@@ -19,7 +19,7 @@ func main() {
 
 	_, err := entities.CreateCharacter(gameObj.World, resourceLoader)
 	if err != nil {
-		log.Fatal("can't create character: %w", err)
+		log.Fatalf("can't create character: %s", err)
 	}
 
 	ebiten.SetWindowSize(640, 480)

@@ -6,6 +6,8 @@ import (
 	"image"
 	"os"
 
+	_ "image/png"
+
 	"github.com/ISMashtakov/mygame/errs"
 	"github.com/hajimehoshi/ebiten/v2"
 )

@@ -3,7 +3,6 @@ package game
 import (
 	"github.com/ISMashtakov/mygame/components"
 	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 	"github.com/yohamta/donburi"
 )
 
@@ -16,13 +15,16 @@ func (g *Game) Update() error {
 }
 
 func (g *Game) Draw(screen *ebiten.Image) {
-
 	for spriteEntity := range components.Sprite.Iter(g.World) {
 		sprite := components.Sprite.Get(spriteEntity)
-		screen.DrawImage(sprite.Image, &ebiten.DrawImageOptions{})
-	}
 
-	ebitenutil.DebugPrint(screen, "Hello, World!")
+		op := ebiten.DrawImageOptions{}
+		if sprite.Scale != nil {
+			op.GeoM.Scale(sprite.Scale.X, sprite.Scale.Y)
+		}
+
+		screen.DrawImage(sprite.Image, &op)
+	}
 }
 
 func (g *Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeight int) {
