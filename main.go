@@ -3,28 +3,28 @@ package main
 import (
 	"log"
 
+	"github.com/ISMashtakov/mygame/entities"
+	"github.com/ISMashtakov/mygame/game"
+	"github.com/ISMashtakov/mygame/resources"
 	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
+	"github.com/yohamta/donburi"
 )
 
-type Game struct{}
-
-func (g *Game) Update() error {
-	return nil
-}
-
-func (g *Game) Draw(screen *ebiten.Image) {
-	ebitenutil.DebugPrint(screen, "Hello, World!")
-}
-
-func (g *Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeight int) {
-	return 320, 240
-}
-
 func main() {
+	gameObj := game.Game{
+		World: donburi.NewWorld(),
+	}
+
+	resourceLoader := &resources.ResourceLoader{}
+
+	_, err := entities.CreateCharacter(gameObj.World, resourceLoader)
+	if err != nil {
+		log.Fatal("can't create character: %w", err)
+	}
+
 	ebiten.SetWindowSize(640, 480)
 	ebiten.SetWindowTitle("Hello, World!")
-	if err := ebiten.RunGame(&Game{}); err != nil {
+	if err := ebiten.RunGame(&gameObj); err != nil {
 		log.Fatal(err)
 	}
 }
