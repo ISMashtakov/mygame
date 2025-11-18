@@ -8,8 +8,6 @@ github.com/hajimehoshi/ebiten/v2 v2.9.4 h1:IlPJpwtksylmmvNhQjv4W2bmCFWXtjY7Z10Es
 github.com/hajimehoshi/ebiten/v2 v2.9.4/go.mod h1:DAt4tnkYYpCvu3x9i1X/nK/vOruNXIlYq/tBXxnhrXM=
 github.com/jezek/xgb v1.1.1 h1:bE/r8ZZtSv7l9gk6nU0mYx51aXrvnyb44892TwSaqS4=
 github.com/jezek/xgb v1.1.1/go.mod h1:nrhwO0FX/enq75I7Y7G8iN1ubpSGZEiA3v9e9GyRFlk=
-github.com/mlange-42/ark v0.6.4 h1:VSMLeDMqQiLsMV6FjqMU2xSluHu2LGAm5oFugg6myGE=
-github.com/mlange-42/ark v0.6.4/go.mod h1:gkS9cuklENPTmSjL2z4DcJgJsIVqF1yNwFlx48Hz/Sw=
 github.com/quasilyte/gmath v0.0.0-20250817142619-e0a8c6ee09b3 h1:AMY+EwOLRJdrOZ/8Lc4i7astuUStRUA40GEBTqJYosY=
 github.com/quasilyte/gmath v0.0.0-20250817142619-e0a8c6ee09b3/go.mod h1:EbI+KMbALSVE2s0YFOQpR4uj66zBh9ter5P4CBMSuvA=
 github.com/samber/lo v1.52.0 h1:Rvi+3BFHES3A8meP33VPAxiBZX/Aws5RxrschYGjomw=

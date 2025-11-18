@@ -1,13 +1,13 @@
-package input
+package systems
 
 import (
-	"github.com/ISMashtakov/mygame/character"
-	"github.com/ISMashtakov/mygame/physics"
+	"github.com/ISMashtakov/mygame/components"
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/inpututil"
-	"github.com/mlange-42/ark/ecs"
 	"github.com/quasilyte/gmath"
 	"github.com/samber/lo"
+	"github.com/yohamta/donburi"
+	"github.com/yohamta/donburi/filter"
 )
 
 const (
@@ -15,16 +15,13 @@ const (
 )
 
 type Input struct {
-	characterFilter *ecs.Filter2[character.Character, physics.Speed]
 }
 
-func NewInput(world *ecs.World) *Input {
-	return &Input{
-		characterFilter: ecs.NewFilter2[character.Character, physics.Speed](world),
-	}
+func NewInput() *Input {
+	return &Input{}
 }
 
-func (m *Input) Update() error {
+func (m *Input) Update(world donburi.World) error {
 	keys := inpututil.AppendPressedKeys(nil)
 	var shift gmath.Vec
 	if lo.Contains(keys, ebiten.KeyD) {
@@ -40,10 +37,8 @@ func (m *Input) Update() error {
 		shift.Y += Speed
 	}
 
-	query := m.characterFilter.Query()
-	for query.Next() {
-		_, speed := query.Get()
-		speed.Vec = speed.Vec.Add(shift)
+	for en := range donburi.NewQuery(filter.Contains(components.Character, components.Speed)).Iter(world) {
+		components.Speed.Set(en, &components.SpeedData{Vec: shift})
 	}
 
 	return nil

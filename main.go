@@ -3,29 +3,29 @@ package main
 import (
 	"log"
 
-	"github.com/ISMashtakov/mygame/character"
-	"github.com/ISMashtakov/mygame/character/input"
 	"github.com/ISMashtakov/mygame/core"
+	"github.com/ISMashtakov/mygame/entities"
 	"github.com/ISMashtakov/mygame/game"
-	"github.com/ISMashtakov/mygame/physics"
 	"github.com/ISMashtakov/mygame/resources"
+	"github.com/ISMashtakov/mygame/systems"
 	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/mlange-42/ark/ecs"
+	"github.com/yohamta/donburi"
 )
 
 func main() {
-	world := ecs.NewWorld()
+	resourceLoader := &resources.ResourceLoader{}
+
+	world := donburi.NewWorld()
 	gameObj := game.NewGame(
-		&world,
+		world,
 		[]core.ISystem{
-			input.NewInput(&world),
-			physics.NewMovement(&world),
+			systems.NewInput(),
+			systems.NewSwapSpriteByWalkingAnimation(60, resourceLoader),
+			systems.NewMovement(),
 		},
 	)
 
-	resourceLoader := &resources.ResourceLoader{}
-
-	characterCreator := character.NewCharacterCreator(&world, resourceLoader)
+	characterCreator := entities.NewCharacterCreator(world)
 
 	_, err := characterCreator.Create()
 	if err != nil {
