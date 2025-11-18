@@ -1,24 +1,43 @@
 package game
 
 import (
-	"github.com/ISMashtakov/mygame/components"
+	"github.com/ISMashtakov/mygame/core"
 	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/yohamta/donburi"
+	"github.com/mlange-42/ark/ecs"
 )
 
 type Game struct {
-	World donburi.World
+	renderFilter *ecs.Filter2[core.Sprite, core.Position]
+	systems      []core.ISystem
+}
+
+func NewGame(world *ecs.World, systems []core.ISystem) *Game {
+	return &Game{
+		renderFilter: ecs.NewFilter2[core.Sprite, core.Position](world),
+		systems:      systems,
+	}
+
 }
 
 func (g *Game) Update() error {
+	for _, system := range g.systems {
+		if err := system.Update(); err != nil {
+			return err
+		}
+	}
+
 	return nil
 }
 
 func (g *Game) Draw(screen *ebiten.Image) {
-	for spriteEntity := range components.Sprite.Iter(g.World) {
-		sprite := components.Sprite.Get(spriteEntity)
+	query := g.renderFilter.Query()
+	for query.Next() {
+		sprite, position := query.Get()
 
 		op := ebiten.DrawImageOptions{}
+
+		op.GeoM.Translate(position.X, position.Y)
+
 		if sprite.Scale != nil {
 			op.GeoM.Scale(sprite.Scale.X, sprite.Scale.Y)
 		}
