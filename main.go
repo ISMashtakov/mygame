@@ -17,12 +17,17 @@ func main() {
 	resourceLoader := resources.NewResourceLoader()
 	resourceLoader.Preload()
 
+	renderer := *game.NewRenderer()
+	// renderer.DrawColliders = true
+
 	world := donburi.NewWorld()
 	gameObj := game.NewGame(
+		renderer,
 		world,
 		[]core.ISystem{
 			systems.NewInput(),
 			systems.NewSwapSpriteByWalkingAnimation(60, resourceLoader),
+			systems.NewCollisionDetector(),
 			systems.NewMovement(),
 		},
 	)
@@ -30,9 +35,10 @@ func main() {
 	// Entity creatores
 	characterCreator := entities.NewCharacterCreator()
 	grassCreator := background.NewGrassCreator(resourceLoader)
+	stoneCreator := entities.NewStoneCreator(resourceLoader)
 
 	// ----------
-	worldBuilder := game.NewWorldBuilder(*grassCreator)
+	worldBuilder := game.NewWorldBuilder(*grassCreator, *stoneCreator)
 
 	err := worldBuilder.Build(world)
 	if err != nil {

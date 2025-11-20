@@ -82,11 +82,13 @@ func (s SwapSpriteByWalkingAnimation) Update(world donburi.World) error {
 		}
 
 		subImage := resImage.SubImage(rect)
-		components.Sprite.SetValue(en, components.SpriteData{
+		sprite := components.SpriteData{
 			Image: subImage.(*ebiten.Image),
 			Scale: render.GetImageScale(rect, s.TargetImageSize),
-		})
+		}
 
+		components.Sprite.SetValue(en, sprite)
+		components.Collider.SetValue(en, *components.GetColliderDataBySprite(sprite))
 	}
 
 	return nil

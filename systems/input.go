@@ -40,7 +40,7 @@ func (m *Input) Update(world donburi.World) error {
 	shift = shift.Normalized().Mulf(Speed)
 
 	for en := range donburi.NewQuery(filter.Contains(components.Character)).Iter(world) {
-		components.MovementRequest.Set(en, &components.MovementRequestData{Vec: shift})
+		donburi.Add(en, components.MovementRequest, &components.MovementRequestData{Vec: shift})
 	}
 
 	return nil

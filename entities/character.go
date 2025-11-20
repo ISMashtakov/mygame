@@ -19,6 +19,7 @@ func (c CharacterCreator) Create(world donburi.World) (donburi.Entity, error) {
 		components.MovementRequest,
 		components.Character,
 		components.WalkingAnimation,
+		components.Collider,
 	)
 
 	return entity, nil

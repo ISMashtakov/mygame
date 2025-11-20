@@ -2,8 +2,10 @@ package game
 
 import (
 	"image"
+	"math/rand"
 
 	"github.com/ISMashtakov/mygame/components"
+	"github.com/ISMashtakov/mygame/entities"
 	"github.com/ISMashtakov/mygame/entities/background"
 	"github.com/quasilyte/gmath"
 	"github.com/yohamta/donburi"
@@ -15,11 +17,16 @@ var (
 
 type WorldBuilder struct {
 	grassCreator background.GrassCreator
+	stoneCreator entities.StoneCreator
 }
 
-func NewWorldBuilder(grassCreator background.GrassCreator) *WorldBuilder {
+func NewWorldBuilder(
+	grassCreator background.GrassCreator,
+	stoneCreator entities.StoneCreator,
+) *WorldBuilder {
 	return &WorldBuilder{
 		grassCreator: grassCreator,
+		stoneCreator: stoneCreator,
 	}
 }
 
@@ -37,6 +44,15 @@ func (b WorldBuilder) Build(world donburi.World) error {
 			currentX += b.grassCreator.TargetImageSize.Dx()
 		}
 		currentY += b.grassCreator.TargetImageSize.Dy()
+	}
+
+	for i := 0; i < 5; i++ {
+		_, err := b.stoneCreator.Create(world, components.PositionData{
+			Vec: gmath.Vec{X: float64(rand.Intn(250)), Y: float64(rand.Intn(250))},
+		})
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
