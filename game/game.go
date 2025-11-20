@@ -40,11 +40,10 @@ func (g *Game) Draw(screen *ebiten.Image) {
 
 		op := ebiten.DrawImageOptions{}
 
-		op.GeoM.Translate(position.X, position.Y)
-
-		if sprite.Scale != nil {
+		if !sprite.Scale.IsZero() {
 			op.GeoM.Scale(sprite.Scale.X, sprite.Scale.Y)
 		}
+		op.GeoM.Translate(position.X, position.Y)
 
 		screen.DrawImage(sprite.Image, &op)
 	}

@@ -10,3 +10,10 @@ type MovementRequestData struct {
 }
 
 var MovementRequest = donburi.NewComponentType[MovementRequestData]()
+
+type ColliderData struct {
+	Width  float64
+	Height float64
+}
+
+var Collider = donburi.NewComponentType[ColliderData]()

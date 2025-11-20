@@ -48,16 +48,3 @@ func (l *ResourceLoader) LoadImage(imageID ImageID) (*ebiten.Image, error) {
 
 	return image, nil
 }
-
-type ImageID = int
-
-var (
-	imageResources = map[ImageID]string{
-		ImageCharacter: "resources/images/char.png",
-	}
-)
-
-const (
-	ImageNone ImageID = iota
-	ImageCharacter
-)

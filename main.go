@@ -5,6 +5,7 @@ import (
 
 	"github.com/ISMashtakov/mygame/core"
 	"github.com/ISMashtakov/mygame/entities"
+	"github.com/ISMashtakov/mygame/entities/background"
 	"github.com/ISMashtakov/mygame/game"
 	"github.com/ISMashtakov/mygame/resources"
 	"github.com/ISMashtakov/mygame/systems"
@@ -26,9 +27,19 @@ func main() {
 		},
 	)
 
-	characterCreator := entities.NewCharacterCreator(world)
+	// Entity creatores
+	characterCreator := entities.NewCharacterCreator()
+	grassCreator := background.NewGrassCreator(resourceLoader)
 
-	_, err := characterCreator.Create()
+	// ----------
+	worldBuilder := game.NewWorldBuilder(*grassCreator)
+
+	err := worldBuilder.Build(world)
+	if err != nil {
+		log.Fatalf("can't create character: %s", err)
+	}
+
+	_, err = characterCreator.Create(world)
 	if err != nil {
 		log.Fatalf("can't create character: %s", err)
 	}

@@ -6,15 +6,10 @@ import (
 	"github.com/ISMashtakov/mygame/components"
 	"github.com/ISMashtakov/mygame/core/direction"
 	"github.com/ISMashtakov/mygame/resources"
+	"github.com/ISMashtakov/mygame/utils/render"
 	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/quasilyte/gmath"
 	"github.com/yohamta/donburi"
 	"github.com/yohamta/donburi/filter"
-)
-
-const (
-	sizeX float64 = 17
-	sizeY float64 = 25
 )
 
 type SwapSpriteByWalkingAnimation struct {
@@ -22,6 +17,8 @@ type SwapSpriteByWalkingAnimation struct {
 	framesInAnimation   int
 	animationLoopLength int
 	resourceLoader      resources.IResourceLoader
+
+	TargetImageSize image.Rectangle
 }
 
 func NewSwapSpriteByWalkingAnimation(TPS int, resourceLoader resources.IResourceLoader) *SwapSpriteByWalkingAnimation {
@@ -30,6 +27,7 @@ func NewSwapSpriteByWalkingAnimation(TPS int, resourceLoader resources.IResource
 		framesInAnimation:   4,
 		animationLoopLength: int(float64(TPS) * 0.5),
 		resourceLoader:      resourceLoader,
+		TargetImageSize:     image.Rect(0, 0, 17, 25),
 	}
 }
 
@@ -86,7 +84,7 @@ func (s SwapSpriteByWalkingAnimation) Update(world donburi.World) error {
 		subImage := resImage.SubImage(rect)
 		components.Sprite.SetValue(en, components.SpriteData{
 			Image: subImage.(*ebiten.Image),
-			Scale: &gmath.Vec{X: sizeX / float64(rect.Dx()), Y: sizeY / float64(rect.Dy())},
+			Scale: render.GetImageScale(rect, s.TargetImageSize),
 		})
 
 	}

@@ -1,6 +1,8 @@
 package systems
 
 import (
+	"fmt"
+
 	"github.com/ISMashtakov/mygame/components"
 	"github.com/yohamta/donburi"
 	"github.com/yohamta/donburi/filter"
@@ -19,6 +21,7 @@ func (m *Movement) Update(world donburi.World) error {
 
 		pos.Vec = pos.Vec.Add(moveRequest.Vec)
 		components.Position.Set(en, pos)
+		fmt.Println(pos)
 
 		components.MovementRequest.Set(en, nil)
 	}

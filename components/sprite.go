@@ -8,7 +8,7 @@ import (
 
 type SpriteData struct {
 	Image *ebiten.Image
-	Scale *gmath.Vec
+	Scale gmath.Vec
 }
 
 var Sprite = donburi.NewComponentType[SpriteData]()

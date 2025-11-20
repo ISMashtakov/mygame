@@ -6,17 +6,20 @@ import (
 )
 
 type CharacterCreator struct {
-	world donburi.World
 }
 
-func NewCharacterCreator(world donburi.World) *CharacterCreator {
-	return &CharacterCreator{
-		world: world,
-	}
+func NewCharacterCreator() *CharacterCreator {
+	return &CharacterCreator{}
 }
 
-func (c CharacterCreator) Create() (donburi.Entity, error) {
-	entity := c.world.Create(components.Position, components.Sprite, components.MovementRequest, components.Character, components.WalkingAnimation)
+func (c CharacterCreator) Create(world donburi.World) (donburi.Entity, error) {
+	entity := world.Create(
+		components.Position,
+		components.Sprite,
+		components.MovementRequest,
+		components.Character,
+		components.WalkingAnimation,
+	)
 
 	return entity, nil
 }
