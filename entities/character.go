@@ -16,7 +16,7 @@ func NewCharacterCreator(world donburi.World) *CharacterCreator {
 }
 
 func (c CharacterCreator) Create() (donburi.Entity, error) {
-	entity := c.world.Create(components.Position, components.Sprite, components.Speed, components.Character, components.WalkingAnimation)
+	entity := c.world.Create(components.Position, components.Sprite, components.MovementRequest, components.Character, components.WalkingAnimation)
 
 	return entity, nil
 }

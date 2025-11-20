@@ -34,25 +34,25 @@ func NewSwapSpriteByWalkingAnimation(TPS int, resourceLoader resources.IResource
 }
 
 func (s SwapSpriteByWalkingAnimation) Update(world donburi.World) error {
-	for en := range donburi.NewQuery(filter.Contains(components.Sprite, components.Character, components.WalkingAnimation, components.Speed)).Iter(world) {
-		walkingAnimation, speed := components.WalkingAnimation.Get(en), components.Speed.Get(en)
+	for en := range donburi.NewQuery(filter.Contains(components.Sprite, components.Character, components.WalkingAnimation, components.MovementRequest)).Iter(world) {
+		walkingAnimation, moveReq := components.WalkingAnimation.Get(en), components.MovementRequest.Get(en)
 
-		if !speed.IsZero() {
+		if !moveReq.IsZero() {
 			switch {
-			case speed.Y > 0:
+			case moveReq.Y > 0:
 				walkingAnimation.Direction = direction.Down
-			case speed.Y < 0:
+			case moveReq.Y < 0:
 				walkingAnimation.Direction = direction.Up
-			case speed.X > 0:
+			case moveReq.X > 0:
 				walkingAnimation.Direction = direction.Right
-			case speed.X < 0:
+			case moveReq.X < 0:
 				walkingAnimation.Direction = direction.Left
 			}
 		}
 
 		walkingAnimation.Frame += 1
 
-		if walkingAnimation.Frame >= s.animationLoopLength || speed.IsZero() {
+		if walkingAnimation.Frame >= s.animationLoopLength || moveReq.IsZero() {
 			walkingAnimation.Frame = 0
 		}
 

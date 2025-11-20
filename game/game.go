@@ -1,9 +1,12 @@
 package game
 
 import (
+	"fmt"
+
 	"github.com/ISMashtakov/mygame/components"
 	"github.com/ISMashtakov/mygame/core"
 	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 	"github.com/yohamta/donburi"
 	"github.com/yohamta/donburi/filter"
 )
@@ -45,6 +48,8 @@ func (g *Game) Draw(screen *ebiten.Image) {
 
 		screen.DrawImage(sprite.Image, &op)
 	}
+
+	ebitenutil.DebugPrint(screen, fmt.Sprintf("FPS: %0.2f, TPS: %0.2f", ebiten.ActualFPS(), ebiten.ActualTPS()))
 }
 
 func (g *Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeight int) {

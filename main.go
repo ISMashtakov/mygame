@@ -13,7 +13,8 @@ import (
 )
 
 func main() {
-	resourceLoader := &resources.ResourceLoader{}
+	resourceLoader := resources.NewResourceLoader()
+	resourceLoader.Preload()
 
 	world := donburi.NewWorld()
 	gameObj := game.NewGame(
@@ -34,6 +35,7 @@ func main() {
 
 	ebiten.SetWindowSize(640, 480)
 	ebiten.SetWindowTitle("Hello, World!")
+
 	if err := ebiten.RunGame(gameObj); err != nil {
 		log.Fatal(err)
 	}

@@ -14,13 +14,13 @@ func NewMovement() *Movement {
 }
 
 func (m *Movement) Update(world donburi.World) error {
-	for en := range donburi.NewQuery(filter.Contains(components.Position, components.Speed)).Iter(world) {
-		pos, speed := components.Position.Get(en), components.Speed.Get(en)
+	for en := range donburi.NewQuery(filter.Contains(components.Position, components.MovementRequest)).Iter(world) {
+		pos, moveRequest := components.Position.Get(en), components.MovementRequest.Get(en)
 
-		pos.Vec = pos.Vec.Add(speed.Vec)
-
-		components.Speed.Set(en, &components.SpeedData{})
+		pos.Vec = pos.Vec.Add(moveRequest.Vec)
 		components.Position.Set(en, pos)
+
+		components.MovementRequest.Set(en, nil)
 	}
 
 	return nil

@@ -5,8 +5,8 @@ import (
 	"github.com/yohamta/donburi"
 )
 
-type SpeedData struct {
+type MovementRequestData struct {
 	gmath.Vec
 }
 
-var Speed = donburi.NewComponentType[SpeedData]()
+var MovementRequest = donburi.NewComponentType[MovementRequestData]()

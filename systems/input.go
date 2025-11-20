@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	Speed = 10
+	Speed = 20
 )
 
 type Input struct {
@@ -37,8 +37,8 @@ func (m *Input) Update(world donburi.World) error {
 		shift.Y += Speed
 	}
 
-	for en := range donburi.NewQuery(filter.Contains(components.Character, components.Speed)).Iter(world) {
-		components.Speed.Set(en, &components.SpeedData{Vec: shift})
+	for en := range donburi.NewQuery(filter.Contains(components.Character)).Iter(world) {
+		components.MovementRequest.Set(en, &components.MovementRequestData{Vec: shift})
 	}
 
 	return nil
