@@ -1,18 +1,17 @@
 package game
 
 import (
-	"github.com/ISMashtakov/mygame/core"
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/yohamta/donburi"
 )
 
 type Game struct {
-	systems  []core.ISystem
+	systems  []ISystem
 	world    donburi.World
 	renderer Renderer
 }
 
-func NewGame(renderer Renderer, world donburi.World, systems []core.ISystem) *Game {
+func NewGame(renderer Renderer, world donburi.World, systems []ISystem) *Game {
 	return &Game{
 		world:    world,
 		systems:  systems,

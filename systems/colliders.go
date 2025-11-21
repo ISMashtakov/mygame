@@ -2,16 +2,28 @@ package systems
 
 import (
 	"github.com/ISMashtakov/mygame/components"
+	"github.com/ISMashtakov/mygame/core"
 	"github.com/quasilyte/gmath"
 	"github.com/yohamta/donburi"
 	"github.com/yohamta/donburi/filter"
 )
 
+const (
+	CollissionDetectorCodename = "collision_detector"
+)
+
 type CollisionDetector struct {
+	core.BaseSystem
 }
 
 func NewCollisionDetector() *CollisionDetector {
-	return &CollisionDetector{}
+	return &CollisionDetector{
+		core.BaseSystem{
+			Codename:        CollissionDetectorCodename,
+			NextSystems:     []string{MovementCodename},
+			PreviousSystems: []string{InputCodename},
+		},
+	}
 }
 
 func (d CollisionDetector) Update(world donburi.World) error {

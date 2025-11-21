@@ -4,6 +4,7 @@ import (
 	"image"
 
 	"github.com/ISMashtakov/mygame/components"
+	"github.com/ISMashtakov/mygame/core"
 	"github.com/ISMashtakov/mygame/core/direction"
 	"github.com/ISMashtakov/mygame/resources"
 	"github.com/ISMashtakov/mygame/utils/render"
@@ -12,7 +13,12 @@ import (
 	"github.com/yohamta/donburi/filter"
 )
 
+const (
+	AnimationCodename = "animation"
+)
+
 type SwapSpriteByWalkingAnimation struct {
+	core.BaseSystem
 	TPS                 int
 	framesInAnimation   int
 	animationLoopLength int
@@ -23,6 +29,10 @@ type SwapSpriteByWalkingAnimation struct {
 
 func NewSwapSpriteByWalkingAnimation(TPS int, resourceLoader resources.IResourceLoader) *SwapSpriteByWalkingAnimation {
 	return &SwapSpriteByWalkingAnimation{
+		BaseSystem: core.BaseSystem{
+			Codename:        AnimationCodename,
+			PreviousSystems: []string{InputCodename},
+		},
 		TPS:                 TPS,
 		framesInAnimation:   4,
 		animationLoopLength: int(float64(TPS) * 0.5),

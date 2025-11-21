@@ -2,6 +2,7 @@ package systems
 
 import (
 	"github.com/ISMashtakov/mygame/components"
+	"github.com/ISMashtakov/mygame/core"
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/inpututil"
 	"github.com/quasilyte/gmath"
@@ -11,14 +12,21 @@ import (
 )
 
 const (
-	Speed = 2
+	Speed         = 2
+	InputCodename = "input"
 )
 
 type Input struct {
+	core.BaseSystem
 }
 
 func NewInput() *Input {
-	return &Input{}
+	return &Input{
+		core.BaseSystem{
+			Codename:    InputCodename,
+			NextSystems: []string{CollissionDetectorCodename, MovementCodename},
+		},
+	}
 }
 
 func (m *Input) Update(world donburi.World) error {
