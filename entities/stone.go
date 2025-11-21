@@ -25,7 +25,7 @@ func (c StoneCreator) Create(world donburi.World, position components.PositionDa
 	entity := world.Create(
 		components.Position,
 		components.Sprite,
-		components.Collider,
+		components.SpriteCollider,
 	)
 
 	en := world.Entry(entity)
@@ -42,7 +42,6 @@ func (c StoneCreator) Create(world donburi.World, position components.PositionDa
 	components.Sprite.SetValue(en, sprite)
 
 	components.Position.SetValue(en, position)
-	components.Collider.SetValue(en, *components.GetColliderDataBySprite(sprite))
 
 	return entity, nil
 }

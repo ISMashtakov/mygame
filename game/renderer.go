@@ -47,8 +47,8 @@ func (r *Renderer) drawSprites(screen *ebiten.Image, world donburi.World) {
 
 func (r *Renderer) drawColliders(screen *ebiten.Image, world donburi.World) {
 	if r.DrawColliders {
-		for en := range donburi.NewQuery(filter.Contains(components.Collider)).Iter(world) {
-			collider := components.Collider.Get(en)
+		for en := range donburi.NewQuery(filter.Contains(components.RectCollider)).Iter(world) {
+			collider := components.RectCollider.Get(en)
 
 			fmt.Println(collider.Rect)
 			r := graphics.NewRect(collider.Width(), collider.Height())

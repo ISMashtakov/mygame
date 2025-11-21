@@ -24,6 +24,9 @@ type Builder struct {
 	renderer  *game.Renderer
 	systems   []ISystem
 	world     donburi.World
+	creators  struct {
+		character *entities.CharacterCreator
+	}
 }
 
 func (b *Builder) Resources() {
@@ -36,10 +39,30 @@ func (b *Builder) Renderer() {
 	// renderer.DrawColliders = true
 }
 
+func (b *Builder) Entities() {
+	// Entity creatores
+	b.creators.character = entities.NewCharacterCreator()
+	grassCreator := background.NewGrassCreator(b.resourses)
+	stoneCreator := entities.NewStoneCreator(b.resourses)
+
+	// ----------
+	worldBuilder := game.NewWorldBuilder(*grassCreator, *stoneCreator)
+
+	err := worldBuilder.Build(b.world)
+	if err != nil {
+		panic(fmt.Errorf("can't build world: %w", err))
+	}
+
+	_, err = b.creators.character.Create(b.world)
+	if err != nil {
+		panic(fmt.Errorf("can't create character: %w", err))
+	}
+}
+
 func (b *Builder) Systems() {
 	b.systems = []ISystem{
 		systems.NewInput(),
-		systems.NewSwapSpriteByWalkingAnimation(60, b.resourses),
+		systems.NewSwapSpriteByWalkingAnimation(60, b.resourses, b.creators.character),
 		systems.NewCollisionDetector(),
 		systems.NewMovement(),
 	}
@@ -53,26 +76,6 @@ func (b *Builder) Systems() {
 
 func (b *Builder) World() {
 	b.world = donburi.NewWorld()
-}
-
-func (b *Builder) Entities() {
-	// Entity creatores
-	characterCreator := entities.NewCharacterCreator()
-	grassCreator := background.NewGrassCreator(b.resourses)
-	stoneCreator := entities.NewStoneCreator(b.resourses)
-
-	// ----------
-	worldBuilder := game.NewWorldBuilder(*grassCreator, *stoneCreator)
-
-	err := worldBuilder.Build(b.world)
-	if err != nil {
-		panic(fmt.Errorf("can't build world: %w", err))
-	}
-
-	_, err = characterCreator.Create(b.world)
-	if err != nil {
-		panic(fmt.Errorf("can't create character: %w", err))
-	}
 }
 
 func (b *Builder) RunGame() {

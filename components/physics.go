@@ -11,19 +11,23 @@ type MovementRequestData struct {
 
 var MovementRequest = donburi.NewComponentType[MovementRequestData]()
 
-type ColliderData struct {
+type RectColliderData struct {
 	gmath.Rect
 }
 
-func GetColliderDataBySprite(sprite SpriteData) *ColliderData {
+func GetRectColliderDataBySprite(sprite SpriteData) *RectColliderData {
 	rect := gmath.Rect{
 		Max: gmath.VecFromStd(sprite.Image.Bounds().Max.Sub(sprite.Image.Bounds().Min)),
 	}
 	rect.Max = rect.Max.Mul(sprite.Scale)
 
-	return &ColliderData{
+	return &RectColliderData{
 		Rect: rect,
 	}
 }
 
-var Collider = donburi.NewComponentType[ColliderData]()
+var RectCollider = donburi.NewComponentType[RectColliderData]()
+
+type SpriteColliderData struct{}
+
+var SpriteCollider = donburi.NewComponentType[SpriteColliderData]()

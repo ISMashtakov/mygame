@@ -11,5 +11,4 @@ func GetListByIterator[T any](iterator iter.Seq[T]) []T {
 	}
 
 	return res
-
 }

@@ -6,6 +6,7 @@ import (
 	"github.com/ISMashtakov/mygame/components"
 	"github.com/ISMashtakov/mygame/core"
 	"github.com/ISMashtakov/mygame/core/direction"
+	"github.com/ISMashtakov/mygame/entities"
 	"github.com/ISMashtakov/mygame/resources"
 	"github.com/ISMashtakov/mygame/utils/render"
 	"github.com/hajimehoshi/ebiten/v2"
@@ -20,14 +21,13 @@ const (
 type SwapSpriteByWalkingAnimation struct {
 	core.BaseSystem
 	TPS                 int
+	characterCreator    *entities.CharacterCreator
 	framesInAnimation   int
 	animationLoopLength int
 	resourceLoader      resources.IResourceLoader
-
-	TargetImageSize image.Rectangle
 }
 
-func NewSwapSpriteByWalkingAnimation(TPS int, resourceLoader resources.IResourceLoader) *SwapSpriteByWalkingAnimation {
+func NewSwapSpriteByWalkingAnimation(TPS int, resourceLoader resources.IResourceLoader, characterCreator *entities.CharacterCreator) *SwapSpriteByWalkingAnimation {
 	return &SwapSpriteByWalkingAnimation{
 		BaseSystem: core.BaseSystem{
 			Codename:        AnimationCodename,
@@ -37,7 +37,7 @@ func NewSwapSpriteByWalkingAnimation(TPS int, resourceLoader resources.IResource
 		framesInAnimation:   4,
 		animationLoopLength: int(float64(TPS) * 0.5),
 		resourceLoader:      resourceLoader,
-		TargetImageSize:     image.Rect(0, 0, 17, 25),
+		characterCreator:    characterCreator,
 	}
 }
 
@@ -94,11 +94,10 @@ func (s SwapSpriteByWalkingAnimation) Update(world donburi.World) error {
 		subImage := resImage.SubImage(rect)
 		sprite := components.SpriteData{
 			Image: subImage.(*ebiten.Image),
-			Scale: render.GetImageScale(rect, s.TargetImageSize),
+			Scale: render.GetImageScale(rect, s.characterCreator.TargetImageSize),
 		}
 
 		components.Sprite.SetValue(en, sprite)
-		components.Collider.SetValue(en, *components.GetColliderDataBySprite(sprite))
 	}
 
 	return nil
