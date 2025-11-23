@@ -1,23 +1,22 @@
 package background
 
 import (
-	"image"
-
 	"github.com/ISMashtakov/mygame/components"
 	"github.com/ISMashtakov/mygame/resources"
 	"github.com/ISMashtakov/mygame/utils/render"
+	"github.com/quasilyte/gmath"
 	"github.com/yohamta/donburi"
 )
 
 type GrassCreator struct {
 	loader          resources.IResourceLoader
-	TargetImageSize image.Rectangle
+	TargetImageSize gmath.Vec
 }
 
 func NewGrassCreator(loader resources.IResourceLoader) *GrassCreator {
 	return &GrassCreator{
 		loader:          loader,
-		TargetImageSize: image.Rect(0, 0, 25, 25),
+		TargetImageSize: gmath.Vec{X: 25, Y: 25},
 	}
 }
 

@@ -8,8 +8,8 @@ import (
 	"github.com/quasilyte/gmath"
 )
 
-func GetImageScale(originSize image.Rectangle, targetSize image.Rectangle) gmath.Vec {
-	return gmath.Vec{X: float64(targetSize.Dx()) / float64(originSize.Dx()), Y: float64(targetSize.Dy()) / float64(originSize.Dy())}
+func GetImageScale(originSize image.Rectangle, targetSize gmath.Vec) gmath.Vec {
+	return gmath.Vec{X: targetSize.X / float64(originSize.Dx()), Y: targetSize.Y / float64(originSize.Dy())}
 }
 
 func AtImage(image *ebiten.Image, vec gmath.Vec) color.Color {

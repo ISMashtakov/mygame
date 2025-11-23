@@ -50,7 +50,6 @@ func (r *Renderer) drawColliders(screen *ebiten.Image, world donburi.World) {
 		for en := range donburi.NewQuery(filter.Contains(components.RectCollider)).Iter(world) {
 			collider := components.RectCollider.Get(en)
 
-			fmt.Println(collider.Rect)
 			r := graphics.NewRect(collider.Width(), collider.Height())
 			r.SetCentered(false)
 

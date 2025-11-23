@@ -41,9 +41,9 @@ func (b WorldBuilder) Build(world donburi.World) error {
 			if err != nil {
 				return err
 			}
-			currentX += b.grassCreator.TargetImageSize.Dx()
+			currentX += int(b.grassCreator.TargetImageSize.X)
 		}
-		currentY += b.grassCreator.TargetImageSize.Dy()
+		currentY += int(b.grassCreator.TargetImageSize.Y)
 	}
 
 	for i := 0; i < 5; i++ {

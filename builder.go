@@ -31,12 +31,14 @@ type Builder struct {
 
 func (b *Builder) Resources() {
 	b.resourses = resources.NewResourceLoader()
-	b.resourses.Preload()
+	if err := b.resourses.Preload(); err != nil {
+		panic(fmt.Errorf("can't preload resourses: %w", err))
+	}
 }
 
 func (b *Builder) Renderer() {
 	b.renderer = game.NewRenderer()
-	// renderer.DrawColliders = true
+	b.renderer.DrawColliders = true
 }
 
 func (b *Builder) Entities() {
@@ -60,14 +62,18 @@ func (b *Builder) Entities() {
 }
 
 func (b *Builder) Systems() {
+	walkingAnimationSystem, err := systems.NewSwapSpriteByWalkingAnimation(b.resourses, b.creators.character)
+	if err != nil {
+		panic(fmt.Errorf("can't create walking system: %w", err))
+	}
+
 	b.systems = []ISystem{
 		systems.NewInput(),
-		systems.NewSwapSpriteByWalkingAnimation(60, b.resourses, b.creators.character),
+		walkingAnimationSystem,
 		systems.NewCollisionDetector(),
 		systems.NewMovement(),
 	}
 
-	var err error
 	b.systems, err = systemssorter.SortSystems(b.systems)
 	if err != nil {
 		panic(fmt.Errorf("can't sort systems: %w", err))

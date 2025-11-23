@@ -1,7 +1,11 @@
 package resources
 
-import "github.com/hajimehoshi/ebiten/v2"
+import (
+	"github.com/ISMashtakov/mygame/core/images"
+	"github.com/hajimehoshi/ebiten/v2"
+)
 
 type IResourceLoader interface {
 	LoadImage(imageID ImageID) (*ebiten.Image, error)
+	LoadAnimation(animationID AnimationID) (*images.Animation, error)
 }
