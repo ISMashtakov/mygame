@@ -4,8 +4,8 @@ type ImageID = int
 
 var (
 	imageResources = map[ImageID]string{
-		ImageCharacterMoving:     "resources/images/character/char.png",
-		ImageCharacterHoeHitting: "resources/images/character/hoe_hitting.png",
+		ImageCharacterMoving:     "resources/images/character/walk.png",
+		ImageCharacterHoeHitting: "resources/images/character/hit.png",
 		ImageGrass:               "resources/images/grass.png",
 		ImageStone:               "resources/images/stone.png",
 	}

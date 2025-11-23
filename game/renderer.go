@@ -30,10 +30,19 @@ func (r *Renderer) drawSprites(screen *ebiten.Image, world donburi.World) {
 	for en := range donburi.NewQuery(filter.Contains(components.Sprite)).Iter(world) {
 		sprite := components.Sprite.Get(en)
 
+		if en.HasComponent(components.SpriteCollider) {
+			fmt.Println(123)
+		}
+
 		op := ebiten.DrawImageOptions{}
 
-		if !sprite.Scale.IsZero() {
-			op.GeoM.Scale(sprite.Scale.X, sprite.Scale.Y)
+		op.GeoM.Scale(sprite.Scale.X, sprite.Scale.Y)
+
+		op.GeoM.Translate(-float64(sprite.Image.Bounds().Dx())/2*sprite.Scale.X, -float64(sprite.Image.Bounds().Dy())/2*sprite.Scale.Y)
+		// op.GeoM.Translate(-float64(sprite.Image.Bounds().Dx())/2, -float64(sprite.Image.Bounds().Dy())/2)
+
+		if sprite.Flip {
+			op.GeoM.Scale(-1, 1)
 		}
 
 		if en.HasComponent(components.Position) {
@@ -51,7 +60,7 @@ func (r *Renderer) drawColliders(screen *ebiten.Image, world donburi.World) {
 			collider := components.RectCollider.Get(en)
 
 			r := graphics.NewRect(collider.Width(), collider.Height())
-			r.SetCentered(false)
+			r.SetCentered(true)
 
 			if en.HasComponent(components.Position) {
 				position := components.Position.Get(en)

@@ -12,7 +12,7 @@ import (
 )
 
 var (
-	WorldSize = image.Rect(0, 0, 500, 500)
+	WorldSize = image.Rect(0, 0, 600, 600)
 )
 
 type WorldBuilder struct {
@@ -48,7 +48,7 @@ func (b WorldBuilder) Build(world donburi.World) error {
 
 	for i := 0; i < 5; i++ {
 		_, err := b.stoneCreator.Create(world, components.PositionData{
-			Vec: gmath.Vec{X: float64(rand.Intn(250)), Y: float64(rand.Intn(250))},
+			Vec: gmath.Vec{X: float64(rand.Intn(WorldSize.Max.X)), Y: float64(rand.Intn(WorldSize.Max.Y))},
 		})
 		if err != nil {
 			return err

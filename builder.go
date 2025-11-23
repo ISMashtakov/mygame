@@ -38,7 +38,7 @@ func (b *Builder) Resources() {
 
 func (b *Builder) Renderer() {
 	b.renderer = game.NewRenderer()
-	b.renderer.DrawColliders = true
+	// b.renderer.DrawColliders = true
 }
 
 func (b *Builder) Entities() {

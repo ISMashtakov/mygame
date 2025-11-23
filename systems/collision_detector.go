@@ -6,7 +6,6 @@ import (
 	"github.com/ISMashtakov/mygame/utils/filter2"
 	"github.com/ISMashtakov/mygame/utils/render"
 	"github.com/quasilyte/gmath"
-	"github.com/samber/lo"
 	"github.com/yohamta/donburi"
 	"github.com/yohamta/donburi/filter"
 )
@@ -113,8 +112,6 @@ func (d CollisionDetector) isIntersectSpriteWithSprite(en, en2 *donburi.Entry) b
 	sprite1, sprite2 := components.Sprite.Get(en), components.Sprite.Get(en2)
 
 	var pos1, pos2 gmath.Vec
-	scale1 := lo.Ternary(sprite1.Scale.IsZero(), gmath.Vec{X: 1, Y: 1}, sprite1.Scale)
-	scale2 := lo.Ternary(sprite2.Scale.IsZero(), gmath.Vec{X: 1, Y: 1}, sprite2.Scale)
 
 	if en.HasComponent(components.Position) {
 		pos := components.Position.Get(en)
@@ -128,16 +125,16 @@ func (d CollisionDetector) isIntersectSpriteWithSprite(en, en2 *donburi.Entry) b
 	bounds1 := gmath.RectFromStd(sprite1.Image.Bounds())
 	bounds2 := gmath.RectFromStd(sprite2.Image.Bounds())
 
-	imageSize1 := gmath.Vec{X: bounds1.Width(), Y: bounds1.Height()}
-	imageSize2 := gmath.Vec{X: bounds2.Width(), Y: bounds2.Height()}
+	imageSize1 := gmath.Vec{X: bounds1.Width(), Y: bounds1.Height()}.Mul(sprite1.Scale)
+	imageSize2 := gmath.Vec{X: bounds2.Width(), Y: bounds2.Height()}.Mul(sprite2.Scale)
 
 	rect1 := gmath.Rect{
-		Min: pos1,
-		Max: pos1.Add(imageSize1.Mul(scale1)),
+		Min: pos1.Sub(imageSize1.Mulf(0.5)),
+		Max: pos1.Add(imageSize1.Mulf(0.5)),
 	}
 	rect2 := gmath.Rect{
-		Min: pos2,
-		Max: pos2.Add(imageSize2.Mul(scale2)),
+		Min: pos2.Sub(imageSize2.Mulf(0.5)),
+		Max: pos2.Add(imageSize2.Mulf(0.5)),
 	}
 
 	imageRec1 := rect1.ToStd()
@@ -155,8 +152,12 @@ func (d CollisionDetector) isIntersectSpriteWithSprite(en, en2 *donburi.Entry) b
 	for y := overlap.Min.Y; y < overlap.Max.Y; y++ {
 		for x := overlap.Min.X; x < overlap.Max.X; x++ {
 			relVec := gmath.Vec{X: float64(x), Y: float64(y)}
-			rel1 := relVec.Sub(pos1).Div(scale1)
-			rel2 := relVec.Sub(pos2).Div(scale2)
+			rel1 := relVec.Add(imageSize1.Mulf(0.5)).
+				Sub(pos1).
+				Div(sprite1.Scale)
+			rel2 := relVec.Add(imageSize2.Mulf(0.5)).
+				Sub(pos2).
+				Div(sprite2.Scale)
 			// Проверяем, что оба пикселя непрозрачны
 			_, _, _, a1 := render.AtImage(sprite1.Image, rel1).RGBA()
 			_, _, _, a2 := render.AtImage(sprite2.Image, rel2).RGBA()
@@ -174,7 +175,6 @@ func (d CollisionDetector) isIntersectRectWithSprite(en, en2 *donburi.Entry) boo
 	sprite2 := components.Sprite.Get(en2)
 
 	var pos2 gmath.Vec
-	scale2 := lo.Ternary(sprite2.Scale.IsZero(), gmath.Vec{X: 1, Y: 1}, sprite2.Scale)
 
 	if en2.HasComponent(components.Position) {
 		pos := components.Position.Get(en2)
@@ -184,10 +184,11 @@ func (d CollisionDetector) isIntersectRectWithSprite(en, en2 *donburi.Entry) boo
 	bounds2 := gmath.RectFromStd(sprite2.Image.Bounds())
 
 	imageSize2 := gmath.Vec{X: bounds2.Width(), Y: bounds2.Height()}
+	imageSize2 = imageSize2.Mul(sprite2.Scale)
 
 	rect2 := gmath.Rect{
-		Min: pos2,
-		Max: pos2.Add(imageSize2.Mul(scale2)),
+		Min: pos2.Sub(imageSize2.Mulf(0.5)),
+		Max: pos2.Add(imageSize2.Mulf(0.5)),
 	}
 
 	imageRec1 := rect1.ToStd()
@@ -204,8 +205,11 @@ func (d CollisionDetector) isIntersectRectWithSprite(en, en2 *donburi.Entry) boo
 	// Проверяем каждый пиксель в области пересечения
 	for y := overlap.Min.Y; y < overlap.Max.Y; y++ {
 		for x := overlap.Min.X; x < overlap.Max.X; x++ {
-			rel2 := gmath.Vec{X: float64(x), Y: float64(y)}.Sub(pos2).Div(scale2)
-			_, _, _, a2 := sprite2.Image.At(int(rel2.X), int(rel2.Y)).RGBA()
+			rel2 := gmath.Vec{X: float64(x), Y: float64(y)}.
+				Add(imageSize2.Mulf(0.5)).
+				Sub(pos2).
+				Div(sprite2.Scale)
+			_, _, _, a2 := render.AtImage(sprite2.Image, rel2).RGBA()
 
 			if a2 > 0 {
 				return true

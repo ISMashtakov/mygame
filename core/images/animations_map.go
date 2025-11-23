@@ -2,7 +2,6 @@ package images
 
 import (
 	"github.com/ISMashtakov/mygame/components/direction"
-	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/samber/lo"
 )
 
@@ -20,8 +19,16 @@ func NewAnimationsMap(spritesSheet SpritesSheet, framesInAnimation int, directio
 	}
 }
 
-func (m AnimationMap) GetByDirection(dir direction.DirectionEnum, i int) *ebiten.Image {
-	return m.spritesSheet.Get(i, lo.IndexOf(m.directions, dir))
+func (m AnimationMap) GetByDirection(dir direction.DirectionEnum, i int) Image {
+	resDir := dir
+	if dir == direction.Left {
+		resDir = direction.Right
+	}
+
+	im := m.spritesSheet.Get(i, lo.IndexOf(m.directions, resDir))
+	im.Flip = dir == direction.Left
+
+	return im
 }
 
 func (m AnimationMap) GetCountFrames() int {

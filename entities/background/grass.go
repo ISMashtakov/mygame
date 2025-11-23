@@ -34,8 +34,7 @@ func (c GrassCreator) Create(world donburi.World, position components.PositionDa
 	}
 
 	components.Sprite.SetValue(en, components.SpriteData{
-		Image: im,
-		Scale: render.GetImageScale(im.Bounds(), c.TargetImageSize),
+		Image: im, Scale: render.GetImageScale(im.Bounds(), c.TargetImageSize),
 	})
 
 	components.Position.SetValue(en, position)

@@ -10,8 +10,6 @@ import (
 	"github.com/ISMashtakov/mygame/core/images"
 	"github.com/ISMashtakov/mygame/entities"
 	"github.com/ISMashtakov/mygame/resources"
-	"github.com/ISMashtakov/mygame/utils/render"
-	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/yohamta/donburi"
 	"github.com/yohamta/donburi/filter"
 )
@@ -61,7 +59,7 @@ func (s SwapSpriteByAnimation) Update(world donburi.World) error {
 			s.walkingAnimation.Reset()
 		}
 
-		var subImage *ebiten.Image
+		var subImage images.Image
 
 		if en.HasComponent(actions.Action) {
 			action := actions.Action.Get(en)
@@ -78,12 +76,7 @@ func (s SwapSpriteByAnimation) Update(world donburi.World) error {
 			subImage = s.walkingAnimation.Next(dir)
 		}
 
-		sprite := components.SpriteData{
-			Image: subImage,
-			Scale: render.GetImageScale(subImage.Bounds(), s.characterCreator.TargetImageSize),
-		}
-
-		components.Sprite.SetValue(en, sprite)
+		components.Sprite.SetValue(en, components.SpriteData(subImage))
 	}
 
 	return nil

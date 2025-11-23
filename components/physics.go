@@ -15,17 +15,6 @@ type RectColliderData struct {
 	gmath.Rect
 }
 
-func GetRectColliderDataBySprite(sprite SpriteData) *RectColliderData {
-	rect := gmath.Rect{
-		Max: gmath.VecFromStd(sprite.Image.Bounds().Max.Sub(sprite.Image.Bounds().Min)),
-	}
-	rect.Max = rect.Max.Mul(sprite.Scale)
-
-	return &RectColliderData{
-		Rect: rect,
-	}
-}
-
 var RectCollider = donburi.NewComponentType[RectColliderData]()
 
 type SpriteColliderData struct{}

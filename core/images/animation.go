@@ -21,7 +21,7 @@ func NewAnimation(animationMap AnimationMap, duration time.Duration) *Animation 
 	}
 }
 
-func (a *Animation) Next(dir direction.DirectionEnum) *ebiten.Image {
+func (a *Animation) Next(dir direction.DirectionEnum) Image {
 	if a.currentFrame >= a.countFrames {
 		a.currentFrame = 0
 	}

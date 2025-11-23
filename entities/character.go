@@ -3,6 +3,7 @@ package entities
 import (
 	"github.com/ISMashtakov/mygame/components"
 	"github.com/ISMashtakov/mygame/components/direction"
+	"github.com/ISMashtakov/mygame/constants"
 	"github.com/quasilyte/gmath"
 	"github.com/yohamta/donburi"
 )
@@ -31,7 +32,12 @@ func (c CharacterCreator) Create(world donburi.World) (donburi.Entity, error) {
 
 	en := world.Entry(entity)
 
-	components.RectCollider.SetValue(en, components.RectColliderData{Rect: gmath.Rect{Max: c.TargetImageSize}})
+	rect := gmath.Rect{
+		Min: constants.CharacterColliderSize.Mulf(-0.5),
+		Max: constants.CharacterColliderSize.Mulf(0.5),
+	}
+
+	components.RectCollider.SetValue(en, components.RectColliderData{Rect: rect})
 	direction.Direction.SetValue(en, direction.Down)
 
 	return entity, nil

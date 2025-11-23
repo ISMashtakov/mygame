@@ -8,27 +8,23 @@ import (
 )
 
 type SpritesSheet struct {
-	image       *ebiten.Image
-	startOffset gmath.Vec
-	offset      gmath.Vec
-	cellSize    gmath.Vec
+	image    *ebiten.Image
+	cellSize gmath.Vec
 }
 
-func NewSpritesSheet(image *ebiten.Image, startOffset gmath.Vec, offset gmath.Vec, cellSize gmath.Vec) *SpritesSheet {
+func NewSpritesSheet(image *ebiten.Image, cellSize gmath.Vec) *SpritesSheet {
 	return &SpritesSheet{
-		image:       image,
-		offset:      offset,
-		cellSize:    cellSize,
-		startOffset: startOffset,
+		image:    image,
+		cellSize: cellSize,
 	}
 }
 
-func (s SpritesSheet) Get(x, y int) *ebiten.Image {
-	start := s.startOffset.Add(s.offset.Mul(gmath.Vec{X: float64(x), Y: float64(y)}))
+func (s SpritesSheet) Get(x, y int) Image {
+	start := s.cellSize.Mul(gmath.Vec{X: float64(x), Y: float64(y)})
 
 	rect := image.Rect(int(start.X), int(start.Y), int(start.X+s.cellSize.X), int(start.Y+s.cellSize.Y))
 
 	subImage := s.image.SubImage(rect)
 
-	return subImage.(*ebiten.Image)
+	return Image{Image: subImage.(*ebiten.Image), Scale: gmath.Vec{X: 1, Y: 1}}
 }

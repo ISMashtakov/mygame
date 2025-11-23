@@ -49,7 +49,7 @@ func (l *ResourceLoader) Preload() error {
 			return err
 		}
 
-		spriteSheet := images.NewSpritesSheet(image, animationData.startOffset, animationData.offset, animationData.cellSize)
+		spriteSheet := images.NewSpritesSheet(image, animationData.cellSize)
 		animationMap := images.NewAnimationsMap(*spriteSheet, animationData.frames, animationData.directions)
 		l.animations[animationID] = images.NewAnimation(*animationMap, animationData.duration)
 	}
