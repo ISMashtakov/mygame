@@ -4,6 +4,7 @@ import (
 	"log"
 
 	"github.com/ISMashtakov/mygame/components"
+	"github.com/ISMashtakov/mygame/components/actions"
 	"github.com/ISMashtakov/mygame/components/direction"
 	"github.com/ISMashtakov/mygame/core"
 	"github.com/hajimehoshi/ebiten/v2"
@@ -39,7 +40,22 @@ func (m *Input) Update(world donburi.World) error {
 		return nil
 	}
 
+	if en.HasComponent(actions.Action) {
+		return nil
+	}
+
 	keys := inpututil.AppendPressedKeys(nil)
+
+	if lo.Contains(keys, ebiten.KeySpace) {
+		donburi.Add(en, actions.Action, &actions.HoeHit)
+	}
+
+	m.processMoving(en, keys)
+
+	return nil
+}
+
+func (m *Input) processMoving(en *donburi.Entry, keys []ebiten.Key) {
 	var shift gmath.Vec
 	if lo.Contains(keys, ebiten.KeyD) {
 		shift.X += 1
@@ -58,15 +74,7 @@ func (m *Input) Update(world donburi.World) error {
 		direction.Direction.SetValue(en, direction.Down)
 	}
 
-	if shift.IsZero() {
-		return nil
-	}
-
-	shift = shift.Normalized().Mulf(Speed)
-
-	for en := range donburi.NewQuery(filter.Contains(components.Character)).Iter(world) {
+	if !shift.IsZero() {
 		donburi.Add(en, components.MovementRequest, &components.MovementRequestData{Vec: shift})
 	}
-
-	return nil
 }

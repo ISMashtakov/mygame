@@ -30,10 +30,19 @@ var (
 			directions:  []direction.DirectionEnum{direction.Down, direction.Left, direction.Right, direction.Up},
 			duration:    time.Millisecond * 800,
 		},
+		AnimationCharacterHoeHitting: {
+			imageID:    ImageCharacterHoeHitting,
+			offset:     gmath.Vec{X: 250, Y: 170},
+			cellSize:   gmath.Vec{X: 250, Y: 170},
+			frames:     3,
+			directions: []direction.DirectionEnum{direction.Left, direction.Right, direction.Down, direction.Up},
+			duration:   time.Millisecond * 1600,
+		},
 	}
 )
 
 const (
 	AnimationNone AnimationID = iota
 	AnimationCharacterWalking
+	AnimationCharacterHoeHitting
 )

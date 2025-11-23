@@ -62,7 +62,7 @@ func (b *Builder) Entities() {
 }
 
 func (b *Builder) Systems() {
-	walkingAnimationSystem, err := systems.NewSwapSpriteByWalkingAnimation(b.resourses, b.creators.character)
+	walkingAnimationSystem, err := systems.NewSwapSpriteByAnimation(b.resourses, b.creators.character)
 	if err != nil {
 		panic(fmt.Errorf("can't create walking system: %w", err))
 	}
