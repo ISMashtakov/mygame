@@ -5,6 +5,13 @@ import (
 	"github.com/yohamta/donburi"
 )
 
-type SpriteData images.Image
+type SpriteData struct {
+	Image images.Image
+	Z     float32
+}
+
+func (d SpriteData) Order() int {
+	return int(d.Z)
+}
 
 var Sprite = donburi.NewComponentType[SpriteData]()

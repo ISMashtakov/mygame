@@ -70,13 +70,17 @@ func (s SwapSpriteByAnimation) Update(world donburi.World) error {
 				if s.hoeHittingAnimation.IsFinish() {
 					s.hoeHittingAnimation.Reset()
 					donburi.Remove[any](en, actions.Action)
+					donburi.Add(en, actions.ActionEnded, &actions.HoeHit)
 				}
 			}
 		} else {
 			subImage = s.walkingAnimation.Next(dir)
 		}
 
-		components.Sprite.SetValue(en, components.SpriteData(subImage))
+		components.Sprite.SetValue(en, components.SpriteData{
+			Image: subImage,
+			Z:     100,
+		})
 	}
 
 	return nil

@@ -9,3 +9,5 @@ var (
 )
 
 var Action = donburi.NewComponentType[ActionEnum]()
+
+var ActionEnded = donburi.NewComponentType[ActionEnum]()

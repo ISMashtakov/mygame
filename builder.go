@@ -26,6 +26,7 @@ type Builder struct {
 	world     donburi.World
 	creators  struct {
 		character *entities.CharacterCreator
+		garden    *background.GardenCreator
 	}
 }
 
@@ -44,6 +45,7 @@ func (b *Builder) Renderer() {
 func (b *Builder) Entities() {
 	// Entity creatores
 	b.creators.character = entities.NewCharacterCreator()
+	b.creators.garden = background.NewGardenCreator(b.resourses)
 	grassCreator := background.NewGrassCreator(b.resourses)
 	stoneCreator := entities.NewStoneCreator(b.resourses)
 
@@ -72,6 +74,7 @@ func (b *Builder) Systems() {
 		walkingAnimationSystem,
 		systems.NewCollisionDetector(),
 		systems.NewMovement(),
+		systems.NewHoeHitChecker(*b.creators.garden),
 	}
 
 	b.systems, err = systemssorter.SortSystems(b.systems)

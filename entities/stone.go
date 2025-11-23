@@ -2,6 +2,7 @@ package entities
 
 import (
 	"github.com/ISMashtakov/mygame/components"
+	"github.com/ISMashtakov/mygame/core/images"
 	"github.com/ISMashtakov/mygame/resources"
 	"github.com/ISMashtakov/mygame/utils/render"
 	"github.com/quasilyte/gmath"
@@ -25,6 +26,7 @@ func (c StoneCreator) Create(world donburi.World, position components.PositionDa
 		components.Position,
 		components.Sprite,
 		components.SpriteCollider,
+		components.Obstacle,
 	)
 
 	en := world.Entry(entity)
@@ -35,8 +37,11 @@ func (c StoneCreator) Create(world donburi.World, position components.PositionDa
 	}
 
 	sprite := components.SpriteData{
-		Image: im,
-		Scale: render.GetImageScale(im.Bounds(), c.TargetImageSize),
+		Image: images.Image{
+			Image: im,
+			Scale: render.GetImageScale(im.Bounds(), c.TargetImageSize),
+		},
+		Z: 5,
 	}
 	components.Sprite.SetValue(en, sprite)
 

@@ -8,6 +8,7 @@ var (
 		ImageCharacterHoeHitting: "resources/images/character/hit.png",
 		ImageGrass:               "resources/images/grass.png",
 		ImageStone:               "resources/images/stone.png",
+		ImageGarden:              "resources/images/garden.png",
 	}
 )
 
@@ -19,4 +20,5 @@ const (
 
 	ImageGrass
 	ImageStone
+	ImageGarden
 )

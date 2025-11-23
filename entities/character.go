@@ -33,7 +33,7 @@ func (c CharacterCreator) Create(world donburi.World) (donburi.Entity, error) {
 	en := world.Entry(entity)
 
 	rect := gmath.Rect{
-		Min: constants.CharacterColliderSize.Mulf(-0.5),
+		Min: constants.CharacterColliderSize.Mulf(-0.5).Add(gmath.Vec{Y: 2}),
 		Max: constants.CharacterColliderSize.Mulf(0.5),
 	}
 

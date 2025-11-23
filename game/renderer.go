@@ -27,21 +27,16 @@ func (r *Renderer) Draw(screen *ebiten.Image, world donburi.World) {
 }
 
 func (r *Renderer) drawSprites(screen *ebiten.Image, world donburi.World) {
-	for en := range donburi.NewQuery(filter.Contains(components.Sprite)).Iter(world) {
+	for en := range donburi.NewOrderedQuery[components.SpriteData](filter.Contains(components.Sprite)).IterOrdered(world, components.Sprite) {
 		sprite := components.Sprite.Get(en)
-
-		if en.HasComponent(components.SpriteCollider) {
-			fmt.Println(123)
-		}
 
 		op := ebiten.DrawImageOptions{}
 
-		op.GeoM.Scale(sprite.Scale.X, sprite.Scale.Y)
+		op.GeoM.Scale(sprite.Image.Scale.X, sprite.Image.Scale.Y)
 
-		op.GeoM.Translate(-float64(sprite.Image.Bounds().Dx())/2*sprite.Scale.X, -float64(sprite.Image.Bounds().Dy())/2*sprite.Scale.Y)
-		// op.GeoM.Translate(-float64(sprite.Image.Bounds().Dx())/2, -float64(sprite.Image.Bounds().Dy())/2)
+		op.GeoM.Translate(-float64(sprite.Image.Bounds().Dx())/2*sprite.Image.Scale.X, -float64(sprite.Image.Bounds().Dy())/2*sprite.Image.Scale.Y)
 
-		if sprite.Flip {
+		if sprite.Image.Flip {
 			op.GeoM.Scale(-1, 1)
 		}
 
@@ -50,7 +45,7 @@ func (r *Renderer) drawSprites(screen *ebiten.Image, world donburi.World) {
 			op.GeoM.Translate(position.X, position.Y)
 		}
 
-		screen.DrawImage(sprite.Image, &op)
+		screen.DrawImage(sprite.Image.Image, &op)
 	}
 }
 
