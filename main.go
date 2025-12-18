@@ -6,7 +6,6 @@ import (
 
 func main() {
 	ebiten.SetWindowSize(640, 480)
-	ebiten.SetWindowTitle("Hello, World!")
 
 	builder := Builder{}
 
@@ -15,6 +14,7 @@ func main() {
 	builder.World()
 	builder.Entities()
 	builder.Systems()
+	builder.GUI()
 
 	builder.RunGame()
 }

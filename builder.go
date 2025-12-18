@@ -7,6 +7,7 @@ import (
 	"github.com/ISMashtakov/mygame/entities"
 	"github.com/ISMashtakov/mygame/entities/background"
 	"github.com/ISMashtakov/mygame/game"
+	"github.com/ISMashtakov/mygame/gui"
 	"github.com/ISMashtakov/mygame/resources"
 	"github.com/ISMashtakov/mygame/systems"
 	"github.com/hajimehoshi/ebiten/v2"
@@ -28,6 +29,7 @@ type Builder struct {
 		character *entities.CharacterCreator
 		garden    *background.GardenCreator
 	}
+	gui *gui.GUI
 }
 
 func (b *Builder) Resources() {
@@ -40,6 +42,10 @@ func (b *Builder) Resources() {
 func (b *Builder) Renderer() {
 	b.renderer = game.NewRenderer()
 	// b.renderer.DrawColliders = true
+}
+
+func (b *Builder) GUI() {
+	b.gui = gui.NewGUI()
 }
 
 func (b *Builder) Entities() {
@@ -92,6 +98,7 @@ func (b *Builder) RunGame() {
 		*b.renderer,
 		b.world,
 		lo.Map(b.systems, func(s ISystem, _ int) game.ISystem { return s }),
+		b.gui,
 	)
 
 	panic(ebiten.RunGame(game))
