@@ -12,9 +12,9 @@ func main() {
 	builder.Resources()
 	builder.Renderer()
 	builder.World()
+	builder.GUI()
 	builder.Entities()
 	builder.Systems()
-	builder.GUI()
 
 	builder.RunGame()
 }

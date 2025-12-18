@@ -54,6 +54,7 @@ func (b *Builder) Entities() {
 	b.creators.garden = background.NewGardenCreator(b.resourses)
 	grassCreator := background.NewGrassCreator(b.resourses)
 	stoneCreator := entities.NewStoneCreator(b.resourses)
+	interfaceCreator := entities.NewInterfaceCreator()
 
 	// ----------
 	worldBuilder := game.NewWorldBuilder(*grassCreator, *stoneCreator)
@@ -66,6 +67,11 @@ func (b *Builder) Entities() {
 	_, err = b.creators.character.Create(b.world)
 	if err != nil {
 		panic(fmt.Errorf("can't create character: %w", err))
+	}
+
+	_, err = interfaceCreator.Create(b.world)
+	if err != nil {
+		panic(fmt.Errorf("can't create interface: %w", err))
 	}
 }
 
@@ -81,6 +87,7 @@ func (b *Builder) Systems() {
 		systems.NewCollisionDetector(),
 		systems.NewMovement(),
 		systems.NewHoeHitChecker(*b.creators.garden),
+		systems.NewCellSelecting(b.gui.DownPanel()),
 	}
 
 	b.systems, err = systemssorter.SortSystems(b.systems)

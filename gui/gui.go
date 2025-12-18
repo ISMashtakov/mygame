@@ -12,7 +12,8 @@ import (
 )
 
 type GUI struct {
-	root *ebitenui.UI
+	root      *ebitenui.UI
+	downPanel *components.DownPanel
 }
 
 func DefaultFont() text.Face {
@@ -27,17 +28,18 @@ func DefaultFont() text.Face {
 }
 
 func NewGUI() *GUI {
+	g := &GUI{}
+
 	root := widget.NewContainer(
 		widget.ContainerOpts.Layout(widget.NewAnchorLayout()),
 	)
+	g.downPanel = components.NewDownPanel()
 
-	downPanel := components.NewDownPanel()
+	root.AddChild(g.downPanel.Root())
 
-	root.AddChild(downPanel.Root())
+	g.root = &ebitenui.UI{Container: root}
 
-	return &GUI{
-		root: &ebitenui.UI{Container: root},
-	}
+	return g
 }
 
 func (g GUI) Draw(screen *ebiten.Image) {
@@ -46,4 +48,8 @@ func (g GUI) Draw(screen *ebiten.Image) {
 
 func (g GUI) Update() {
 	g.root.Update()
+}
+
+func (g GUI) DownPanel() *components.DownPanel {
+	return g.downPanel
 }

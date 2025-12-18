@@ -6,6 +6,7 @@ import (
 	"github.com/ISMashtakov/mygame/components"
 	"github.com/ISMashtakov/mygame/components/actions"
 	"github.com/ISMashtakov/mygame/components/direction"
+	"github.com/ISMashtakov/mygame/components/gui"
 	"github.com/ISMashtakov/mygame/core"
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/inpututil"
@@ -34,47 +35,64 @@ func NewInput() *Input {
 }
 
 func (m *Input) Update(world donburi.World) error {
-	en, ok := donburi.NewQuery(filter.Contains(components.Character)).First(world)
+	characterEntity, ok := donburi.NewQuery(filter.Contains(components.Character)).First(world)
 	if !ok {
 		log.Println("can't found character")
 		return nil
 	}
 
-	if en.HasComponent(actions.Action) {
+	if characterEntity.HasComponent(actions.Action) {
 		return nil
 	}
 
 	keys := inpututil.AppendPressedKeys(nil)
+	m.processMoving(characterEntity, keys)
 
-	if lo.Contains(keys, ebiten.KeySpace) {
-		donburi.Add(en, actions.Action, &actions.HoeHit)
+	justPressedKeys := inpututil.AppendJustPressedKeys(nil)
+
+	if lo.Contains(justPressedKeys, ebiten.KeySpace) {
+		donburi.Add(characterEntity, actions.Action, &actions.HoeHit)
 	}
 
-	m.processMoving(en, keys)
+	cellEntity, ok := donburi.NewQuery(filter.Contains(gui.SelectedCell)).First(world)
+	if !ok {
+		log.Println("can't found interface cell entity")
+		return nil
+	}
 
+	m.processNumbers(cellEntity, justPressedKeys)
 	return nil
 }
 
-func (m *Input) processMoving(en *donburi.Entry, keys []ebiten.Key) {
+func (m *Input) processMoving(char *donburi.Entry, keys []ebiten.Key) {
 	var shift gmath.Vec
 	if lo.Contains(keys, ebiten.KeyD) {
 		shift.X += 1
-		direction.Direction.SetValue(en, direction.Right)
+		direction.Direction.SetValue(char, direction.Right)
 	}
 	if lo.Contains(keys, ebiten.KeyA) {
 		shift.X -= 1
-		direction.Direction.SetValue(en, direction.Left)
+		direction.Direction.SetValue(char, direction.Left)
 	}
 	if lo.Contains(keys, ebiten.KeyW) {
 		shift.Y -= 1
-		direction.Direction.SetValue(en, direction.Up)
+		direction.Direction.SetValue(char, direction.Up)
 	}
 	if lo.Contains(keys, ebiten.KeyS) {
 		shift.Y += 1
-		direction.Direction.SetValue(en, direction.Down)
+		direction.Direction.SetValue(char, direction.Down)
 	}
 
 	if !shift.IsZero() {
-		donburi.Add(en, components.MovementRequest, &components.MovementRequestData{Vec: shift})
+		donburi.Add(char, components.MovementRequest, &components.MovementRequestData{Vec: shift})
+	}
+}
+
+func (m *Input) processNumbers(en *donburi.Entry, keys []ebiten.Key) {
+	for i := 0; i < 9; i++ {
+		if lo.Contains(keys, ebiten.Key(int(ebiten.Key1)+i)) {
+			donburi.Add(en, gui.SelectCellRequest, &gui.SelectCellRequestData{CellNumber: i})
+			return
+		}
 	}
 }

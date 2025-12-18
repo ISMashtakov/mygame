@@ -8,10 +8,13 @@ import (
 )
 
 type DownPanel struct {
-	root *widget.Container
+	root  *widget.Container
+	cells []*InventoryCell
 }
 
 func NewDownPanel(opts ...widget.ButtonOpt) *DownPanel {
+	result := &DownPanel{}
+
 	c := color.RGBA{R: 255, G: 220, B: 152, A: 255}
 	b := color.RGBA{R: 216, G: 122, B: 36, A: 255}
 
@@ -30,7 +33,7 @@ func NewDownPanel(opts ...widget.ButtonOpt) *DownPanel {
 		widget.ContainerOpts.BackgroundImage(image.NewBorderedNineSliceColor(c, b, 1)),
 	)
 
-	for i := 0; i < 8; i++ {
+	for i := 0; i < 9; i++ {
 		cell := NewInventoryCell(
 			widget.ButtonOpts.WidgetOpts(
 				widget.WidgetOpts.LayoutData(widget.RowLayoutData{
@@ -41,13 +44,19 @@ func NewDownPanel(opts ...widget.ButtonOpt) *DownPanel {
 		)
 
 		downPanel.AddChild(cell.Root())
+
+		result.cells = append(result.cells, cell)
 	}
 
-	return &DownPanel{
-		root: downPanel,
-	}
+	result.root = downPanel
+
+	return result
 }
 
 func (c DownPanel) Root() *widget.Container {
 	return c.root
+}
+
+func (c DownPanel) Cells() []*InventoryCell {
+	return c.cells
 }
