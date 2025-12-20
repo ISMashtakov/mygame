@@ -29,6 +29,7 @@ func (c StoneCreator) Create(world donburi.World, position components.PositionDa
 		components.Sprite,
 		components.SpriteCollider,
 		components.Obstacle,
+		components.Destroyable,
 	)
 
 	en := world.Entry(entity)

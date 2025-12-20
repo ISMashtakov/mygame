@@ -6,6 +6,7 @@ type Type int
 
 const (
 	Hoe Type = iota + 1
+	Pickaxe
 )
 
 type IItem interface {

@@ -88,13 +88,13 @@ func (b *Builder) Entities() {
 	}
 
 	don.CreateRequest(b.world, guicomponents.SetItemToDownPanelRequest, &guicomponents.SetItemToDownPanelRequestData{
-		Index: 1,
+		Index: 0,
 		Item:  b.itemsFactory.Hoe(),
 	})
 
 	don.CreateRequest(b.world, guicomponents.SetItemToDownPanelRequest, &guicomponents.SetItemToDownPanelRequestData{
-		Index: 6,
-		Item:  b.itemsFactory.Hoe(),
+		Index: 1,
+		Item:  b.itemsFactory.Pickaxe(),
 	})
 }
 

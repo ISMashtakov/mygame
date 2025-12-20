@@ -15,3 +15,7 @@ func NewItemsFactory(loader resources.IResourceLoader) *ItemsFactory {
 func (f ItemsFactory) Hoe() IItem {
 	return NewSimpleItem(Hoe, f.loader.LoadImage(resources.ImageItemHoe))
 }
+
+func (f ItemsFactory) Pickaxe() IItem {
+	return NewSimpleItem(Pickaxe, f.loader.LoadImage(resources.ImageItemPickaxe))
+}

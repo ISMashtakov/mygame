@@ -63,7 +63,9 @@ func (m *Input) Update(world donburi.World) {
 		if item != nil {
 			switch item.GetType() {
 			case items.Hoe:
-				donburi.Add(characterEntity, actions.Action, &actions.HoeHit)
+				donburi.Add(characterEntity, actions.Action, lo.ToPtr(actions.HoeHit))
+			case items.Pickaxe:
+				donburi.Add(characterEntity, actions.Action, lo.ToPtr(actions.PickaxeHit))
 			}
 
 		}

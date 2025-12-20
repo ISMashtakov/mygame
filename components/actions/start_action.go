@@ -4,8 +4,9 @@ import "github.com/yohamta/donburi"
 
 type ActionEnum int
 
-var (
-	HoeHit ActionEnum = 1
+const (
+	HoeHit ActionEnum = iota + 1
+	PickaxeHit
 )
 
 var Action = donburi.NewComponentType[ActionEnum]()

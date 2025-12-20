@@ -16,26 +16,26 @@ import (
 )
 
 const (
-	HoeHitCheckerCodename = "hoe_hit_checker"
+	ActionEndHandlerCodename = "action_end_handler"
 )
 
-type HoeHitChecker struct {
+type ActionEndHandler struct {
 	core.BaseSystem
 	gardenCreator      background.GardenCreator
 	collidersSubsystem subsystems.ColliderSearcher
 }
 
-func NewHoeHitChecker(garderCreator background.GardenCreator) *HoeHitChecker {
-	return &HoeHitChecker{
+func NewHoeHitChecker(garderCreator background.GardenCreator) *ActionEndHandler {
+	return &ActionEndHandler{
 		BaseSystem: core.BaseSystem{
-			Codename:        HoeHitCheckerCodename,
+			Codename:        ActionEndHandlerCodename,
 			PreviousSystems: []string{AnimationCodename},
 		},
 		gardenCreator: garderCreator,
 	}
 }
 
-func (m *HoeHitChecker) Update(world donburi.World) {
+func (m *ActionEndHandler) Update(world donburi.World) {
 	for en := range donburi.NewQuery(filter.Contains(actions.ActionEnded, direction.Direction, components.Position)).Iter(world) {
 		action, dir, position := actions.ActionEnded.Get(en), direction.Direction.Get(en), components.Position.Get(en)
 		switch *action {
@@ -57,9 +57,27 @@ func (m *HoeHitChecker) Update(world donburi.World) {
 			if len(m.collidersSubsystem.SearchByRect(world, rect, filter2.ContainsAny(components.Garden, components.Obstacle))) == 0 {
 				m.gardenCreator.Create(world, components.PositionData{Vec: point})
 			}
+		case actions.PickaxeHit:
+			point := position.Vec.Add(direction.GetDirectionVector(*dir).Mul(constants.TileSize))
 
-			donburi.Remove[any](en, actions.ActionEnded)
+			// сдвиг для красоты
+			if *dir != direction.Down {
+				point.Y += 10
+			}
+
+			hitArea := gmath.Vec{X: 10, Y: 10}
+
+			rect := gmath.Rect{
+				Min: point.Sub(hitArea.Mulf(0.5)),
+				Max: point.Add(hitArea.Mulf(0.5)),
+			}
+
+			for _, destroyableEn := range m.collidersSubsystem.SearchByRect(world, rect, filter.Contains(components.Destroyable)) {
+				world.Remove(destroyableEn.Entity())
+			}
 		}
+
+		donburi.Remove[any](en, actions.ActionEnded)
 
 	}
 }

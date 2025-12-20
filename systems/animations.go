@@ -55,16 +55,7 @@ func (s SwapSpriteByAnimation) Update(world donburi.World) {
 
 		if en.HasComponent(actions.Action) {
 			action := actions.Action.Get(en)
-			switch *action {
-			case actions.HoeHit:
-				subImage = s.hoeHittingAnimation.Next(dir)
-
-				if s.hoeHittingAnimation.IsFinish() {
-					s.hoeHittingAnimation.Reset()
-					donburi.Remove[any](en, actions.Action)
-					donburi.Add(en, actions.ActionEnded, &actions.HoeHit)
-				}
-			}
+			subImage = s.updateAction(en, *action, dir)
 		} else {
 			subImage = s.walkingAnimation.Next(dir)
 		}
@@ -74,4 +65,28 @@ func (s SwapSpriteByAnimation) Update(world donburi.World) {
 			Z:     z.OBJ,
 		})
 	}
+}
+
+func (s SwapSpriteByAnimation) updateAction(character *donburi.Entry, action actions.ActionEnum, dir direction.DirectionEnum) images.Image {
+	var subImage images.Image
+	switch action {
+	case actions.HoeHit:
+		subImage = s.hoeHittingAnimation.Next(dir)
+
+		if s.hoeHittingAnimation.IsFinish() {
+			s.hoeHittingAnimation.Reset()
+			donburi.Remove[any](character, actions.Action)
+			donburi.Add(character, actions.ActionEnded, &action)
+		}
+	case actions.PickaxeHit:
+		subImage = s.hoeHittingAnimation.Next(dir)
+
+		if s.hoeHittingAnimation.IsFinish() {
+			s.hoeHittingAnimation.Reset()
+			donburi.Remove[any](character, actions.Action)
+			donburi.Add(character, actions.ActionEnded, &action)
+		}
+	}
+
+	return subImage
 }
