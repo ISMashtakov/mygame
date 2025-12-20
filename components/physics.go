@@ -17,6 +17,8 @@ type RectColliderData struct {
 
 var RectCollider = donburi.NewComponentType[RectColliderData]()
 
-type SpriteColliderData struct{}
+type SpriteColliderData struct {
+	ActiveZone *gmath.Rect
+}
 
 var SpriteCollider = donburi.NewComponentType[SpriteColliderData]()

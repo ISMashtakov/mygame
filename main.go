@@ -16,5 +16,7 @@ func main() {
 	builder.Entities()
 	builder.Systems()
 
+	// builder.Debug()
+
 	builder.RunGame()
 }

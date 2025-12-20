@@ -6,6 +6,7 @@ import (
 	"github.com/ISMashtakov/mygame/components"
 	"github.com/ISMashtakov/mygame/components/actions"
 	"github.com/ISMashtakov/mygame/components/direction"
+	"github.com/ISMashtakov/mygame/constants/z"
 	"github.com/ISMashtakov/mygame/core"
 	"github.com/ISMashtakov/mygame/core/images"
 	"github.com/ISMashtakov/mygame/entities"
@@ -79,7 +80,7 @@ func (s SwapSpriteByAnimation) Update(world donburi.World) error {
 
 		components.Sprite.SetValue(en, components.SpriteData{
 			Image: subImage,
-			Z:     100,
+			Z:     z.OBJ,
 		})
 	}
 

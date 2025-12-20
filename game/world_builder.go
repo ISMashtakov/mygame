@@ -46,7 +46,7 @@ func (b WorldBuilder) Build(world donburi.World) error {
 		currentY += int(b.grassCreator.TargetImageSize.Y)
 	}
 
-	for i := 0; i < 5; i++ {
+	for i := 0; i < 15; i++ {
 		_, err := b.stoneCreator.Create(world, components.PositionData{
 			Vec: gmath.Vec{X: float64(rand.Intn(WorldSize.Max.X)), Y: float64(rand.Intn(WorldSize.Max.Y))},
 		})

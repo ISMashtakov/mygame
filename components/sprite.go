@@ -10,8 +10,4 @@ type SpriteData struct {
 	Z     float32
 }
 
-func (d SpriteData) Order() int {
-	return int(d.Z)
-}
-
 var Sprite = donburi.NewComponentType[SpriteData]()

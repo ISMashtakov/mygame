@@ -32,6 +32,10 @@ type Builder struct {
 	gui *gui.GUI
 }
 
+func (b *Builder) Debug() {
+	b.renderer.DrawColliders = true
+}
+
 func (b *Builder) Resources() {
 	b.resourses = resources.NewResourceLoader()
 	if err := b.resourses.Preload(); err != nil {
@@ -41,7 +45,6 @@ func (b *Builder) Resources() {
 
 func (b *Builder) Renderer() {
 	b.renderer = game.NewRenderer()
-	// b.renderer.DrawColliders = true
 }
 
 func (b *Builder) GUI() {

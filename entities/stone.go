@@ -2,8 +2,10 @@ package entities
 
 import (
 	"github.com/ISMashtakov/mygame/components"
+	"github.com/ISMashtakov/mygame/constants/z"
 	"github.com/ISMashtakov/mygame/core/images"
 	"github.com/ISMashtakov/mygame/resources"
+	"github.com/ISMashtakov/mygame/utils"
 	"github.com/ISMashtakov/mygame/utils/render"
 	"github.com/quasilyte/gmath"
 	"github.com/yohamta/donburi"
@@ -41,11 +43,17 @@ func (c StoneCreator) Create(world donburi.World, position components.PositionDa
 			Image: im,
 			Scale: render.GetImageScale(im.Bounds(), c.TargetImageSize),
 		},
-		Z: 5,
+		Z: z.OBJ,
 	}
 	components.Sprite.SetValue(en, sprite)
 
 	components.Position.SetValue(en, position)
+
+	rect := utils.GetRectOfBottomOfParent(c.TargetImageSize, 0.3)
+
+	components.SpriteCollider.SetValue(en, components.SpriteColliderData{
+		ActiveZone: &rect,
+	})
 
 	return entity, nil
 }

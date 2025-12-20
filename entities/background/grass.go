@@ -3,6 +3,7 @@ package background
 import (
 	"github.com/ISMashtakov/mygame/components"
 	"github.com/ISMashtakov/mygame/constants"
+	"github.com/ISMashtakov/mygame/constants/z"
 	"github.com/ISMashtakov/mygame/core/images"
 	"github.com/ISMashtakov/mygame/resources"
 	"github.com/ISMashtakov/mygame/utils/render"
@@ -39,7 +40,7 @@ func (c GrassCreator) Create(world donburi.World, position components.PositionDa
 		Image: images.Image{
 			Image: im, Scale: render.GetImageScale(im.Bounds(), c.TargetImageSize),
 		},
-		Z: 0,
+		Z: z.GRASS,
 	})
 
 	components.Position.SetValue(en, position)

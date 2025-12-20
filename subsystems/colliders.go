@@ -145,17 +145,8 @@ func (s ColliderSearcher) isIntersectSpriteWithSprite(en, en2 *donburi.Entry) bo
 	imageSize1 := gmath.Vec{X: bounds1.Width(), Y: bounds1.Height()}.Mul(sprite1.Image.Scale)
 	imageSize2 := gmath.Vec{X: bounds2.Width(), Y: bounds2.Height()}.Mul(sprite2.Image.Scale)
 
-	rect1 := gmath.Rect{
-		Min: pos1.Sub(imageSize1.Mulf(0.5)),
-		Max: pos1.Add(imageSize1.Mulf(0.5)),
-	}
-	rect2 := gmath.Rect{
-		Min: pos2.Sub(imageSize2.Mulf(0.5)),
-		Max: pos2.Add(imageSize2.Mulf(0.5)),
-	}
-
-	imageRec1 := rect1.ToStd()
-	imageRec2 := rect2.ToStd()
+	imageRec1 := s.getSpriteRect(en, imageSize1, pos1).ToStd()
+	imageRec2 := s.getSpriteRect(en2, imageSize2, pos2).ToStd()
 
 	// Сначала проверяем пересечение bounding box
 	if !imageRec1.Overlaps(imageRec2) {
@@ -202,13 +193,8 @@ func (s ColliderSearcher) isIntersectRectWithSprite(rect gmath.Rect, en2 *donbur
 	imageSize2 := gmath.Vec{X: bounds2.Width(), Y: bounds2.Height()}
 	imageSize2 = imageSize2.Mul(sprite2.Image.Scale)
 
-	rect2 := gmath.Rect{
-		Min: pos2.Sub(imageSize2.Mulf(0.5)),
-		Max: pos2.Add(imageSize2.Mulf(0.5)),
-	}
-
 	imageRec1 := rect.ToStd()
-	imageRec2 := rect2.ToStd()
+	imageRec2 := s.getSpriteRect(en2, imageSize2, pos2).ToStd()
 
 	// Сначала проверяем пересечение bounding box
 	if !imageRec1.Overlaps(imageRec2) {
@@ -234,4 +220,20 @@ func (s ColliderSearcher) isIntersectRectWithSprite(rect gmath.Rect, en2 *donbur
 	}
 
 	return false
+}
+
+func (s ColliderSearcher) getSpriteRect(spriteEntity *donburi.Entry, imageSize, pos gmath.Vec) gmath.Rect {
+	spriteCollider := components.SpriteCollider.Get(spriteEntity)
+
+	if spriteCollider.ActiveZone != nil {
+		return gmath.Rect{
+			Min: spriteCollider.ActiveZone.Min.Add(pos),
+			Max: spriteCollider.ActiveZone.Max.Add(pos),
+		}
+	} else {
+		return gmath.Rect{
+			Min: pos.Sub(imageSize.Mulf(0.5)),
+			Max: pos.Add(imageSize.Mulf(0.5)),
+		}
+	}
 }
