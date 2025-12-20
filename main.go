@@ -11,8 +11,9 @@ func main() {
 
 	builder.Resources()
 	builder.Renderer()
-	builder.World()
+	builder.ItemsFactory()
 	builder.GUI()
+	builder.World()
 	builder.Entities()
 	builder.Systems()
 

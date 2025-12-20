@@ -1,8 +1,6 @@
 package systems
 
 import (
-	"fmt"
-
 	"github.com/ISMashtakov/mygame/components"
 	"github.com/ISMashtakov/mygame/components/actions"
 	"github.com/ISMashtakov/mygame/components/direction"
@@ -26,16 +24,9 @@ type SwapSpriteByAnimation struct {
 	hoeHittingAnimation *images.Animation
 }
 
-func NewSwapSpriteByAnimation(resourceLoader resources.IResourceLoader, characterCreator *entities.CharacterCreator) (*SwapSpriteByAnimation, error) {
-	walkingAnimation, err := resourceLoader.LoadAnimation(resources.AnimationCharacterWalking)
-	if err != nil {
-		return nil, fmt.Errorf("can't get animation: %w", err)
-	}
-
-	hoeHittingAnimation, err := resourceLoader.LoadAnimation(resources.AnimationCharacterHoeHitting)
-	if err != nil {
-		return nil, fmt.Errorf("can't get animation: %w", err)
-	}
+func NewSwapSpriteByAnimation(resourceLoader resources.IResourceLoader, characterCreator *entities.CharacterCreator) *SwapSpriteByAnimation {
+	walkingAnimation := resourceLoader.LoadAnimation(resources.AnimationCharacterWalking)
+	hoeHittingAnimation := resourceLoader.LoadAnimation(resources.AnimationCharacterHoeHitting)
 
 	return &SwapSpriteByAnimation{
 		BaseSystem: core.BaseSystem{
@@ -46,7 +37,7 @@ func NewSwapSpriteByAnimation(resourceLoader resources.IResourceLoader, characte
 
 		walkingAnimation:    walkingAnimation,
 		hoeHittingAnimation: hoeHittingAnimation,
-	}, nil
+	}
 }
 
 func (s SwapSpriteByAnimation) Update(world donburi.World) error {

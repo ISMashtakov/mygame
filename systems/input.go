@@ -1,13 +1,17 @@
 package systems
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/ISMashtakov/mygame/components"
 	"github.com/ISMashtakov/mygame/components/actions"
 	"github.com/ISMashtakov/mygame/components/direction"
 	"github.com/ISMashtakov/mygame/components/gui"
+	"github.com/ISMashtakov/mygame/constants"
 	"github.com/ISMashtakov/mygame/core"
+	"github.com/ISMashtakov/mygame/items"
+	"github.com/ISMashtakov/mygame/utils/don"
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/inpututil"
 	"github.com/quasilyte/gmath"
@@ -51,7 +55,22 @@ func (m *Input) Update(world donburi.World) error {
 	justPressedKeys := inpututil.AppendJustPressedKeys(nil)
 
 	if lo.Contains(justPressedKeys, ebiten.KeySpace) {
-		donburi.Add(characterEntity, actions.Action, &actions.HoeHit)
+		panelEntity, ok := donburi.NewQuery(filter.Contains(gui.SelectedCell, gui.DownPanel)).First(world)
+		if !ok {
+			return fmt.Errorf("panel not found")
+		}
+
+		selectedCell := gui.SelectedCell.Get(panelEntity)
+		downPanel := gui.DownPanel.Get(panelEntity)
+
+		item := downPanel.Items[selectedCell.CellNumber]
+		if item != nil {
+			switch item.GetType() {
+			case items.Hoe:
+				donburi.Add(characterEntity, actions.Action, &actions.HoeHit)
+			}
+
+		}
 	}
 
 	cellEntity, ok := donburi.NewQuery(filter.Contains(gui.SelectedCell)).First(world)
@@ -89,9 +108,9 @@ func (m *Input) processMoving(char *donburi.Entry, keys []ebiten.Key) {
 }
 
 func (m *Input) processNumbers(en *donburi.Entry, keys []ebiten.Key) {
-	for i := 0; i < 9; i++ {
+	for i := 0; i < constants.DownPanelLength; i++ {
 		if lo.Contains(keys, ebiten.Key(int(ebiten.Key1)+i)) {
-			donburi.Add(en, gui.SelectCellRequest, &gui.SelectCellRequestData{CellNumber: i})
+			don.CreateRequest(en.World, gui.SelectCellRequest, &gui.SelectCellRequestData{CellNumber: i})
 			return
 		}
 	}

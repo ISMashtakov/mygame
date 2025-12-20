@@ -3,6 +3,7 @@ package components
 import (
 	"image/color"
 
+	"github.com/ISMashtakov/mygame/constants"
 	"github.com/ebitenui/ebitenui/image"
 	"github.com/ebitenui/ebitenui/widget"
 )
@@ -33,15 +34,8 @@ func NewDownPanel(opts ...widget.ButtonOpt) *DownPanel {
 		widget.ContainerOpts.BackgroundImage(image.NewBorderedNineSliceColor(c, b, 1)),
 	)
 
-	for i := 0; i < 9; i++ {
-		cell := NewInventoryCell(
-			widget.ButtonOpts.WidgetOpts(
-				widget.WidgetOpts.LayoutData(widget.RowLayoutData{
-					MaxWidth:  20,
-					MaxHeight: 20,
-				}),
-			),
-		)
+	for i := 0; i < constants.DownPanelLength; i++ {
+		cell := NewInventoryCell()
 
 		downPanel.AddChild(cell.Root())
 

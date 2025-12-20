@@ -44,10 +44,7 @@ func (l *ResourceLoader) Preload() error {
 	l.animations = make(map[AnimationID]*images.Animation, len(animationResources))
 
 	for animationID, animationData := range animationResources {
-		image, err := l.LoadImage(animationData.imageID)
-		if err != nil {
-			return err
-		}
+		image := l.LoadImage(animationData.imageID)
 
 		spriteSheet := images.NewSpritesSheet(image, animationData.cellSize)
 		animationMap := images.NewAnimationsMap(*spriteSheet, animationData.frames, animationData.directions)
@@ -57,20 +54,20 @@ func (l *ResourceLoader) Preload() error {
 	return nil
 }
 
-func (l *ResourceLoader) LoadImage(imageID ImageID) (*ebiten.Image, error) {
+func (l *ResourceLoader) LoadImage(imageID ImageID) *ebiten.Image {
 	image, ok := l.resources[imageID]
 	if !ok {
-		return nil, fmt.Errorf("%d: %w", imageID, errs.ErrUnknowsResourceID)
+		panic(fmt.Errorf("%d: %w", imageID, errs.ErrUnknowsResourceID))
 	}
 
-	return image, nil
+	return image
 }
 
-func (l *ResourceLoader) LoadAnimation(animationID AnimationID) (*images.Animation, error) {
+func (l *ResourceLoader) LoadAnimation(animationID AnimationID) *images.Animation {
 	animation, ok := l.animations[animationID]
 	if !ok {
-		return nil, fmt.Errorf("%d: %w", animationID, errs.ErrUnknowsResourceID)
+		panic(fmt.Errorf("%d: %w", animationID, errs.ErrUnknowsResourceID))
 	}
 
-	return animation, nil
+	return animation
 }

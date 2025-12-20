@@ -3,11 +3,15 @@ package main
 import (
 	"fmt"
 
+	guicomponents "github.com/ISMashtakov/mygame/components/gui"
 	systemssorter "github.com/ISMashtakov/mygame/core/systems_sorter"
 	"github.com/ISMashtakov/mygame/entities"
 	"github.com/ISMashtakov/mygame/entities/background"
 	"github.com/ISMashtakov/mygame/game"
+	"github.com/ISMashtakov/mygame/utils/don"
+
 	"github.com/ISMashtakov/mygame/gui"
+	"github.com/ISMashtakov/mygame/items"
 	"github.com/ISMashtakov/mygame/resources"
 	"github.com/ISMashtakov/mygame/systems"
 	"github.com/hajimehoshi/ebiten/v2"
@@ -30,6 +34,8 @@ type Builder struct {
 		garden    *background.GardenCreator
 	}
 	gui *gui.GUI
+
+	itemsFactory *items.ItemsFactory
 }
 
 func (b *Builder) Debug() {
@@ -45,6 +51,10 @@ func (b *Builder) Resources() {
 
 func (b *Builder) Renderer() {
 	b.renderer = game.NewRenderer()
+}
+
+func (b *Builder) ItemsFactory() {
+	b.itemsFactory = items.NewItemsFactory(b.resourses)
 }
 
 func (b *Builder) GUI() {
@@ -76,13 +86,20 @@ func (b *Builder) Entities() {
 	if err != nil {
 		panic(fmt.Errorf("can't create interface: %w", err))
 	}
+
+	don.CreateRequest(b.world, guicomponents.SetItemToDownPanelRequest, &guicomponents.SetItemToDownPanelRequestData{
+		Index: 1,
+		Item:  b.itemsFactory.Hoe(),
+	})
+
+	don.CreateRequest(b.world, guicomponents.SetItemToDownPanelRequest, &guicomponents.SetItemToDownPanelRequestData{
+		Index: 6,
+		Item:  b.itemsFactory.Hoe(),
+	})
 }
 
 func (b *Builder) Systems() {
-	walkingAnimationSystem, err := systems.NewSwapSpriteByAnimation(b.resourses, b.creators.character)
-	if err != nil {
-		panic(fmt.Errorf("can't create walking system: %w", err))
-	}
+	walkingAnimationSystem := systems.NewSwapSpriteByAnimation(b.resourses, b.creators.character)
 
 	b.systems = []ISystem{
 		systems.NewInput(),
@@ -90,9 +107,10 @@ func (b *Builder) Systems() {
 		systems.NewCollisionDetector(),
 		systems.NewMovement(),
 		systems.NewHoeHitChecker(*b.creators.garden),
-		systems.NewCellSelecting(b.gui.DownPanel()),
+		systems.NewDownPanelHandler(b.gui.DownPanel()),
 	}
 
+	var err error
 	b.systems, err = systemssorter.SortSystems(b.systems)
 	if err != nil {
 		panic(fmt.Errorf("can't sort systems: %w", err))

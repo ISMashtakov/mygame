@@ -6,6 +6,6 @@ import (
 )
 
 type IResourceLoader interface {
-	LoadImage(imageID ImageID) (*ebiten.Image, error)
-	LoadAnimation(animationID AnimationID) (*images.Animation, error)
+	LoadImage(imageID ImageID) *ebiten.Image
+	LoadAnimation(animationID AnimationID) *images.Animation
 }

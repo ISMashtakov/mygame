@@ -5,44 +5,61 @@ import (
 
 	"github.com/ebitenui/ebitenui/image"
 	"github.com/ebitenui/ebitenui/widget"
+	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/samber/lo"
 )
 
 type InventoryCell struct {
-	root *widget.Button
+	root     *widget.Container
+	cell     *widget.Container
+	image    *ebiten.Image
+	selected bool
 }
 
-func NewInventoryCell(opts ...widget.ButtonOpt) *InventoryCell {
+func NewInventoryCell() *InventoryCell {
 	res := &InventoryCell{}
-	res.root = widget.NewButton(opts...)
-	res.Disable()
+	res.root = widget.NewContainer(
+		widget.ContainerOpts.Layout(widget.NewRowLayout()))
+	res.cell = widget.NewContainer(widget.ContainerOpts.WidgetOpts(
+		widget.WidgetOpts.MinSize(20, 20),
+	))
+	res.root.AddChild(res.cell)
+
+	res.updateImage()
 
 	return res
 }
 
-func (InventoryCell) getImage(enabled bool) *widget.ButtonImage {
+func (c *InventoryCell) updateImage() {
 	background := color.RGBA{R: 246, G: 186, B: 114, A: 255}
-	border := lo.Ternary(enabled, color.RGBA{R: 170, G: 29, B: 19, A: 255}, color.RGBA{R: 193, G: 135, B: 72, A: 255})
-	im := image.NewAdvancedNineSliceColor(background, image.NewBorder(1, 1, 1, 1, border))
+	border := lo.Ternary(c.selected, color.RGBA{R: 170, G: 29, B: 19, A: 255}, color.RGBA{R: 193, G: 135, B: 72, A: 255})
 
-	return &widget.ButtonImage{
-		Idle:            im,
-		Hover:           im,
-		Pressed:         im,
-		PressedHover:    im,
-		Disabled:        im,
-		PressedDisabled: im,
+	backgroundImage := image.NewAdvancedNineSliceColor(background, image.NewBorder(1, 1, 1, 1, border))
+
+	c.root.SetBackgroundImage(backgroundImage)
+
+	if c.image != nil {
+		c.cell.SetBackgroundImage(image.NewNineSliceBorder(c.image, 1))
+	} else {
+		c.cell.SetBackgroundImage(image.NewNineSliceColor(color.Transparent))
 	}
 }
 
-func (c InventoryCell) Root() *widget.Button {
+func (c *InventoryCell) Root() *widget.Container {
 	return c.root
 }
 
-func (c InventoryCell) Enable() {
-	c.root.SetImage(c.getImage(true))
+func (c *InventoryCell) Enable() {
+	c.selected = true
+	c.updateImage()
 }
 
-func (c InventoryCell) Disable() {
-	c.root.SetImage(c.getImage(false))
+func (c *InventoryCell) Disable() {
+	c.selected = false
+	c.updateImage()
+}
+
+func (c *InventoryCell) SetImage(image *ebiten.Image) {
+	c.image = image
+	c.updateImage()
 }

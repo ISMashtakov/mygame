@@ -23,7 +23,7 @@ func NewStoneCreator(loader resources.IResourceLoader) *StoneCreator {
 	}
 }
 
-func (c StoneCreator) Create(world donburi.World, position components.PositionData) (donburi.Entity, error) {
+func (c StoneCreator) Create(world donburi.World, position components.PositionData) donburi.Entity {
 	entity := world.Create(
 		components.Position,
 		components.Sprite,
@@ -33,10 +33,7 @@ func (c StoneCreator) Create(world donburi.World, position components.PositionDa
 
 	en := world.Entry(entity)
 
-	im, err := c.loader.LoadImage(resources.ImageStone)
-	if err != nil {
-		return 0, err
-	}
+	im := c.loader.LoadImage(resources.ImageStone)
 
 	sprite := components.SpriteData{
 		Image: images.Image{
@@ -55,5 +52,5 @@ func (c StoneCreator) Create(world donburi.World, position components.PositionDa
 		ActiveZone: &rect,
 	})
 
-	return entity, nil
+	return entity
 }

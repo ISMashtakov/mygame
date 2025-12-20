@@ -9,6 +9,8 @@ var (
 		ImageGrass:               "resources/images/grass.png",
 		ImageStone:               "resources/images/stone.png",
 		ImageGarden:              "resources/images/garden.png",
+		// HOE
+		ImageItemHoe: "resources/images/items/hoe.png",
 	}
 )
 
@@ -21,4 +23,7 @@ const (
 	ImageGrass
 	ImageStone
 	ImageGarden
+
+	// ITEMS
+	ImageItemHoe
 )

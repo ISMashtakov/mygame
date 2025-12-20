@@ -55,10 +55,7 @@ func (m *HoeHitChecker) Update(world donburi.World) error {
 			}
 
 			if len(m.collidersSubsystem.SearchByRect(world, rect, filter2.ContainsAny(components.Garden, components.Obstacle))) == 0 {
-				_, err := m.gardenCreator.Create(world, components.PositionData{Vec: point})
-				if err != nil {
-					return err
-				}
+				m.gardenCreator.Create(world, components.PositionData{Vec: point})
 			}
 
 			donburi.Remove[any](en, actions.ActionEnded)

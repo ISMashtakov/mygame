@@ -23,7 +23,7 @@ func NewGrassCreator(loader resources.IResourceLoader) *GrassCreator {
 	}
 }
 
-func (c GrassCreator) Create(world donburi.World, position components.PositionData) (donburi.Entity, error) {
+func (c GrassCreator) Create(world donburi.World, position components.PositionData) donburi.Entity {
 	entity := world.Create(
 		components.Position,
 		components.Sprite,
@@ -31,10 +31,7 @@ func (c GrassCreator) Create(world donburi.World, position components.PositionDa
 
 	en := world.Entry(entity)
 
-	im, err := c.loader.LoadImage(resources.ImageGrass)
-	if err != nil {
-		return 0, err
-	}
+	im := c.loader.LoadImage(resources.ImageGrass)
 
 	components.Sprite.SetValue(en, components.SpriteData{
 		Image: images.Image{
@@ -45,5 +42,5 @@ func (c GrassCreator) Create(world donburi.World, position components.PositionDa
 
 	components.Position.SetValue(en, position)
 
-	return entity, nil
+	return entity
 }

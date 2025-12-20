@@ -41,7 +41,7 @@ func (d CollisionDetector) fixCollision(world donburi.World) int {
 
 	for en := range donburi.NewQuery(
 		filter.And(
-			filter.Contains(components.MovementRequest),
+			filter.Contains(components.MovementRequest), // TODO: Переделать запрос на движение
 			colliderFilter,
 		),
 	).Iter(world) {

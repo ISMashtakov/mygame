@@ -7,6 +7,7 @@ import (
 	"github.com/ISMashtakov/mygame/components"
 	"github.com/ISMashtakov/mygame/entities"
 	"github.com/ISMashtakov/mygame/entities/background"
+	"github.com/ISMashtakov/mygame/items"
 	"github.com/quasilyte/gmath"
 	"github.com/yohamta/donburi"
 )
@@ -18,6 +19,7 @@ var (
 type WorldBuilder struct {
 	grassCreator background.GrassCreator
 	stoneCreator entities.StoneCreator
+	itemsFactory items.ItemsFactory
 }
 
 func NewWorldBuilder(
@@ -35,24 +37,18 @@ func (b WorldBuilder) Build(world donburi.World) error {
 	for currentY <= WorldSize.Max.Y {
 		currentX := WorldSize.Min.X
 		for currentX <= WorldSize.Max.X {
-			_, err := b.grassCreator.Create(world, components.PositionData{
+			b.grassCreator.Create(world, components.PositionData{
 				Vec: gmath.Vec{X: float64(currentX), Y: float64(currentY)},
 			})
-			if err != nil {
-				return err
-			}
 			currentX += int(b.grassCreator.TargetImageSize.X)
 		}
 		currentY += int(b.grassCreator.TargetImageSize.Y)
 	}
 
 	for i := 0; i < 15; i++ {
-		_, err := b.stoneCreator.Create(world, components.PositionData{
+		b.stoneCreator.Create(world, components.PositionData{
 			Vec: gmath.Vec{X: float64(rand.Intn(WorldSize.Max.X)), Y: float64(rand.Intn(WorldSize.Max.Y))},
 		})
-		if err != nil {
-			return err
-		}
 	}
 
 	return nil

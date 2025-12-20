@@ -22,7 +22,7 @@ func NewGardenCreator(loader resources.IResourceLoader) *GardenCreator {
 	}
 }
 
-func (c GardenCreator) Create(world donburi.World, position components.PositionData) (donburi.Entity, error) {
+func (c GardenCreator) Create(world donburi.World, position components.PositionData) donburi.Entity {
 	entity := world.Create(
 		components.Position,
 		components.Sprite,
@@ -32,10 +32,7 @@ func (c GardenCreator) Create(world donburi.World, position components.PositionD
 
 	en := world.Entry(entity)
 
-	im, err := c.loader.LoadImage(resources.ImageGarden)
-	if err != nil {
-		return 0, err
-	}
+	im := c.loader.LoadImage(resources.ImageGarden)
 
 	components.Sprite.SetValue(en, components.SpriteData{
 		Image: images.Image{
@@ -51,5 +48,5 @@ func (c GardenCreator) Create(world donburi.World, position components.PositionD
 	components.RectCollider.SetValue(en, components.RectColliderData{Rect: rect})
 	components.Position.SetValue(en, position)
 
-	return entity, nil
+	return entity
 }
