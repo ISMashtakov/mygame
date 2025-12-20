@@ -40,14 +40,14 @@ func NewSwapSpriteByAnimation(resourceLoader resources.IResourceLoader, characte
 	}
 }
 
-func (s SwapSpriteByAnimation) Update(world donburi.World) error {
+func (s SwapSpriteByAnimation) Update(world donburi.World) {
 	for en := range donburi.NewQuery(
 		filter.And(
 			filter.Contains(components.Sprite, components.Character, components.WalkingAnimation, direction.Direction),
 		)).Iter(world) {
 		dir := direction.Direction.GetValue(en)
 
-		if !en.HasComponent(components.MovementRequest) {
+		if !en.HasComponent(components.Movement) {
 			s.walkingAnimation.Reset()
 		}
 
@@ -74,6 +74,4 @@ func (s SwapSpriteByAnimation) Update(world donburi.World) error {
 			Z:     z.OBJ,
 		})
 	}
-
-	return nil
 }

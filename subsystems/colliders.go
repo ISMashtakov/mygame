@@ -82,8 +82,8 @@ func (s ColliderSearcher) getRect(en *donburi.Entry) gmath.Rect {
 		offset = offset.Add(pos.Vec)
 	}
 
-	if en.HasComponent(components.MovementRequest) {
-		moveReq := components.MovementRequest.Get(en)
+	if en.HasComponent(components.Movement) {
+		moveReq := components.Movement.Get(en)
 		offset = offset.Add(moveReq.Vec)
 	}
 

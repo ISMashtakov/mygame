@@ -22,7 +22,7 @@ func (c CharacterCreator) Create(world donburi.World) (donburi.Entity, error) {
 	entity := world.Create(
 		components.Position,
 		components.Sprite,
-		components.MovementRequest,
+		components.Movement,
 		components.Character,
 		components.WalkingAnimation,
 		// Подумать над спрайтовым коллайдером, но проблема, что анимация меняет спрайт и можно застрять в текстуре.

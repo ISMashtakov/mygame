@@ -5,5 +5,5 @@ import (
 )
 
 type ISystem interface {
-	Update(world donburi.World) error
+	Update(world donburi.World)
 }

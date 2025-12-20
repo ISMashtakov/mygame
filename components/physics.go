@@ -5,11 +5,11 @@ import (
 	"github.com/yohamta/donburi"
 )
 
-type MovementRequestData struct {
+type MovementData struct {
 	gmath.Vec
 }
 
-var MovementRequest = donburi.NewComponentType[MovementRequestData]()
+var Movement = donburi.NewComponentType[MovementData]()
 
 type RectColliderData struct {
 	gmath.Rect

@@ -25,9 +25,7 @@ func NewGame(renderer Renderer, world donburi.World, systems []ISystem, gui *gui
 
 func (g *Game) Update() error {
 	for _, system := range g.systems {
-		if err := system.Update(g.world); err != nil {
-			return err
-		}
+		system.Update(g.world)
 	}
 
 	g.gui.Update()

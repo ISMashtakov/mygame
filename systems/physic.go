@@ -24,14 +24,12 @@ func NewMovement() *Movement {
 	}
 }
 
-func (m *Movement) Update(world donburi.World) error {
-	for en := range donburi.NewQuery(filter.Contains(components.Position, components.MovementRequest)).Iter(world) { //TODO: тут тоже
-		pos, moveRequest := components.Position.Get(en), components.MovementRequest.Get(en)
+func (m *Movement) Update(world donburi.World) {
+	for en := range donburi.NewQuery(filter.Contains(components.Position, components.Movement)).Iter(world) { //TODO: тут тоже
+		pos, moveRequest := components.Position.Get(en), components.Movement.Get(en)
 
 		pos.Vec = pos.Vec.Add(moveRequest.Vec)
 
-		donburi.Remove[any](en, components.MovementRequest)
+		donburi.Remove[any](en, components.Movement)
 	}
-
-	return nil
 }

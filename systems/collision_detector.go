@@ -28,10 +28,9 @@ func NewCollisionDetector() *CollisionDetector {
 	}
 }
 
-func (d CollisionDetector) Update(world donburi.World) error {
+func (d CollisionDetector) Update(world donburi.World) {
 	for d.fixCollision(world) > 0 {
 	}
-	return nil
 }
 
 func (d CollisionDetector) fixCollision(world donburi.World) int {
@@ -41,7 +40,7 @@ func (d CollisionDetector) fixCollision(world donburi.World) int {
 
 	for en := range donburi.NewQuery(
 		filter.And(
-			filter.Contains(components.MovementRequest), // TODO: Переделать запрос на движение
+			filter.Contains(components.Movement), // TODO: Переделать запрос на движение
 			colliderFilter,
 		),
 	).Iter(world) {
@@ -53,7 +52,7 @@ func (d CollisionDetector) fixCollision(world donburi.World) int {
 			}
 
 			if d.colidersSubsystem.IsIntersect(en, en2) {
-				donburi.Remove[any](en, components.MovementRequest)
+				donburi.Remove[any](en, components.Movement)
 				countFixed++
 				break
 			}

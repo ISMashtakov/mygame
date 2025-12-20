@@ -35,7 +35,7 @@ func NewHoeHitChecker(garderCreator background.GardenCreator) *HoeHitChecker {
 	}
 }
 
-func (m *HoeHitChecker) Update(world donburi.World) error {
+func (m *HoeHitChecker) Update(world donburi.World) {
 	for en := range donburi.NewQuery(filter.Contains(actions.ActionEnded, direction.Direction, components.Position)).Iter(world) {
 		action, dir, position := actions.ActionEnded.Get(en), direction.Direction.Get(en), components.Position.Get(en)
 		switch *action {
@@ -62,6 +62,4 @@ func (m *HoeHitChecker) Update(world donburi.World) error {
 		}
 
 	}
-
-	return nil
 }

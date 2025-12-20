@@ -29,10 +29,9 @@ func NewDownPanelHandler(downPanel *components.DownPanel) *DownPanelHandler {
 	}
 }
 
-func (c *DownPanelHandler) Update(world donburi.World) error {
+func (c *DownPanelHandler) Update(world donburi.World) {
 	c.updateSelecting(world)
 	c.updateItems(world)
-	return nil
 }
 
 func (c *DownPanelHandler) updateItems(world donburi.World) {

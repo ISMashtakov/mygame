@@ -1,9 +1,6 @@
 package systems
 
 import (
-	"fmt"
-	"log"
-
 	"github.com/ISMashtakov/mygame/components"
 	"github.com/ISMashtakov/mygame/components/actions"
 	"github.com/ISMashtakov/mygame/components/direction"
@@ -38,15 +35,14 @@ func NewInput() *Input {
 	}
 }
 
-func (m *Input) Update(world donburi.World) error {
+func (m *Input) Update(world donburi.World) {
 	characterEntity, ok := donburi.NewQuery(filter.Contains(components.Character)).First(world)
 	if !ok {
-		log.Println("can't found character")
-		return nil
+		panic("can't found character")
 	}
 
 	if characterEntity.HasComponent(actions.Action) {
-		return nil
+		return
 	}
 
 	keys := inpututil.AppendPressedKeys(nil)
@@ -57,7 +53,7 @@ func (m *Input) Update(world donburi.World) error {
 	if lo.Contains(justPressedKeys, ebiten.KeySpace) {
 		panelEntity, ok := donburi.NewQuery(filter.Contains(gui.SelectedCell, gui.DownPanel)).First(world)
 		if !ok {
-			return fmt.Errorf("panel not found")
+			panic("panel not found")
 		}
 
 		selectedCell := gui.SelectedCell.Get(panelEntity)
@@ -75,12 +71,10 @@ func (m *Input) Update(world donburi.World) error {
 
 	cellEntity, ok := donburi.NewQuery(filter.Contains(gui.SelectedCell)).First(world)
 	if !ok {
-		log.Println("can't found interface cell entity")
-		return nil
+		panic("can't found interface cell entity")
 	}
 
 	m.processNumbers(cellEntity, justPressedKeys)
-	return nil
 }
 
 func (m *Input) processMoving(char *donburi.Entry, keys []ebiten.Key) {
@@ -103,7 +97,7 @@ func (m *Input) processMoving(char *donburi.Entry, keys []ebiten.Key) {
 	}
 
 	if !shift.IsZero() {
-		donburi.Add(char, components.MovementRequest, &components.MovementRequestData{Vec: shift})
+		donburi.Add(char, components.Movement, &components.MovementData{Vec: shift})
 	}
 }
 
