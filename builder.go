@@ -68,19 +68,16 @@ func (b *Builder) Entities() {
 	grassCreator := background.NewGrassCreator(b.resourses)
 	stoneCreator := entities.NewStoneCreator(b.resourses)
 	interfaceCreator := entities.NewInterfaceCreator()
+	cameraCreator := entities.NewCameraCreator()
 
 	// ----------
 	worldBuilder := game.NewWorldBuilder(*grassCreator, *stoneCreator)
 
 	err := worldBuilder.Build(b.world)
-	if err != nil {
-		panic(fmt.Errorf("can't build world: %w", err))
-	}
 
-	_, err = b.creators.character.Create(b.world)
-	if err != nil {
-		panic(fmt.Errorf("can't create character: %w", err))
-	}
+	_ = b.creators.character.Create(b.world)
+
+	_ = cameraCreator.Create(b.world)
 
 	_, err = interfaceCreator.Create(b.world)
 	if err != nil {
@@ -108,6 +105,7 @@ func (b *Builder) Systems() {
 		systems.NewMovement(),
 		systems.NewHoeHitChecker(*b.creators.garden),
 		systems.NewDownPanelHandler(b.gui.DownPanel()),
+		systems.NewCameraMoving(),
 	}
 
 	var err error
@@ -129,5 +127,5 @@ func (b *Builder) RunGame() {
 		b.gui,
 	)
 
-	panic(ebiten.RunGame(game))
+	fmt.Println(ebiten.RunGame(game))
 }

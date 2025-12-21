@@ -1,6 +1,7 @@
 package game
 
 import (
+	"github.com/ISMashtakov/mygame/constants"
 	"github.com/ISMashtakov/mygame/gui"
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/yohamta/donburi"
@@ -39,5 +40,5 @@ func (g *Game) Draw(screen *ebiten.Image) {
 }
 
 func (g *Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeight int) {
-	return 320, 240
+	return int(constants.TargetLayout.X), int(constants.TargetLayout.Y)
 }

@@ -5,13 +5,17 @@ import (
 	"slices"
 
 	"github.com/ISMashtakov/mygame/components"
+	"github.com/ISMashtakov/mygame/constants"
 	"github.com/ISMashtakov/mygame/utils"
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 	graphics "github.com/quasilyte/ebitengine-graphics"
+	"github.com/quasilyte/gmath"
 	"github.com/yohamta/donburi"
 	"github.com/yohamta/donburi/filter"
 )
+
+var ()
 
 type Renderer struct {
 	DrawColliders bool
@@ -35,6 +39,13 @@ func (r *Renderer) drawSprites(screen *ebiten.Image, world donburi.World) {
 
 	slices.SortFunc(spritesEntity, r.drawOrderFunc)
 
+	cameraEn, ok := donburi.NewQuery(filter.Contains(components.Position, components.Camera)).First(world)
+	if !ok {
+		panic("can not find camera")
+	}
+
+	cameraPos := components.Position.Get(cameraEn)
+
 	for _, en := range spritesEntity {
 		sprite := components.Sprite.Get(en)
 
@@ -52,9 +63,20 @@ func (r *Renderer) drawSprites(screen *ebiten.Image, world donburi.World) {
 			position := components.Position.Get(en)
 			op.GeoM.Translate(position.X, position.Y)
 		}
+		r.applyCameraMods(&op.GeoM, *cameraPos)
 
 		screen.DrawImage(sprite.Image.Image, &op)
 	}
+}
+
+func (r *Renderer) applyCameraMods(geom *ebiten.GeoM, cameraPos components.PositionData) {
+	geom.Translate(-cameraPos.Vec.X, -cameraPos.Vec.Y)
+
+	width, height := ebiten.WindowSize()
+	windowSize := gmath.Vec{X: float64(width), Y: float64(height)}
+
+	shift := windowSize.Mulf(0.5).Mul(constants.TargetLayout.Div(windowSize))
+	geom.Translate(shift.X, shift.Y)
 }
 
 func (r *Renderer) drawOrderFunc(en1, en2 *donburi.Entry) int {

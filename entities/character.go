@@ -18,7 +18,7 @@ func NewCharacterCreator() *CharacterCreator {
 	}
 }
 
-func (c CharacterCreator) Create(world donburi.World) (donburi.Entity, error) {
+func (c CharacterCreator) Create(world donburi.World) donburi.Entity {
 	entity := world.Create(
 		components.Position,
 		components.Sprite,
@@ -37,5 +37,5 @@ func (c CharacterCreator) Create(world donburi.World) (donburi.Entity, error) {
 	components.RectCollider.SetValue(en, components.RectColliderData{Rect: rect})
 	direction.Direction.SetValue(en, direction.Down)
 
-	return entity, nil
+	return entity
 }
