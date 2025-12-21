@@ -1,8 +1,6 @@
 package resources
 
 import (
-	"time"
-
 	"github.com/ISMashtakov/mygame/components/direction"
 	"github.com/quasilyte/gmath"
 )
@@ -16,7 +14,6 @@ type animationData struct {
 	cellSize   gmath.Vec
 	frames     int
 	directions []direction.DirectionEnum
-	duration   time.Duration
 }
 
 var (
@@ -26,14 +23,12 @@ var (
 			cellSize:   CharacterImageSize,
 			frames:     4,
 			directions: []direction.DirectionEnum{direction.Down, direction.Right, direction.Up},
-			duration:   time.Millisecond * 600,
 		},
 		AnimationCharacterHoeHitting: {
 			imageID:    ImageCharacterHoeHitting,
 			cellSize:   CharacterImageSize,
 			frames:     6,
 			directions: []direction.DirectionEnum{direction.Down, direction.Right, direction.Up},
-			duration:   time.Millisecond * 600,
 		},
 	}
 )

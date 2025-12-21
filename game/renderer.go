@@ -23,7 +23,6 @@ type Renderer struct {
 
 func NewRenderer() *Renderer {
 	return &Renderer{}
-
 }
 
 func (r *Renderer) Draw(screen *ebiten.Image, world donburi.World) {

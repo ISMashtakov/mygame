@@ -98,14 +98,15 @@ func (b *Builder) Entities() {
 }
 
 func (b *Builder) Systems() {
-	walkingAnimationSystem := systems.NewSwapSpriteByAnimation(b.resourses, b.creators.character)
+	walkingAnimationSystem := systems.NewAnimation(b.creators.character)
 
 	b.systems = []ISystem{
-		systems.NewInput(),
+		systems.NewInput(b.resourses),
 		walkingAnimationSystem,
 		systems.NewCollisionDetector(),
 		systems.NewMovement(),
-		systems.NewHoeHitChecker(*b.creators.garden, *b.creators.simpleSprite),
+		systems.NewPickaxeHitRequestHandler(*b.creators.simpleSprite),
+		systems.NewGardenCreatingRequestHandler(*b.creators.garden),
 		systems.NewDownPanelHandler(b.gui.DownPanel()),
 		systems.NewCameraMoving(),
 	}

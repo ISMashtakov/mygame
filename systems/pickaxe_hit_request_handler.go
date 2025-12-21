@@ -6,14 +6,11 @@ import (
 	"github.com/ISMashtakov/mygame/animations"
 	"github.com/ISMashtakov/mygame/components"
 	"github.com/ISMashtakov/mygame/components/actions"
-	"github.com/ISMashtakov/mygame/components/direction"
-	"github.com/ISMashtakov/mygame/constants"
 	"github.com/ISMashtakov/mygame/core"
 	"github.com/ISMashtakov/mygame/entities"
 	"github.com/ISMashtakov/mygame/entities/background"
 	"github.com/ISMashtakov/mygame/subsystems"
-	"github.com/ISMashtakov/mygame/utils"
-	"github.com/ISMashtakov/mygame/utils/filter2"
+	"github.com/ISMashtakov/mygame/utils/don"
 	"github.com/ISMashtakov/mygame/utils/funcs"
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/quasilyte/gmath"
@@ -22,75 +19,42 @@ import (
 )
 
 const (
-	ActionEndHandlerCodename = "action_end_handler"
+	PickaxeHitRequestHandlerCodename = "PickaxeHitRequestHandlerCodename"
 )
 
-type ActionEndHandler struct {
+type PickaxeHitRequestHandler struct {
 	core.BaseSystem
 	gardenCreator      background.GardenCreator
 	collidersSubsystem subsystems.ColliderSearcher
 	spriteCreator      entities.SimpeSpriteCreator
 }
 
-func NewHoeHitChecker(garderCreator background.GardenCreator, spriteCreator entities.SimpeSpriteCreator) *ActionEndHandler {
-	return &ActionEndHandler{
+func NewPickaxeHitRequestHandler(spriteCreator entities.SimpeSpriteCreator) *PickaxeHitRequestHandler {
+	return &PickaxeHitRequestHandler{
 		BaseSystem: core.BaseSystem{
-			Codename:        ActionEndHandlerCodename,
+			Codename:        PickaxeHitRequestHandlerCodename,
 			PreviousSystems: []string{AnimationCodename},
 		},
-		gardenCreator: garderCreator,
 		spriteCreator: spriteCreator,
 	}
 }
 
-func (m *ActionEndHandler) Update(world donburi.World) {
-	for en := range donburi.NewQuery(filter.Contains(actions.ActionEnded, direction.Direction, components.Position)).Iter(world) {
-		action, dir, position := actions.ActionEnded.Get(en), direction.Direction.Get(en), components.Position.Get(en)
-		switch *action {
-		case actions.HoeHit:
-			point := position.Vec.Add(direction.GetDirectionVector(*dir).Mul(constants.TileSize))
+func (m *PickaxeHitRequestHandler) Update(world donburi.World) {
+	for en := range don.IterByRequests(world, actions.PickaxeHitRequest) {
+		hitArea := gmath.Vec{X: 10, Y: 10}
 
-			// сдвиг для красоты
-			if *dir != direction.Down {
-				point.Y += 10
-			}
-
-			point = utils.FloorByNearestStepVec(point, constants.TileSize)
-
-			rect := gmath.Rect{
-				Min: point.Sub(m.gardenCreator.TargetImageSize.Mulf(0.5)),
-				Max: point.Add(m.gardenCreator.TargetImageSize.Mulf(0.5)),
-			}
-
-			if len(m.collidersSubsystem.SearchByRect(world, rect, filter2.ContainsAny(components.Garden, components.Obstacle))) == 0 {
-				m.gardenCreator.Create(world, components.PositionData{Vec: point})
-			}
-		case actions.PickaxeHit:
-			point := position.Vec.Add(direction.GetDirectionVector(*dir).Mul(constants.TileSize))
-
-			// сдвиг для красоты
-			if *dir != direction.Down {
-				point.Y += 10
-			}
-
-			hitArea := gmath.Vec{X: 10, Y: 10}
-
-			rect := gmath.Rect{
-				Min: point.Sub(hitArea.Mulf(0.5)),
-				Max: point.Add(hitArea.Mulf(0.5)),
-			}
-
-			for _, destroyableEn := range m.collidersSubsystem.SearchByRect(world, rect, filter.Contains(components.Destroyable)) {
-				m.destroyObj(world, destroyableEn)
-			}
+		rect := gmath.Rect{
+			Min: en.Point.Sub(hitArea.Mulf(0.5)),
+			Max: en.Point.Add(hitArea.Mulf(0.5)),
 		}
 
-		donburi.Remove[any](en, actions.ActionEnded)
-
+		for _, destroyableEn := range m.collidersSubsystem.SearchByRect(world, rect, filter.Contains(components.Destroyable)) {
+			m.destroyObj(world, destroyableEn)
+		}
 	}
 }
 
-func (m *ActionEndHandler) destroyObj(world donburi.World, destroyableEn *donburi.Entry) {
+func (m *PickaxeHitRequestHandler) destroyObj(world donburi.World, destroyableEn *donburi.Entry) {
 	if destroyableEn.HasComponent(components.Position) && destroyableEn.HasComponent(components.Sprite) {
 		pos := components.Position.Get(destroyableEn)
 		sprite := components.Sprite.Get(destroyableEn)

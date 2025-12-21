@@ -15,7 +15,7 @@ import (
 
 type ResourceLoader struct {
 	resources  map[ImageID]*ebiten.Image
-	animations map[AnimationID]*images.Animation
+	animations map[AnimationID]*images.AnimationMap
 }
 
 func NewResourceLoader() *ResourceLoader {
@@ -41,14 +41,13 @@ func (l *ResourceLoader) Preload() error {
 	}
 
 	// Animations
-	l.animations = make(map[AnimationID]*images.Animation, len(animationResources))
+	l.animations = make(map[AnimationID]*images.AnimationMap, len(animationResources))
 
 	for animationID, animationData := range animationResources {
 		image := l.LoadImage(animationData.imageID)
 
 		spriteSheet := images.NewSpritesSheet(image, animationData.cellSize)
-		animationMap := images.NewAnimationsMap(*spriteSheet, animationData.frames, animationData.directions)
-		l.animations[animationID] = images.NewAnimation(*animationMap, animationData.duration)
+		l.animations[animationID] = images.NewAnimationsMap(*spriteSheet, animationData.frames, animationData.directions)
 	}
 
 	return nil
@@ -63,7 +62,7 @@ func (l *ResourceLoader) LoadImage(imageID ImageID) *ebiten.Image {
 	return image
 }
 
-func (l *ResourceLoader) LoadAnimation(animationID AnimationID) *images.Animation {
+func (l *ResourceLoader) LoadAnimationMap(animationID AnimationID) *images.AnimationMap {
 	animation, ok := l.animations[animationID]
 	if !ok {
 		panic(fmt.Errorf("%d: %w", animationID, errs.ErrUnknowsResourceID))

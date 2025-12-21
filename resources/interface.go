@@ -7,5 +7,5 @@ import (
 
 type IResourceLoader interface {
 	LoadImage(imageID ImageID) *ebiten.Image
-	LoadAnimation(animationID AnimationID) *images.Animation
+	LoadAnimationMap(animationID AnimationID) *images.AnimationMap
 }
