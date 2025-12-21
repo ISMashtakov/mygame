@@ -7,7 +7,7 @@ var (
 		ImageCharacterMoving:     "resources/images/character/walk.png",
 		ImageCharacterHoeHitting: "resources/images/character/hit.png",
 		ImageGrass:               "resources/images/grass.png",
-		ImageStone:               "resources/images/stone.png",
+		ImageCoil:                "resources/images/coil.png",
 		ImageGarden:              "resources/images/garden.png",
 		// HOE
 		ImageItemHoe:     "resources/images/items/hoe.png",
@@ -22,7 +22,7 @@ const (
 	ImageCharacterHoeHitting
 
 	ImageGrass
-	ImageStone
+	ImageCoil
 	ImageGarden
 
 	// ITEMS

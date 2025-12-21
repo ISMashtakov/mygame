@@ -66,12 +66,12 @@ func (b *Builder) Entities() {
 	b.creators.character = entities.NewCharacterCreator()
 	b.creators.garden = background.NewGardenCreator(b.resourses)
 	grassCreator := background.NewGrassCreator(b.resourses)
-	stoneCreator := entities.NewStoneCreator(b.resourses)
+	coilCreator := entities.NewCoilCreator(b.resourses)
 	interfaceCreator := entities.NewInterfaceCreator()
 	cameraCreator := entities.NewCameraCreator()
 
 	// ----------
-	worldBuilder := game.NewWorldBuilder(*grassCreator, *stoneCreator)
+	worldBuilder := game.NewWorldBuilder(*grassCreator, *coilCreator)
 
 	err := worldBuilder.Build(b.world)
 

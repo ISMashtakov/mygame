@@ -11,19 +11,19 @@ import (
 	"github.com/yohamta/donburi"
 )
 
-type StoneCreator struct {
+type CoilCreator struct {
 	loader          resources.IResourceLoader
 	TargetImageSize gmath.Vec
 }
 
-func NewStoneCreator(loader resources.IResourceLoader) *StoneCreator {
-	return &StoneCreator{
+func NewCoilCreator(loader resources.IResourceLoader) *CoilCreator {
+	return &CoilCreator{
 		loader:          loader,
 		TargetImageSize: gmath.Vec{X: 25, Y: 25},
 	}
 }
 
-func (c StoneCreator) Create(world donburi.World, position components.PositionData) donburi.Entity {
+func (c CoilCreator) Create(world donburi.World, position components.PositionData) donburi.Entity {
 	entity := world.Create(
 		components.Position,
 		components.Sprite,
@@ -34,7 +34,7 @@ func (c StoneCreator) Create(world donburi.World, position components.PositionDa
 
 	en := world.Entry(entity)
 
-	im := c.loader.LoadImage(resources.ImageStone)
+	im := c.loader.LoadImage(resources.ImageCoil)
 
 	sprite := components.SpriteData{
 		Image: images.Image{
