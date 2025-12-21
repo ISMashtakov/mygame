@@ -30,8 +30,9 @@ type Builder struct {
 	systems   []ISystem
 	world     donburi.World
 	creators  struct {
-		character *entities.CharacterCreator
-		garden    *background.GardenCreator
+		character    *entities.CharacterCreator
+		garden       *background.GardenCreator
+		simpleSprite *entities.SimpeSpriteCreator
 	}
 	gui *gui.GUI
 
@@ -65,6 +66,7 @@ func (b *Builder) Entities() {
 	// Entity creatores
 	b.creators.character = entities.NewCharacterCreator()
 	b.creators.garden = background.NewGardenCreator(b.resourses)
+	b.creators.simpleSprite = entities.NewSimpeSpriteCreator()
 	grassCreator := background.NewGrassCreator(b.resourses)
 	coilCreator := entities.NewCoilCreator(b.resourses)
 	interfaceCreator := entities.NewInterfaceCreator()
@@ -103,7 +105,7 @@ func (b *Builder) Systems() {
 		walkingAnimationSystem,
 		systems.NewCollisionDetector(),
 		systems.NewMovement(),
-		systems.NewHoeHitChecker(*b.creators.garden),
+		systems.NewHoeHitChecker(*b.creators.garden, *b.creators.simpleSprite),
 		systems.NewDownPanelHandler(b.gui.DownPanel()),
 		systems.NewCameraMoving(),
 	}

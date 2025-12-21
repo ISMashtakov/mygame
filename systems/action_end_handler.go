@@ -1,15 +1,21 @@
 package systems
 
 import (
+	"time"
+
+	"github.com/ISMashtakov/mygame/animations"
 	"github.com/ISMashtakov/mygame/components"
 	"github.com/ISMashtakov/mygame/components/actions"
 	"github.com/ISMashtakov/mygame/components/direction"
 	"github.com/ISMashtakov/mygame/constants"
 	"github.com/ISMashtakov/mygame/core"
+	"github.com/ISMashtakov/mygame/entities"
 	"github.com/ISMashtakov/mygame/entities/background"
 	"github.com/ISMashtakov/mygame/subsystems"
 	"github.com/ISMashtakov/mygame/utils"
 	"github.com/ISMashtakov/mygame/utils/filter2"
+	"github.com/ISMashtakov/mygame/utils/funcs"
+	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/quasilyte/gmath"
 	"github.com/yohamta/donburi"
 	"github.com/yohamta/donburi/filter"
@@ -23,15 +29,17 @@ type ActionEndHandler struct {
 	core.BaseSystem
 	gardenCreator      background.GardenCreator
 	collidersSubsystem subsystems.ColliderSearcher
+	spriteCreator      entities.SimpeSpriteCreator
 }
 
-func NewHoeHitChecker(garderCreator background.GardenCreator) *ActionEndHandler {
+func NewHoeHitChecker(garderCreator background.GardenCreator, spriteCreator entities.SimpeSpriteCreator) *ActionEndHandler {
 	return &ActionEndHandler{
 		BaseSystem: core.BaseSystem{
 			Codename:        ActionEndHandlerCodename,
 			PreviousSystems: []string{AnimationCodename},
 		},
 		gardenCreator: garderCreator,
+		spriteCreator: spriteCreator,
 	}
 }
 
@@ -73,11 +81,68 @@ func (m *ActionEndHandler) Update(world donburi.World) {
 			}
 
 			for _, destroyableEn := range m.collidersSubsystem.SearchByRect(world, rect, filter.Contains(components.Destroyable)) {
-				world.Remove(destroyableEn.Entity())
+				m.destroyObj(world, destroyableEn)
 			}
 		}
 
 		donburi.Remove[any](en, actions.ActionEnded)
 
 	}
+}
+
+func (m *ActionEndHandler) destroyObj(world donburi.World, destroyableEn *donburi.Entry) {
+	if destroyableEn.HasComponent(components.Position) && destroyableEn.HasComponent(components.Sprite) {
+		pos := components.Position.Get(destroyableEn)
+		sprite := components.Sprite.Get(destroyableEn)
+
+		parts := m.spriteCreator.DivideSprite(world, *sprite, *pos)
+
+		duration := time.Millisecond * 500
+		getScaleAnimation := func(entry *donburi.Entry) *animations.ScaleAnimation {
+			return animations.NewScaleAnimation(
+				funcs.LineTo(duration.Seconds()*float64(ebiten.TPS()), -sprite.Image.Scale.X),
+				funcs.LineTo(duration.Seconds()*float64(ebiten.TPS()), -sprite.Image.Scale.Y),
+				components.Sprite.Get(entry),
+			)
+		}
+
+		components.StartAnimation(
+			world,
+			*core.NewAnimationPlayer(
+				duration,
+				func() { world.Remove(parts[0].Entity()) },
+				animations.NewMoveAnimation(funcs.Line(-0.3), funcs.SquareTo(8, -3, 50, 0), components.Position.Get(parts[0])),
+				getScaleAnimation(parts[0]),
+			),
+		)
+		components.StartAnimation(
+			world,
+			*core.NewAnimationPlayer(
+				duration,
+				func() { world.Remove(parts[1].Entity()) },
+				animations.NewMoveAnimation(funcs.Line(0.3), funcs.SquareTo(8, -3, 50, 0), components.Position.Get(parts[1])),
+				getScaleAnimation(parts[1]),
+			),
+		)
+		components.StartAnimation(
+			world,
+			*core.NewAnimationPlayer(
+				duration,
+				func() { world.Remove(parts[2].Entity()) },
+				animations.NewMoveAnimation(funcs.Line(0.3), funcs.SquareTo(8, 3, 50, 0), components.Position.Get(parts[2])),
+				getScaleAnimation(parts[2]),
+			),
+		)
+		components.StartAnimation(
+			world,
+			*core.NewAnimationPlayer(
+				duration,
+				func() { world.Remove(parts[3].Entity()) },
+				animations.NewMoveAnimation(funcs.Line(-0.3), funcs.SquareTo(8, 3, 50, 0), components.Position.Get(parts[3])),
+				getScaleAnimation(parts[3]),
+			),
+		)
+	}
+
+	world.Remove(destroyableEn.Entity())
 }

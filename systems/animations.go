@@ -65,6 +65,17 @@ func (s SwapSpriteByAnimation) Update(world donburi.World) {
 			Z:     z.OBJ,
 		})
 	}
+
+	s.newAnimationUpdate(world)
+}
+
+func (s SwapSpriteByAnimation) newAnimationUpdate(world donburi.World) {
+	for animationEntry := range donburi.NewQuery(filter.Contains(components.Animation)).Iter(world) {
+		animation := components.Animation.Get(animationEntry)
+		if animation.Player.Next() {
+			components.DeleteAnimation(world, animationEntry)
+		}
+	}
 }
 
 func (s SwapSpriteByAnimation) updateAction(character *donburi.Entry, action actions.ActionEnum, dir direction.DirectionEnum) images.Image {

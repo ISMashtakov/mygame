@@ -29,7 +29,7 @@ func NewRenderer() *Renderer {
 func (r *Renderer) Draw(screen *ebiten.Image, world donburi.World) {
 	r.drawSprites(screen, world)
 	r.drawColliders(screen, world)
-	ebitenutil.DebugPrint(screen, fmt.Sprintf("FPS: %0.2f, TPS: %0.2f", ebiten.ActualFPS(), ebiten.ActualTPS()))
+	ebitenutil.DebugPrint(screen, fmt.Sprintf("FPS: %0.2f, TPS: %0.2f, entities: %d", ebiten.ActualFPS(), ebiten.ActualTPS(), world.Len()))
 }
 
 func (r *Renderer) drawSprites(screen *ebiten.Image, world donburi.World) {
