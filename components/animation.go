@@ -20,10 +20,6 @@ func StartAnimation(world donburi.World, player core.AnimationPlayer) *donburi.E
 	return entry
 }
 
-func DeleteAnimation(world donburi.World, an *donburi.Entry) {
-	world.Remove(an.Entity())
-}
-
 type CurrentAnimationData struct {
 	Entry     *donburi.Entry
 	IsWalking bool // Булевая переменная не очень мне нравится как решение, возможно на какой-то енамчик тут поменять придётся

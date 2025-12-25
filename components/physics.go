@@ -22,3 +22,5 @@ type SpriteColliderData struct {
 }
 
 var SpriteCollider = donburi.NewComponentType[SpriteColliderData]()
+
+var DisabledColliders = donburi.NewTag()

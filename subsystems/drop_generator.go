@@ -47,6 +47,8 @@ func (g DropGeneratorSubSystem) Generate(entity *donburi.Entry) {
 
 func (g DropGeneratorSubSystem) GetStartIdleAnimationFunc(prop *donburi.Entry) func() {
 	return func() {
+		prop.RemoveComponent(components.DisabledColliders)
+
 		duration := time.Second * 3
 		components.StartAnimation(
 			prop.World,

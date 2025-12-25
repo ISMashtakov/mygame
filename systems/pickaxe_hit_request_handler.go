@@ -77,7 +77,7 @@ func (m *PickaxeHitRequestHandler) destroyObj(world donburi.World, destroyableEn
 			world,
 			*core.NewAnimationPlayer(
 				duration,
-				core.WithOnFinish(func() { world.Remove(parts[0].Entity()) }),
+				core.WithOnFinish(parts[0].Remove),
 				core.WithAnimations(
 					animations.NewMoveAnimation(funcs.Line(-0.3), funcs.SquareTo(8, -3, 50, 0), components.Position.Get(parts[0])),
 					getScaleAnimation(parts[0]),
@@ -88,7 +88,7 @@ func (m *PickaxeHitRequestHandler) destroyObj(world donburi.World, destroyableEn
 			world,
 			*core.NewAnimationPlayer(
 				duration,
-				core.WithOnFinish(func() { world.Remove(parts[1].Entity()) }),
+				core.WithOnFinish(parts[1].Remove),
 				core.WithAnimations(
 					animations.NewMoveAnimation(funcs.Line(0.3), funcs.SquareTo(8, -3, 50, 0), components.Position.Get(parts[1])),
 					getScaleAnimation(parts[1]),
@@ -99,7 +99,7 @@ func (m *PickaxeHitRequestHandler) destroyObj(world donburi.World, destroyableEn
 			world,
 			*core.NewAnimationPlayer(
 				duration,
-				core.WithOnFinish(func() { world.Remove(parts[2].Entity()) }),
+				core.WithOnFinish(parts[2].Remove),
 				core.WithAnimations(
 					animations.NewMoveAnimation(funcs.Line(0.3), funcs.SquareTo(8, 3, 50, 0), components.Position.Get(parts[2])),
 					getScaleAnimation(parts[2]),
@@ -110,7 +110,7 @@ func (m *PickaxeHitRequestHandler) destroyObj(world donburi.World, destroyableEn
 			world,
 			*core.NewAnimationPlayer(
 				duration,
-				core.WithOnFinish(func() { world.Remove(parts[3].Entity()) }),
+				core.WithOnFinish(parts[3].Remove),
 				core.WithAnimations(
 					animations.NewMoveAnimation(funcs.Line(-0.3), funcs.SquareTo(8, 3, 50, 0), components.Position.Get(parts[3])),
 					getScaleAnimation(parts[3]),
@@ -121,5 +121,5 @@ func (m *PickaxeHitRequestHandler) destroyObj(world donburi.World, destroyableEn
 
 	m.dropGeneratorSubsystem.Generate(destroyableEn)
 
-	world.Remove(destroyableEn.Entity())
+	destroyableEn.Remove()
 }

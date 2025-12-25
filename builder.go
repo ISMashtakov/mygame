@@ -115,6 +115,7 @@ func (b *Builder) Systems() {
 		systems.NewGardenCreatingRequestHandler(*b.creators.garden),
 		systems.NewDownPanelHandler(b.gui.DownPanel()),
 		systems.NewCameraMoving(),
+		systems.NewPropsTaking(),
 	}
 
 	var err error

@@ -1,6 +1,8 @@
 package subsystems
 
 import (
+	"iter"
+
 	"github.com/ISMashtakov/mygame/components"
 	"github.com/ISMashtakov/mygame/utils/filter2"
 	"github.com/ISMashtakov/mygame/utils/render"
@@ -19,6 +21,22 @@ func NewColliderSearcher() *ColliderSearcher {
 	return &ColliderSearcher{}
 }
 
+func (s ColliderSearcher) SearchByEntry(
+	world donburi.World,
+	entry *donburi.Entry,
+	filters ...filter.LayoutFilter,
+) []*donburi.Entry {
+	var result []*donburi.Entry
+
+	for en := range s.iterByColliders(world, filters...) {
+		if s.IsIntersect(en, entry) {
+			result = append(result, en)
+		}
+	}
+
+	return result
+}
+
 func (s ColliderSearcher) SearchByRect(
 	world donburi.World,
 	rect gmath.Rect,
@@ -26,9 +44,7 @@ func (s ColliderSearcher) SearchByRect(
 ) []*donburi.Entry {
 	var result []*donburi.Entry
 
-	colliderFilter := filter2.ContainsAny(components.RectCollider, components.SpriteCollider)
-
-	for en := range donburi.NewQuery(filter.And(append(filters, colliderFilter)...)).Iter(world) {
+	for en := range s.iterByColliders(world, filters...) {
 		if en.HasComponent(components.RectCollider) && s.getRect(en).Intersects(rect) {
 			result = append(result, en)
 		}
@@ -48,9 +64,7 @@ func (s ColliderSearcher) SearchByPoint(
 ) []*donburi.Entry {
 	var result []*donburi.Entry
 
-	colliderFilter := filter2.ContainsAny(components.RectCollider, components.SpriteCollider)
-
-	for en := range donburi.NewQuery(filter.And(append(filters, colliderFilter)...)).Iter(world) {
+	for en := range s.iterByColliders(world, filters...) {
 		if en.HasComponent(components.RectCollider) && s.isInRect(en, point) {
 			result = append(result, en)
 		}
@@ -62,7 +76,20 @@ func (s ColliderSearcher) SearchByPoint(
 	return result
 }
 
+func (s ColliderSearcher) iterByColliders(
+	world donburi.World,
+	filters ...filter.LayoutFilter,
+) iter.Seq[*donburi.Entry] {
+	colliderFilter := filter2.ContainsAny(components.RectCollider, components.SpriteCollider)
+	notDisabledFilter := filter.Not(filter.Contains(components.DisabledColliders))
+	return donburi.NewQuery(filter.And(append(filters, colliderFilter, notDisabledFilter)...)).Iter(world)
+}
+
 func (s ColliderSearcher) IsIntersect(en, en2 *donburi.Entry) bool {
+	if en.HasComponent(components.DisabledColliders) || en2.HasComponent(components.DisabledColliders) {
+		return false
+	}
+
 	collisionTypes := map[collisionType]func(en, en2 *donburi.Entry) bool{
 		{components.RectCollider, components.RectCollider}:     s.isIntersectRectWithRect,
 		{components.RectCollider, components.SpriteCollider}:   func(en, en2 *donburi.Entry) bool { return s.isIntersectRectWithSprite(s.getRect(en), en2) },

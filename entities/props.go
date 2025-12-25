@@ -18,7 +18,7 @@ type PropsCreator struct {
 func NewPropsCreator() *PropsCreator {
 	return &PropsCreator{
 		TargetImageSize:  gmath.Vec{X: 25, Y: 25},
-		RectColliderSize: gmath.Vec{X: 25, Y: 25},
+		RectColliderSize: gmath.Vec{X: 10, Y: 10},
 	}
 }
 
@@ -28,6 +28,7 @@ func (c PropsCreator) Create(world donburi.World, item items.IItem, pos gmath.Ve
 		components.Sprite,
 		components.RectCollider,
 		components.Prop,
+		components.DisabledColliders,
 	)
 
 	en := world.Entry(entity)

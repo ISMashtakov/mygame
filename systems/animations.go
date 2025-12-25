@@ -32,7 +32,7 @@ func (s Animation) Update(world donburi.World) {
 	for animationEntry := range donburi.NewQuery(filter.Contains(components.Animation)).Iter(world) {
 		animation := components.Animation.Get(animationEntry)
 		if animation.Player.Next() {
-			components.DeleteAnimation(world, animationEntry)
+			animationEntry.Remove()
 		}
 	}
 }

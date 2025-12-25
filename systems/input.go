@@ -97,7 +97,7 @@ func (m *Input) processItemAction(
 ) {
 	startAnimation := func(onFinish func(point gmath.Vec)) {
 		if anim.Entry != nil {
-			components.DeleteAnimation(char.World, anim.Entry)
+			anim.Entry.Remove()
 			anim.Entry = nil
 		}
 
@@ -169,7 +169,7 @@ func (m *Input) processMoving(char *donburi.Entry, anim *components.CurrentAnima
 		donburi.Add(char, components.Movement, &components.MovementData{Vec: shift})
 
 		if anim.Entry != nil && anim.IsWalking && oldDirection != newDirection {
-			components.DeleteAnimation(char.World, anim.Entry)
+			anim.Entry.Remove()
 			anim.Entry = nil
 		}
 
@@ -188,7 +188,7 @@ func (m *Input) processMoving(char *donburi.Entry, anim *components.CurrentAnima
 		}
 	} else {
 		if anim.Entry != nil && anim.IsWalking {
-			components.DeleteAnimation(char.World, anim.Entry)
+			anim.Entry.Remove()
 			anim.Entry = nil
 		}
 
