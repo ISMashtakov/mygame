@@ -15,6 +15,7 @@ const (
 
 type CollisionDetector struct {
 	core.BaseSystem
+
 	colidersSubsystem subsystems.ColliderSearcher
 }
 
@@ -29,7 +30,7 @@ func NewCollisionDetector() *CollisionDetector {
 }
 
 func (d CollisionDetector) Update(world donburi.World) {
-	for d.fixCollision(world) > 0 {
+	for d.fixCollision(world) > 0 { //nolint:revive // Исправляем коллизии пока они есть.
 	}
 }
 

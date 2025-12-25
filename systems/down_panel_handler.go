@@ -16,6 +16,7 @@ const (
 
 type DownPanelHandler struct {
 	core.BaseSystem
+
 	downPanel *components.DownPanel
 }
 

@@ -1,7 +1,7 @@
 package errs
 
-import "fmt"
+import "errors"
 
 var (
-	ErrUnknowsResourceID = fmt.Errorf("unknown resource ID")
+	ErrUnknowsResourceID = errors.New("unknown resource ID")
 )

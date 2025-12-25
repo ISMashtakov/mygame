@@ -2,24 +2,24 @@ package items
 
 import "github.com/ISMashtakov/mygame/resources"
 
-type ItemsFactory struct {
+type Factory struct {
 	loader resources.IResourceLoader
 }
 
-func NewItemsFactory(loader resources.IResourceLoader) *ItemsFactory {
-	return &ItemsFactory{
+func NewItemsFactory(loader resources.IResourceLoader) *Factory {
+	return &Factory{
 		loader: loader,
 	}
 }
 
-func (f ItemsFactory) Hoe() IItem {
+func (f Factory) Hoe() IItem {
 	return NewSimpleItem(Hoe, f.loader.LoadImage(resources.ImageItemHoe))
 }
 
-func (f ItemsFactory) Pickaxe() IItem {
+func (f Factory) Pickaxe() IItem {
 	return NewSimpleItem(Pickaxe, f.loader.LoadImage(resources.ImageItemPickaxe))
 }
 
-func (f ItemsFactory) Coal() IItem {
+func (f Factory) Coal() IItem {
 	return NewSimpleItem(Coal, f.loader.LoadImage(resources.ImageItemCoal))
 }

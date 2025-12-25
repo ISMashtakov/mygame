@@ -13,10 +13,15 @@ type SpritesheetAnimation struct {
 	animationMap *images.AnimationMap
 	countFrames  int
 	sprite       *components.SpriteData
-	direction    direction.DirectionEnum
+	direction    direction.Enum
 }
 
-func NewSpritesheetAnimation(animationMap *images.AnimationMap, direction direction.DirectionEnum, duration time.Duration, sprite *components.SpriteData) *SpritesheetAnimation {
+func NewSpritesheetAnimation(
+	animationMap *images.AnimationMap,
+	direction direction.Enum,
+	duration time.Duration,
+	sprite *components.SpriteData,
+) *SpritesheetAnimation {
 	return &SpritesheetAnimation{
 		animationMap: animationMap,
 		countFrames:  int(duration.Seconds() * float64(ebiten.TPS())),

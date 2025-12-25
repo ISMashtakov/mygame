@@ -55,7 +55,7 @@ func (a *AnimationPlayer) Next() bool {
 		animation.Next(a.currentFrame)
 	}
 
-	a.currentFrame += 1
+	a.currentFrame++
 
 	isEnd := a.currentFrame >= a.countFrames
 

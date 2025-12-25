@@ -10,7 +10,7 @@ type containsAny struct {
 	components []component.IComponentType
 }
 
-// Contains matches layouts that contains all the components specified.
+// ContainsAny matches layouts that contains all the components specified.
 func ContainsAny(components ...component.IComponentType) filter.LayoutFilter {
 	return &containsAny{components: components}
 }

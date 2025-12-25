@@ -3,6 +3,8 @@ package main
 import (
 	"github.com/ISMashtakov/mygame/constants"
 	"github.com/hajimehoshi/ebiten/v2"
+
+	_ "image/png"
 )
 
 func main() {

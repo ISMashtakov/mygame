@@ -21,7 +21,6 @@ func NewGame(renderer Renderer, world donburi.World, systems []ISystem, gui *gui
 		renderer: renderer,
 		gui:      gui,
 	}
-
 }
 
 func (g *Game) Update() error {
@@ -39,6 +38,6 @@ func (g *Game) Draw(screen *ebiten.Image) {
 	g.gui.Draw(screen)
 }
 
-func (g *Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeight int) {
+func (g *Game) Layout(_, _ int) (int, int) {
 	return int(constants.TargetLayout.X), int(constants.TargetLayout.Y)
 }

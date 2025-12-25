@@ -15,10 +15,10 @@ import (
 type CoalCreator struct {
 	loader          resources.IResourceLoader
 	TargetImageSize gmath.Vec
-	itemsFactory    items.ItemsFactory
+	itemsFactory    items.Factory
 }
 
-func NewCoalCreator(loader resources.IResourceLoader, itemsFactory items.ItemsFactory) *CoalCreator {
+func NewCoalCreator(loader resources.IResourceLoader, itemsFactory items.Factory) *CoalCreator {
 	return &CoalCreator{
 		loader:          loader,
 		TargetImageSize: gmath.Vec{X: 25, Y: 25},

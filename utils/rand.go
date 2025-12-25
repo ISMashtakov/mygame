@@ -1,6 +1,6 @@
 package utils
 
-import "math/rand"
+import "math/rand/v2"
 
 func RandomInt(from, to int) int {
 	return from + (rand.Int() % (to - from))

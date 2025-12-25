@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log/slog"
 
 	guicomponents "github.com/ISMashtakov/mygame/components/gui"
 	systemssorter "github.com/ISMashtakov/mygame/core/systems_sorter"
@@ -37,7 +38,7 @@ type Builder struct {
 	}
 	gui *gui.GUI
 
-	itemsFactory *items.ItemsFactory
+	itemsFactory *items.Factory
 }
 
 func (b *Builder) Debug() {
@@ -78,6 +79,9 @@ func (b *Builder) Entities() {
 	worldBuilder := game.NewWorldBuilder(*grassCreator, *coalCreator)
 
 	err := worldBuilder.Build(b.world)
+	if err != nil {
+		panic(fmt.Errorf("can't build world: %w", err))
+	}
 
 	_ = b.creators.character.Create(b.world)
 
@@ -132,5 +136,7 @@ func (b *Builder) RunGame() {
 		b.gui,
 	)
 
-	fmt.Println(ebiten.RunGame(game))
+	if err := ebiten.RunGame(game); err != nil {
+		slog.Error(err.Error())
+	}
 }

@@ -27,7 +27,10 @@ func NewRenderer() *Renderer {
 func (r *Renderer) Draw(screen *ebiten.Image, world donburi.World) {
 	r.drawSprites(screen, world)
 	r.drawColliders(screen, world)
-	ebitenutil.DebugPrint(screen, fmt.Sprintf("FPS: %0.2f, TPS: %0.2f, entities: %d", ebiten.ActualFPS(), ebiten.ActualTPS(), world.Len()))
+	ebitenutil.DebugPrint(
+		screen,
+		fmt.Sprintf("FPS: %0.2f, TPS: %0.2f, entities: %d", ebiten.ActualFPS(), ebiten.ActualTPS(), world.Len()),
+	)
 }
 
 func (r *Renderer) drawSprites(screen *ebiten.Image, world donburi.World) {
@@ -51,7 +54,10 @@ func (r *Renderer) drawSprites(screen *ebiten.Image, world donburi.World) {
 
 		op.GeoM.Scale(sprite.Image.Scale.X, sprite.Image.Scale.Y)
 
-		op.GeoM.Translate(-float64(sprite.Image.Bounds().Dx())/2*sprite.Image.Scale.X, -float64(sprite.Image.Bounds().Dy())/2*sprite.Image.Scale.Y)
+		op.GeoM.Translate(
+			-float64(sprite.Image.Bounds().Dx())/2*sprite.Image.Scale.X,
+			-float64(sprite.Image.Bounds().Dy())/2*sprite.Image.Scale.Y,
+		)
 
 		if sprite.Image.Flip {
 			op.GeoM.Scale(-1, 1)

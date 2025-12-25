@@ -26,7 +26,8 @@ const (
 	ImageCoal
 	ImageGarden
 
-	// ITEMS
+	// ITEMS.
+
 	ImageItemHoe
 	ImageItemPickaxe
 	ImageItemCoal

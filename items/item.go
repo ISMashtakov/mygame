@@ -16,9 +16,8 @@ type IItem interface {
 }
 
 type SimpleItem struct {
-	itemType  Type
-	image     *ebiten.Image
-	propImage *ebiten.Image
+	itemType Type
+	image    *ebiten.Image
 }
 
 func NewSimpleItem(itemType Type, image *ebiten.Image) *SimpleItem {

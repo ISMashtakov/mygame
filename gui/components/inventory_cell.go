@@ -32,7 +32,11 @@ func NewInventoryCell() *InventoryCell {
 
 func (c *InventoryCell) updateImage() {
 	background := color.RGBA{R: 246, G: 186, B: 114, A: 255}
-	border := lo.Ternary(c.selected, color.RGBA{R: 170, G: 29, B: 19, A: 255}, color.RGBA{R: 193, G: 135, B: 72, A: 255})
+	border := lo.Ternary(
+		c.selected,
+		color.RGBA{R: 170, G: 29, B: 19, A: 255},
+		color.RGBA{R: 193, G: 135, B: 72, A: 255},
+	)
 
 	backgroundImage := image.NewAdvancedNineSliceColor(background, image.NewBorder(1, 1, 1, 1, border))
 

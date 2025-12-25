@@ -19,7 +19,11 @@ func NewColliderSearcher() *ColliderSearcher {
 	return &ColliderSearcher{}
 }
 
-func (s ColliderSearcher) SearchByRect(world donburi.World, rect gmath.Rect, filters ...filter.LayoutFilter) []*donburi.Entry {
+func (s ColliderSearcher) SearchByRect(
+	world donburi.World,
+	rect gmath.Rect,
+	filters ...filter.LayoutFilter,
+) []*donburi.Entry {
 	var result []*donburi.Entry
 
 	colliderFilter := filter2.ContainsAny(components.RectCollider, components.SpriteCollider)
@@ -37,7 +41,11 @@ func (s ColliderSearcher) SearchByRect(world donburi.World, rect gmath.Rect, fil
 	return result
 }
 
-func (s ColliderSearcher) SearchByPoint(world donburi.World, point gmath.Vec, filters ...filter.LayoutFilter) []*donburi.Entry {
+func (s ColliderSearcher) SearchByPoint(
+	world donburi.World,
+	point gmath.Vec,
+	filters ...filter.LayoutFilter,
+) []*donburi.Entry {
 	var result []*donburi.Entry
 
 	colliderFilter := filter2.ContainsAny(components.RectCollider, components.SpriteCollider)
@@ -230,10 +238,10 @@ func (s ColliderSearcher) getSpriteRect(spriteEntity *donburi.Entry, imageSize, 
 			Min: spriteCollider.ActiveZone.Min.Add(pos),
 			Max: spriteCollider.ActiveZone.Max.Add(pos),
 		}
-	} else {
-		return gmath.Rect{
-			Min: pos.Sub(imageSize.Mulf(0.5)),
-			Max: pos.Add(imageSize.Mulf(0.5)),
-		}
+	}
+
+	return gmath.Rect{
+		Min: pos.Sub(imageSize.Mulf(0.5)),
+		Max: pos.Add(imageSize.Mulf(0.5)),
 	}
 }

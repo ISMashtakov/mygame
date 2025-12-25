@@ -20,6 +20,7 @@ const (
 
 type GardenCreatingRequestHandler struct {
 	core.BaseSystem
+
 	gardenCreator      background.GardenCreator
 	collidersSubsystem subsystems.ColliderSearcher
 }
@@ -43,9 +44,10 @@ func (m *GardenCreatingRequestHandler) Update(world donburi.World) {
 			Max: point.Add(m.gardenCreator.TargetImageSize.Mulf(0.5)),
 		}
 
-		if len(m.collidersSubsystem.SearchByRect(world, rect, filter2.ContainsAny(components.Garden, components.Obstacle))) == 0 {
+		if len(
+			m.collidersSubsystem.SearchByRect(world, rect, filter2.ContainsAny(components.Garden, components.Obstacle)),
+		) == 0 {
 			m.gardenCreator.Create(world, components.PositionData{Vec: point})
 		}
-
 	}
 }

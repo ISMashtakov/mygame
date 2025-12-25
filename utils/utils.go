@@ -7,7 +7,7 @@ import (
 
 func SlicsByFunc[T any](count int, fun func() T) []T {
 	var res []T
-	for i := 0; i < count; i++ {
+	for range count {
 		res = append(res, fun())
 	}
 

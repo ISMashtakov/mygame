@@ -13,7 +13,7 @@ type DownPanel struct {
 	cells []*InventoryCell
 }
 
-func NewDownPanel(opts ...widget.ButtonOpt) *DownPanel {
+func NewDownPanel() *DownPanel {
 	result := &DownPanel{}
 
 	c := color.RGBA{R: 255, G: 220, B: 152, A: 255}
@@ -34,7 +34,7 @@ func NewDownPanel(opts ...widget.ButtonOpt) *DownPanel {
 		widget.ContainerOpts.BackgroundImage(image.NewBorderedNineSliceColor(c, b, 1)),
 	)
 
-	for i := 0; i < constants.DownPanelLength; i++ {
+	for range constants.DownPanelLength {
 		cell := NewInventoryCell()
 
 		downPanel.AddChild(cell.Root())

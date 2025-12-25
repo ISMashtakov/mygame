@@ -8,10 +8,14 @@ import (
 type AnimationMap struct {
 	spritesSheet      SpritesSheet
 	framesInAnimation int
-	directions        []direction.DirectionEnum
+	directions        []direction.Enum
 }
 
-func NewAnimationsMap(spritesSheet SpritesSheet, framesInAnimation int, directions []direction.DirectionEnum) *AnimationMap {
+func NewAnimationsMap(
+	spritesSheet SpritesSheet,
+	framesInAnimation int,
+	directions []direction.Enum,
+) *AnimationMap {
 	return &AnimationMap{
 		spritesSheet:      spritesSheet,
 		framesInAnimation: framesInAnimation,
@@ -19,7 +23,7 @@ func NewAnimationsMap(spritesSheet SpritesSheet, framesInAnimation int, directio
 	}
 }
 
-func (m AnimationMap) GetByDirection(dir direction.DirectionEnum, i int) Image {
+func (m AnimationMap) GetByDirection(dir direction.Enum, i int) Image {
 	resDir := dir
 	if dir == direction.Left {
 		resDir = direction.Right

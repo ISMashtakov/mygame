@@ -23,12 +23,16 @@ const (
 
 type PickaxeHitRequestHandler struct {
 	core.BaseSystem
+
 	collidersSubsystem     subsystems.ColliderSearcher
 	dropGeneratorSubsystem subsystems.DropGeneratorSubSystem
 	spriteCreator          entities.SimpeSpriteCreator
 }
 
-func NewPickaxeHitRequestHandler(spriteCreator entities.SimpeSpriteCreator, propsCreator entities.PropsCreator) *PickaxeHitRequestHandler {
+func NewPickaxeHitRequestHandler(
+	spriteCreator entities.SimpeSpriteCreator,
+	propsCreator entities.PropsCreator,
+) *PickaxeHitRequestHandler {
 	return &PickaxeHitRequestHandler{
 		BaseSystem: core.BaseSystem{
 			Codename:        PickaxeHitRequestHandlerCodename,

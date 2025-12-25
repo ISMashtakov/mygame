@@ -14,6 +14,7 @@ const (
 
 type Animation struct {
 	core.BaseSystem
+
 	characterCreator *entities.CharacterCreator
 }
 

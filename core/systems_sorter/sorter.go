@@ -11,19 +11,27 @@ type node struct{ system string }
 
 func newNode(system string) *node { return &node{system: system} }
 
-func (n node) Id() string { return n.system }
+func (n node) Id() string { return n.system } //nolint:revive,staticcheck // Специально для имплементации интерфейса для либы
 
 func SortSystems[T ISystem](systems []T) ([]T, error) {
 	graph := toposort.NewTopology()
-	lo.ForEach(systems, func(s T, _ int) { graph.AddNode(newNode(s.GetCodename())) })
+	for _, s := range systems {
+		if err := graph.AddNode(newNode(s.GetCodename())); err != nil {
+			return nil, err
+		}
+	}
 
 	for _, system := range systems {
 		for _, next := range system.GetNextSystems() {
-			graph.AddEdge(newNode(system.GetCodename()), newNode(next))
+			if err := graph.AddEdge(newNode(system.GetCodename()), newNode(next)); err != nil {
+				return nil, err
+			}
 		}
 
 		for _, prev := range system.GetPreviousSystems() {
-			graph.AddEdge(newNode(prev), newNode(system.GetCodename()))
+			if err := graph.AddEdge(newNode(prev), newNode(system.GetCodename())); err != nil {
+				return nil, err
+			}
 		}
 	}
 

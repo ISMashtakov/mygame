@@ -2,12 +2,11 @@ package game
 
 import (
 	"image"
-	"math/rand"
 
 	"github.com/ISMashtakov/mygame/components"
 	"github.com/ISMashtakov/mygame/entities"
 	"github.com/ISMashtakov/mygame/entities/background"
-	"github.com/ISMashtakov/mygame/items"
+	"github.com/ISMashtakov/mygame/utils"
 	"github.com/quasilyte/gmath"
 	"github.com/yohamta/donburi"
 )
@@ -19,7 +18,6 @@ var (
 type WorldBuilder struct {
 	grassCreator background.GrassCreator
 	coalCreator  entities.CoalCreator
-	itemsFactory items.ItemsFactory
 }
 
 func NewWorldBuilder(
@@ -45,9 +43,9 @@ func (b WorldBuilder) Build(world donburi.World) error {
 		currentY += int(b.grassCreator.TargetImageSize.Y)
 	}
 
-	for i := 0; i < 15; i++ {
+	for range 15 {
 		b.coalCreator.Create(world, components.PositionData{
-			Vec: gmath.Vec{X: float64(rand.Intn(WorldSize.Max.X)), Y: float64(rand.Intn(WorldSize.Max.Y))},
+			Vec: gmath.Vec{X: utils.RandomFloat(0, WorldSize.Max.X), Y: utils.RandomFloat(0, WorldSize.Max.Y)},
 		})
 	}
 

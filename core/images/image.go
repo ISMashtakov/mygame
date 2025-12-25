@@ -7,6 +7,7 @@ import (
 
 type Image struct {
 	*ebiten.Image
+
 	Flip  bool
 	Scale gmath.Vec
 }

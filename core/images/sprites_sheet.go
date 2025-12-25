@@ -24,7 +24,7 @@ func (s SpritesSheet) Get(x, y int) Image {
 
 	rect := image.Rect(int(start.X), int(start.Y), int(start.X+s.cellSize.X), int(start.Y+s.cellSize.Y))
 
-	subImage := s.image.SubImage(rect)
+	subImage := s.image.SubImage(rect).(*ebiten.Image)
 
-	return Image{Image: subImage.(*ebiten.Image), Scale: gmath.Vec{X: 1, Y: 1}}
+	return Image{Image: subImage, Scale: gmath.Vec{X: 1, Y: 1}}
 }

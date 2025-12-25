@@ -13,7 +13,7 @@ type animationData struct {
 	imageID    ImageID
 	cellSize   gmath.Vec
 	frames     int
-	directions []direction.DirectionEnum
+	directions []direction.Enum
 }
 
 var (
@@ -22,19 +22,18 @@ var (
 			imageID:    ImageCharacterMoving,
 			cellSize:   CharacterImageSize,
 			frames:     4,
-			directions: []direction.DirectionEnum{direction.Down, direction.Right, direction.Up},
+			directions: []direction.Enum{direction.Down, direction.Right, direction.Up},
 		},
 		AnimationCharacterHoeHitting: {
 			imageID:    ImageCharacterHoeHitting,
 			cellSize:   CharacterImageSize,
 			frames:     6,
-			directions: []direction.DirectionEnum{direction.Down, direction.Right, direction.Up},
+			directions: []direction.Enum{direction.Down, direction.Right, direction.Up},
 		},
 	}
 )
 
 const (
-	AnimationNone AnimationID = iota
-	AnimationCharacterWalking
+	AnimationCharacterWalking AnimationID = iota
 	AnimationCharacterHoeHitting
 )

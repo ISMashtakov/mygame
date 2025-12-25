@@ -7,7 +7,7 @@ import (
 	"github.com/yohamta/donburi"
 )
 
-type DirectionEnum int
+type Enum int
 
 const (
 	Up = iota + 1
@@ -16,9 +16,9 @@ const (
 	Left
 )
 
-var Direction = donburi.NewComponentType[DirectionEnum]()
+var Direction = donburi.NewComponentType[Enum]()
 
-func GetDirectionVector(dir DirectionEnum) gmath.Vec {
+func GetDirectionVector(dir Enum) gmath.Vec {
 	switch dir {
 	case Up:
 		return gmath.Vec{Y: -1}

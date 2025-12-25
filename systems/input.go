@@ -29,6 +29,7 @@ const (
 
 type Input struct {
 	core.BaseSystem
+
 	walkingAnimationMap *images.AnimationMap
 	hoeHittingAnimation *images.AnimationMap
 }
@@ -66,7 +67,11 @@ func (m *Input) Update(world donburi.World) {
 	m.processMoving(characterEntity, anim, keys)
 }
 
-func (m *Input) processAction(char *donburi.Entry, anim *components.CurrentAnimationData, justPressedKeys []ebiten.Key) bool {
+func (m *Input) processAction(
+	char *donburi.Entry,
+	anim *components.CurrentAnimationData,
+	justPressedKeys []ebiten.Key,
+) bool {
 	if lo.Contains(justPressedKeys, ebiten.KeySpace) {
 		panelEntity, ok := donburi.NewQuery(filter.Contains(gui.SelectedCell, gui.DownPanel)).First(char.World)
 		if !ok {
@@ -78,69 +83,60 @@ func (m *Input) processAction(char *donburi.Entry, anim *components.CurrentAnima
 
 		item := downPanel.Items[selectedCell.CellNumber]
 		if item != nil {
-			switch item.GetType() {
-			case items.Hoe:
-				if anim.Entry != nil {
-					components.DeleteAnimation(char.World, anim.Entry)
-					anim.Entry = nil
-				}
-
-				anim.Entry = components.StartAnimation(char.World, *core.NewAnimationPlayer(
-					time.Millisecond*600,
-					core.WithOnFinish(func() {
-						anim.Entry = nil
-						point := components.Position.Get(char).Vec.Add(direction.GetDirectionVector(*direction.Direction.Get(char)).Mul(constants.TileSize))
-						// сдвиг для красоты
-						if *direction.Direction.Get(char) != direction.Down {
-							point.Y += 10
-						}
-
-						don.CreateRequest(char.World, actions.GardenCreatingRequest, &actions.GardenCreatingRequestData{
-							Point: point,
-						})
-					}),
-					core.WithAnimations(animations.NewSpritesheetAnimation(
-						m.hoeHittingAnimation,
-						*direction.Direction.Get(char),
-						time.Millisecond*600,
-						components.Sprite.Get(char),
-					)),
-				))
-				anim.IsWalking = false
-
-			case items.Pickaxe:
-				if anim.Entry != nil {
-					components.DeleteAnimation(char.World, anim.Entry)
-					anim.Entry = nil
-				}
-
-				anim.Entry = components.StartAnimation(char.World, *core.NewAnimationPlayer(
-					time.Millisecond*600,
-					core.WithOnFinish(func() {
-						anim.Entry = nil
-						point := components.Position.Get(char).Vec.Add(direction.GetDirectionVector(*direction.Direction.Get(char)).Mul(constants.TileSize))
-						// сдвиг для красоты
-						if *direction.Direction.Get(char) != direction.Down {
-							point.Y += 10
-						}
-						don.CreateRequest(char.World, actions.PickaxeHitRequest, &actions.PickaxeHitRequestData{
-							Point: point,
-						})
-					}),
-					core.WithAnimations(animations.NewSpritesheetAnimation(
-						m.hoeHittingAnimation,
-						*direction.Direction.Get(char),
-						time.Millisecond*600,
-						components.Sprite.Get(char),
-					)),
-				))
-				anim.IsWalking = false
-
-			}
+			m.processItemAction(char, item, anim)
 		}
 	}
 
 	return false
+}
+
+func (m *Input) processItemAction(
+	char *donburi.Entry,
+	item items.IItem,
+	anim *components.CurrentAnimationData,
+) {
+	startAnimation := func(onFinish func(point gmath.Vec)) {
+		if anim.Entry != nil {
+			components.DeleteAnimation(char.World, anim.Entry)
+			anim.Entry = nil
+		}
+
+		anim.Entry = components.StartAnimation(char.World, *core.NewAnimationPlayer(
+			time.Millisecond*600,
+			core.WithOnFinish(func() {
+				anim.Entry = nil
+				point := components.Position.Get(char).Vec.Add(direction.GetDirectionVector(*direction.Direction.Get(char)).Mul(constants.TileSize))
+				// сдвиг для красоты
+				if *direction.Direction.Get(char) != direction.Down {
+					point.Y += 10
+				}
+
+				onFinish(point)
+			}),
+			core.WithAnimations(animations.NewSpritesheetAnimation(
+				m.hoeHittingAnimation,
+				*direction.Direction.Get(char),
+				time.Millisecond*600,
+				components.Sprite.Get(char),
+			)),
+		))
+		anim.IsWalking = false
+	}
+
+	switch item.GetType() { //nolint:exhaustive // Перечисляю не все Items так как не у всех есть действие
+	case items.Hoe:
+		startAnimation(func(point gmath.Vec) {
+			don.CreateRequest(char.World, actions.GardenCreatingRequest, &actions.GardenCreatingRequestData{
+				Point: point,
+			})
+		})
+	case items.Pickaxe:
+		startAnimation(func(point gmath.Vec) {
+			don.CreateRequest(char.World, actions.PickaxeHitRequest, &actions.PickaxeHitRequestData{
+				Point: point,
+			})
+		})
+	}
 }
 
 func (m *Input) processMoving(char *donburi.Entry, anim *components.CurrentAnimationData, keys []ebiten.Key) {
@@ -149,19 +145,19 @@ func (m *Input) processMoving(char *donburi.Entry, anim *components.CurrentAnima
 	newDirection := oldDirection
 
 	if lo.Contains(keys, ebiten.KeyD) {
-		shift.X += 1
+		shift.X++
 		newDirection = direction.Right
 	}
 	if lo.Contains(keys, ebiten.KeyA) {
-		shift.X -= 1
+		shift.X--
 		newDirection = direction.Left
 	}
 	if lo.Contains(keys, ebiten.KeyW) {
-		shift.Y -= 1
+		shift.Y--
 		newDirection = direction.Up
 	}
 	if lo.Contains(keys, ebiten.KeyS) {
-		shift.Y += 1
+		shift.Y++
 		newDirection = direction.Down
 	}
 
@@ -201,7 +197,7 @@ func (m *Input) processMoving(char *donburi.Entry, anim *components.CurrentAnima
 }
 
 func (m *Input) processNumbers(char *donburi.Entry, keys []ebiten.Key) {
-	for i := 0; i < constants.DownPanelLength; i++ {
+	for i := range constants.DownPanelLength {
 		if lo.Contains(keys, ebiten.Key(int(ebiten.Key1)+i)) {
 			don.CreateRequest(char.World, gui.SelectCellRequest, &gui.SelectCellRequestData{CellNumber: i})
 			return

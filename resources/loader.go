@@ -6,8 +6,6 @@ import (
 	"image"
 	"os"
 
-	_ "image/png"
-
 	"github.com/ISMashtakov/mygame/core/images"
 	"github.com/ISMashtakov/mygame/errs"
 	"github.com/hajimehoshi/ebiten/v2"
@@ -47,7 +45,11 @@ func (l *ResourceLoader) Preload() error {
 		image := l.LoadImage(animationData.imageID)
 
 		spriteSheet := images.NewSpritesSheet(image, animationData.cellSize)
-		l.animations[animationID] = images.NewAnimationsMap(*spriteSheet, animationData.frames, animationData.directions)
+		l.animations[animationID] = images.NewAnimationsMap(
+			*spriteSheet,
+			animationData.frames,
+			animationData.directions,
+		)
 	}
 
 	return nil

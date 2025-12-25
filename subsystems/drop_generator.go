@@ -41,7 +41,6 @@ func (g DropGeneratorSubSystem) Generate(entity *donburi.Entry) {
 					),
 				),
 			)
-
 		}
 	}
 }

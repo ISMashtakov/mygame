@@ -10,7 +10,7 @@ import (
 type Func func(x float64) float64
 
 func Zero() Func {
-	return func(x float64) float64 {
+	return func(_ float64) float64 {
 		return 0
 	}
 }
