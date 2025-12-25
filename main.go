@@ -1,11 +1,12 @@
 package main
 
 import (
+	"github.com/ISMashtakov/mygame/constants"
 	"github.com/hajimehoshi/ebiten/v2"
 )
 
 func main() {
-	ebiten.SetWindowSize(1920, 1080)
+	ebiten.SetWindowSize(constants.TargetLayout.ToStd().X*2, constants.TargetLayout.ToStd().Y*2)
 
 	builder := Builder{}
 

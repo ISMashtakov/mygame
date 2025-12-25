@@ -6,7 +6,6 @@ import (
 
 	"github.com/ISMashtakov/mygame/components"
 	"github.com/ISMashtakov/mygame/constants"
-	"github.com/ISMashtakov/mygame/utils"
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 	graphics "github.com/quasilyte/ebitengine-graphics"
@@ -32,7 +31,7 @@ func (r *Renderer) Draw(screen *ebiten.Image, world donburi.World) {
 }
 
 func (r *Renderer) drawSprites(screen *ebiten.Image, world donburi.World) {
-	spritesEntity := utils.GetListByIterator(
+	spritesEntity := slices.Collect(
 		donburi.NewQuery(filter.Contains(components.Sprite)).Iter(world),
 	)
 

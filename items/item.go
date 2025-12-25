@@ -7,6 +7,7 @@ type Type int
 const (
 	Hoe Type = iota + 1
 	Pickaxe
+	Coal
 )
 
 type IItem interface {
@@ -15,8 +16,9 @@ type IItem interface {
 }
 
 type SimpleItem struct {
-	itemType Type
-	image    *ebiten.Image
+	itemType  Type
+	image     *ebiten.Image
+	propImage *ebiten.Image
 }
 
 func NewSimpleItem(itemType Type, image *ebiten.Image) *SimpleItem {

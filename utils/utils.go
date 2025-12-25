@@ -1,21 +1,18 @@
 package utils
 
 import (
-	"iter"
-
 	"github.com/quasilyte/gmath"
 	"github.com/samber/lo"
 )
 
-func GetListByIterator[T any](iterator iter.Seq[T]) []T {
+func SlicsByFunc[T any](count int, fun func() T) []T {
 	var res []T
-	for i := range iterator {
-		res = append(res, i)
+	for i := 0; i < count; i++ {
+		res = append(res, fun())
 	}
 
 	return res
 }
-
 func FloorByNearestStep(num, step int) int {
 	fail := num % step
 

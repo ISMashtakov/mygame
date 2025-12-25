@@ -8,7 +8,6 @@ import (
 	"github.com/ISMashtakov/mygame/components/actions"
 	"github.com/ISMashtakov/mygame/core"
 	"github.com/ISMashtakov/mygame/entities"
-	"github.com/ISMashtakov/mygame/entities/background"
 	"github.com/ISMashtakov/mygame/subsystems"
 	"github.com/ISMashtakov/mygame/utils/don"
 	"github.com/ISMashtakov/mygame/utils/funcs"
@@ -24,18 +23,19 @@ const (
 
 type PickaxeHitRequestHandler struct {
 	core.BaseSystem
-	gardenCreator      background.GardenCreator
-	collidersSubsystem subsystems.ColliderSearcher
-	spriteCreator      entities.SimpeSpriteCreator
+	collidersSubsystem     subsystems.ColliderSearcher
+	dropGeneratorSubsystem subsystems.DropGeneratorSubSystem
+	spriteCreator          entities.SimpeSpriteCreator
 }
 
-func NewPickaxeHitRequestHandler(spriteCreator entities.SimpeSpriteCreator) *PickaxeHitRequestHandler {
+func NewPickaxeHitRequestHandler(spriteCreator entities.SimpeSpriteCreator, propsCreator entities.PropsCreator) *PickaxeHitRequestHandler {
 	return &PickaxeHitRequestHandler{
 		BaseSystem: core.BaseSystem{
 			Codename:        PickaxeHitRequestHandlerCodename,
 			PreviousSystems: []string{AnimationCodename},
 		},
-		spriteCreator: spriteCreator,
+		spriteCreator:          spriteCreator,
+		dropGeneratorSubsystem: *subsystems.NewDropGeneratorSubSystem(propsCreator),
 	}
 }
 
@@ -56,8 +56,7 @@ func (m *PickaxeHitRequestHandler) Update(world donburi.World) {
 
 func (m *PickaxeHitRequestHandler) destroyObj(world donburi.World, destroyableEn *donburi.Entry) {
 	if destroyableEn.HasComponent(components.Position) && destroyableEn.HasComponent(components.Sprite) {
-		pos := components.Position.Get(destroyableEn)
-		sprite := components.Sprite.Get(destroyableEn)
+		pos, sprite := components.Position.Get(destroyableEn), components.Sprite.Get(destroyableEn)
 
 		parts := m.spriteCreator.DivideSprite(world, *sprite, *pos)
 
@@ -74,39 +73,49 @@ func (m *PickaxeHitRequestHandler) destroyObj(world donburi.World, destroyableEn
 			world,
 			*core.NewAnimationPlayer(
 				duration,
-				func() { world.Remove(parts[0].Entity()) },
-				animations.NewMoveAnimation(funcs.Line(-0.3), funcs.SquareTo(8, -3, 50, 0), components.Position.Get(parts[0])),
-				getScaleAnimation(parts[0]),
+				core.WithOnFinish(func() { world.Remove(parts[0].Entity()) }),
+				core.WithAnimations(
+					animations.NewMoveAnimation(funcs.Line(-0.3), funcs.SquareTo(8, -3, 50, 0), components.Position.Get(parts[0])),
+					getScaleAnimation(parts[0]),
+				),
 			),
 		)
 		components.StartAnimation(
 			world,
 			*core.NewAnimationPlayer(
 				duration,
-				func() { world.Remove(parts[1].Entity()) },
-				animations.NewMoveAnimation(funcs.Line(0.3), funcs.SquareTo(8, -3, 50, 0), components.Position.Get(parts[1])),
-				getScaleAnimation(parts[1]),
+				core.WithOnFinish(func() { world.Remove(parts[1].Entity()) }),
+				core.WithAnimations(
+					animations.NewMoveAnimation(funcs.Line(0.3), funcs.SquareTo(8, -3, 50, 0), components.Position.Get(parts[1])),
+					getScaleAnimation(parts[1]),
+				),
 			),
 		)
 		components.StartAnimation(
 			world,
 			*core.NewAnimationPlayer(
 				duration,
-				func() { world.Remove(parts[2].Entity()) },
-				animations.NewMoveAnimation(funcs.Line(0.3), funcs.SquareTo(8, 3, 50, 0), components.Position.Get(parts[2])),
-				getScaleAnimation(parts[2]),
+				core.WithOnFinish(func() { world.Remove(parts[2].Entity()) }),
+				core.WithAnimations(
+					animations.NewMoveAnimation(funcs.Line(0.3), funcs.SquareTo(8, 3, 50, 0), components.Position.Get(parts[2])),
+					getScaleAnimation(parts[2]),
+				),
 			),
 		)
 		components.StartAnimation(
 			world,
 			*core.NewAnimationPlayer(
 				duration,
-				func() { world.Remove(parts[3].Entity()) },
-				animations.NewMoveAnimation(funcs.Line(-0.3), funcs.SquareTo(8, 3, 50, 0), components.Position.Get(parts[3])),
-				getScaleAnimation(parts[3]),
+				core.WithOnFinish(func() { world.Remove(parts[3].Entity()) }),
+				core.WithAnimations(
+					animations.NewMoveAnimation(funcs.Line(-0.3), funcs.SquareTo(8, 3, 50, 0), components.Position.Get(parts[3])),
+					getScaleAnimation(parts[3]),
+				),
 			),
 		)
 	}
+
+	m.dropGeneratorSubsystem.Generate(destroyableEn)
 
 	world.Remove(destroyableEn.Entity())
 }

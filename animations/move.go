@@ -1,6 +1,9 @@
 package animations
 
 import (
+	"math"
+	"time"
+
 	"github.com/ISMashtakov/mygame/components"
 	"github.com/ISMashtakov/mygame/utils/funcs"
 	"github.com/quasilyte/gmath"
@@ -24,6 +27,18 @@ func NewMoveAnimation(
 		positionData: positionData,
 		basePosition: *positionData,
 	}
+}
+
+func NewSquareMoveAnimation(
+	target gmath.Vec,
+	duration time.Duration,
+	positionData *components.PositionData,
+) *MoveAnimation {
+	return NewMoveAnimation(
+		funcs.LineTo(funcs.X(duration), target.X),
+		funcs.SquareTo(funcs.X(duration)/2, math.Atan(target.Y), funcs.X(duration), target.Y),
+		positionData,
+	)
 }
 
 func (a *MoveAnimation) Next(frame int) {

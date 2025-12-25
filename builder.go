@@ -33,6 +33,7 @@ type Builder struct {
 		character    *entities.CharacterCreator
 		garden       *background.GardenCreator
 		simpleSprite *entities.SimpeSpriteCreator
+		props        *entities.PropsCreator
 	}
 	gui *gui.GUI
 
@@ -67,13 +68,14 @@ func (b *Builder) Entities() {
 	b.creators.character = entities.NewCharacterCreator()
 	b.creators.garden = background.NewGardenCreator(b.resourses)
 	b.creators.simpleSprite = entities.NewSimpeSpriteCreator()
+	b.creators.props = entities.NewPropsCreator()
 	grassCreator := background.NewGrassCreator(b.resourses)
-	coilCreator := entities.NewCoilCreator(b.resourses)
+	coalCreator := entities.NewCoalCreator(b.resourses, *b.itemsFactory)
 	interfaceCreator := entities.NewInterfaceCreator()
 	cameraCreator := entities.NewCameraCreator()
 
 	// ----------
-	worldBuilder := game.NewWorldBuilder(*grassCreator, *coilCreator)
+	worldBuilder := game.NewWorldBuilder(*grassCreator, *coalCreator)
 
 	err := worldBuilder.Build(b.world)
 
@@ -105,7 +107,7 @@ func (b *Builder) Systems() {
 		walkingAnimationSystem,
 		systems.NewCollisionDetector(),
 		systems.NewMovement(),
-		systems.NewPickaxeHitRequestHandler(*b.creators.simpleSprite),
+		systems.NewPickaxeHitRequestHandler(*b.creators.simpleSprite, *b.creators.props),
 		systems.NewGardenCreatingRequestHandler(*b.creators.garden),
 		systems.NewDownPanelHandler(b.gui.DownPanel()),
 		systems.NewCameraMoving(),

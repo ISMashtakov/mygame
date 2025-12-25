@@ -4,6 +4,7 @@ import (
 	"github.com/ISMashtakov/mygame/components"
 	"github.com/ISMashtakov/mygame/constants/z"
 	"github.com/ISMashtakov/mygame/core/images"
+	"github.com/ISMashtakov/mygame/items"
 	"github.com/ISMashtakov/mygame/resources"
 	"github.com/ISMashtakov/mygame/utils"
 	"github.com/ISMashtakov/mygame/utils/render"
@@ -11,19 +12,21 @@ import (
 	"github.com/yohamta/donburi"
 )
 
-type CoilCreator struct {
+type CoalCreator struct {
 	loader          resources.IResourceLoader
 	TargetImageSize gmath.Vec
+	itemsFactory    items.ItemsFactory
 }
 
-func NewCoilCreator(loader resources.IResourceLoader) *CoilCreator {
-	return &CoilCreator{
+func NewCoalCreator(loader resources.IResourceLoader, itemsFactory items.ItemsFactory) *CoalCreator {
+	return &CoalCreator{
 		loader:          loader,
 		TargetImageSize: gmath.Vec{X: 25, Y: 25},
+		itemsFactory:    itemsFactory,
 	}
 }
 
-func (c CoilCreator) Create(world donburi.World, position components.PositionData) donburi.Entity {
+func (c CoalCreator) Create(world donburi.World, position components.PositionData) donburi.Entity {
 	entity := world.Create(
 		components.Position,
 		components.Sprite,
@@ -34,7 +37,7 @@ func (c CoilCreator) Create(world donburi.World, position components.PositionDat
 
 	en := world.Entry(entity)
 
-	im := c.loader.LoadImage(resources.ImageCoil)
+	im := c.loader.LoadImage(resources.ImageCoal)
 
 	sprite := components.SpriteData{
 		Image: images.Image{
@@ -51,6 +54,10 @@ func (c CoilCreator) Create(world donburi.World, position components.PositionDat
 
 	components.SpriteCollider.SetValue(en, components.SpriteColliderData{
 		ActiveZone: &rect,
+	})
+
+	components.Destroyable.SetValue(en, components.DestroyableData{
+		Resources: utils.SlicsByFunc(utils.RandomInt(1, 4), c.itemsFactory.Coal),
 	})
 
 	return entity

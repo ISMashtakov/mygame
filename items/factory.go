@@ -19,3 +19,7 @@ func (f ItemsFactory) Hoe() IItem {
 func (f ItemsFactory) Pickaxe() IItem {
 	return NewSimpleItem(Pickaxe, f.loader.LoadImage(resources.ImageItemPickaxe))
 }
+
+func (f ItemsFactory) Coal() IItem {
+	return NewSimpleItem(Coal, f.loader.LoadImage(resources.ImageItemCoal))
+}

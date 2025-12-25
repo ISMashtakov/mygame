@@ -87,7 +87,7 @@ func (m *Input) processAction(char *donburi.Entry, anim *components.CurrentAnima
 
 				anim.Entry = components.StartAnimation(char.World, *core.NewAnimationPlayer(
 					time.Millisecond*600,
-					func() {
+					core.WithOnFinish(func() {
 						anim.Entry = nil
 						point := components.Position.Get(char).Vec.Add(direction.GetDirectionVector(*direction.Direction.Get(char)).Mul(constants.TileSize))
 						// сдвиг для красоты
@@ -98,13 +98,13 @@ func (m *Input) processAction(char *donburi.Entry, anim *components.CurrentAnima
 						don.CreateRequest(char.World, actions.GardenCreatingRequest, &actions.GardenCreatingRequestData{
 							Point: point,
 						})
-					},
-					animations.NewSpritesheetAnimation(
+					}),
+					core.WithAnimations(animations.NewSpritesheetAnimation(
 						m.hoeHittingAnimation,
 						*direction.Direction.Get(char),
 						time.Millisecond*600,
 						components.Sprite.Get(char),
-					),
+					)),
 				))
 				anim.IsWalking = false
 
@@ -116,7 +116,7 @@ func (m *Input) processAction(char *donburi.Entry, anim *components.CurrentAnima
 
 				anim.Entry = components.StartAnimation(char.World, *core.NewAnimationPlayer(
 					time.Millisecond*600,
-					func() {
+					core.WithOnFinish(func() {
 						anim.Entry = nil
 						point := components.Position.Get(char).Vec.Add(direction.GetDirectionVector(*direction.Direction.Get(char)).Mul(constants.TileSize))
 						// сдвиг для красоты
@@ -126,13 +126,13 @@ func (m *Input) processAction(char *donburi.Entry, anim *components.CurrentAnima
 						don.CreateRequest(char.World, actions.PickaxeHitRequest, &actions.PickaxeHitRequestData{
 							Point: point,
 						})
-					},
-					animations.NewSpritesheetAnimation(
+					}),
+					core.WithAnimations(animations.NewSpritesheetAnimation(
 						m.hoeHittingAnimation,
 						*direction.Direction.Get(char),
 						time.Millisecond*600,
 						components.Sprite.Get(char),
-					),
+					)),
 				))
 				anim.IsWalking = false
 
@@ -180,13 +180,13 @@ func (m *Input) processMoving(char *donburi.Entry, anim *components.CurrentAnima
 		if anim.Entry == nil {
 			anim.Entry = components.StartAnimation(char.World, *core.NewAnimationPlayer(
 				time.Millisecond*600,
-				func() { anim.Entry = nil },
-				animations.NewSpritesheetAnimation(
+				core.WithOnFinish(func() { anim.Entry = nil }),
+				core.WithAnimations(animations.NewSpritesheetAnimation(
 					m.walkingAnimationMap,
 					newDirection,
 					time.Millisecond*600,
 					components.Sprite.Get(char),
-				),
+				)),
 			))
 			anim.IsWalking = true
 		}

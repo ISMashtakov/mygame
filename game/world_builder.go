@@ -18,17 +18,17 @@ var (
 
 type WorldBuilder struct {
 	grassCreator background.GrassCreator
-	coilCreator  entities.CoilCreator
+	coalCreator  entities.CoalCreator
 	itemsFactory items.ItemsFactory
 }
 
 func NewWorldBuilder(
 	grassCreator background.GrassCreator,
-	coilCreator entities.CoilCreator,
+	coalCreator entities.CoalCreator,
 ) *WorldBuilder {
 	return &WorldBuilder{
 		grassCreator: grassCreator,
-		coilCreator:  coilCreator,
+		coalCreator:  coalCreator,
 	}
 }
 
@@ -46,7 +46,7 @@ func (b WorldBuilder) Build(world donburi.World) error {
 	}
 
 	for i := 0; i < 15; i++ {
-		b.coilCreator.Create(world, components.PositionData{
+		b.coalCreator.Create(world, components.PositionData{
 			Vec: gmath.Vec{X: float64(rand.Intn(WorldSize.Max.X)), Y: float64(rand.Intn(WorldSize.Max.Y))},
 		})
 	}

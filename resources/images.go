@@ -7,11 +7,12 @@ var (
 		ImageCharacterMoving:     "resources/images/character/walk.png",
 		ImageCharacterHoeHitting: "resources/images/character/hit.png",
 		ImageGrass:               "resources/images/grass.png",
-		ImageCoil:                "resources/images/coil.png",
+		ImageCoal:                "resources/images/coal.png",
 		ImageGarden:              "resources/images/garden.png",
-		// HOE
+		// Items
 		ImageItemHoe:     "resources/images/items/hoe.png",
 		ImageItemPickaxe: "resources/images/items/pickaxe.png",
+		ImageItemCoal:    "resources/images/items/coal.png",
 	}
 )
 
@@ -22,10 +23,11 @@ const (
 	ImageCharacterHoeHitting
 
 	ImageGrass
-	ImageCoil
+	ImageCoal
 	ImageGarden
 
 	// ITEMS
 	ImageItemHoe
 	ImageItemPickaxe
+	ImageItemCoal
 )
