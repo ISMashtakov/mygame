@@ -59,6 +59,10 @@ func (m *Input) Update(world donburi.World) {
 	justPressedKeys := inpututil.AppendJustPressedKeys(nil)
 	keys := inpututil.AppendPressedKeys(nil)
 
+	if lo.Contains(justPressedKeys, ebiten.KeyTab) {
+		don.CreateRequest[any](world, gui.SwitchInventaryStatusRequest, nil)
+	}
+
 	m.processNumbers(characterEntity, justPressedKeys)
 	if m.processAction(characterEntity, anim, keys) {
 		return

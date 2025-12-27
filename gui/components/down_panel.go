@@ -1,9 +1,8 @@
 package components
 
 import (
-	"image/color"
-
 	"github.com/ISMashtakov/mygame/constants"
+	"github.com/ISMashtakov/mygame/gui/colors"
 	"github.com/ebitenui/ebitenui/image"
 	"github.com/ebitenui/ebitenui/widget"
 )
@@ -16,10 +15,7 @@ type DownPanel struct {
 func NewDownPanel() *DownPanel {
 	result := &DownPanel{}
 
-	c := color.RGBA{R: 255, G: 220, B: 152, A: 255}
-	b := color.RGBA{R: 216, G: 122, B: 36, A: 255}
-
-	downPanel := widget.NewContainer(
+	result.root = widget.NewContainer(
 		widget.ContainerOpts.Layout(widget.NewRowLayout(
 			widget.RowLayoutOpts.Padding(widget.NewInsetsSimple(2)),
 			widget.RowLayoutOpts.Spacing(1),
@@ -31,18 +27,18 @@ func NewDownPanel() *DownPanel {
 				Padding:            widget.NewInsetsSimple(5),
 			}),
 		),
-		widget.ContainerOpts.BackgroundImage(image.NewBorderedNineSliceColor(c, b, 1)),
+		widget.ContainerOpts.BackgroundImage(
+			image.NewBorderedNineSliceColor(colors.InventoryBackgroud, colors.InventoryBorder, 1),
+		),
 	)
 
 	for range constants.DownPanelLength {
 		cell := NewInventoryCell()
 
-		downPanel.AddChild(cell.Root())
+		result.root.AddChild(cell.Root())
 
 		result.cells = append(result.cells, cell)
 	}
-
-	result.root = downPanel
 
 	return result
 }

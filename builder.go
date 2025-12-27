@@ -116,6 +116,7 @@ func (b *Builder) Systems() {
 		systems.NewDownPanelHandler(b.gui.DownPanel()),
 		systems.NewCameraMoving(),
 		systems.NewPropsTaking(),
+		systems.NewInventory(*b.gui.Inventory()),
 	}
 
 	var err error
