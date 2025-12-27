@@ -3,7 +3,7 @@ package gui
 import (
 	"bytes"
 
-	"github.com/ISMashtakov/mygame/gui/components"
+	"github.com/ISMashtakov/mygame/gui/guicomponents"
 	"github.com/ebitenui/ebitenui"
 	"github.com/ebitenui/ebitenui/widget"
 	"github.com/hajimehoshi/ebiten/v2"
@@ -13,8 +13,8 @@ import (
 
 type GUI struct {
 	root      *ebitenui.UI
-	downPanel *components.DownPanel
-	inventory *components.Inventory
+	downPanel *guicomponents.DownPanel
+	inventory *guicomponents.Inventory
 }
 
 func DefaultFont() text.Face {
@@ -35,8 +35,8 @@ func NewGUI() *GUI {
 		widget.ContainerOpts.Layout(widget.NewAnchorLayout()),
 	)
 
-	g.downPanel = components.NewDownPanel()
-	g.inventory = components.NewInventory()
+	g.downPanel = guicomponents.NewDownPanel()
+	g.inventory = guicomponents.NewInventory()
 
 	root.AddChild(g.downPanel.Root())
 	root.AddChild(g.inventory.Root())
@@ -54,10 +54,10 @@ func (g GUI) Update() {
 	g.root.Update()
 }
 
-func (g GUI) DownPanel() *components.DownPanel {
+func (g GUI) DownPanel() *guicomponents.DownPanel {
 	return g.downPanel
 }
 
-func (g GUI) Inventory() *components.Inventory {
+func (g GUI) Inventory() *guicomponents.Inventory {
 	return g.inventory
 }

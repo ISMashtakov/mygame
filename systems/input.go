@@ -85,7 +85,7 @@ func (m *Input) processAction(
 		selectedCell := gui.SelectedCell.Get(panelEntity)
 		downPanel := gui.DownPanel.Get(panelEntity)
 
-		item := downPanel.Items[selectedCell.CellNumber]
+		item := downPanel.GetItem(selectedCell.CellNumber)
 		if item != nil {
 			m.processItemAction(char, item, anim)
 		}

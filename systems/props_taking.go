@@ -2,8 +2,12 @@ package systems
 
 import (
 	"github.com/ISMashtakov/mygame/components"
+	"github.com/ISMashtakov/mygame/components/gui"
 	"github.com/ISMashtakov/mygame/core"
+	"github.com/ISMashtakov/mygame/gui/guicomponents"
+	"github.com/ISMashtakov/mygame/items"
 	"github.com/ISMashtakov/mygame/subsystems"
+	"github.com/ISMashtakov/mygame/utils/don"
 	"github.com/yohamta/donburi"
 	"github.com/yohamta/donburi/filter"
 )
@@ -15,13 +19,18 @@ const (
 type PropsTaking struct {
 	core.BaseSystem
 	subsystems.ColliderSearcher
+
+	inventory *guicomponents.Inventory
+	downPanel *guicomponents.DownPanel
 }
 
-func NewPropsTaking() *PropsTaking {
+func NewPropsTaking(inventory *guicomponents.Inventory, downPanel *guicomponents.DownPanel) *PropsTaking {
 	return &PropsTaking{
 		BaseSystem: core.BaseSystem{
 			Codename: PropsTakingCodename,
 		},
+		inventory: inventory,
+		downPanel: downPanel,
 	}
 }
 
@@ -32,6 +41,30 @@ func (s PropsTaking) Update(world donburi.World) {
 	}
 
 	for _, propEntry := range s.ColliderSearcher.SearchByEntry(world, charEntry, filter.Contains(components.Prop, components.RectCollider)) {
-		propEntry.Remove()
+		prop := components.Prop.Get(propEntry)
+		if s.addItemToInventory(world, prop.Item) {
+			propEntry.Remove()
+		}
 	}
+}
+
+func (s PropsTaking) addItemToInventory(world donburi.World, item items.IItem) bool {
+	panel := don.GetComponent(world, gui.DownPanel)
+	inventory := don.GetComponent(world, gui.Inventory)
+
+	for index, cell := range panel.GetItems() {
+		if cell == nil {
+			panel.SetItem(world, index, item)
+			return true
+		}
+	}
+
+	for index, cell := range inventory.GetItems() {
+		if cell == nil {
+			inventory.SetItem(world, index, item)
+			return true
+		}
+	}
+
+	return false
 }

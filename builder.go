@@ -4,12 +4,10 @@ import (
 	"fmt"
 	"log/slog"
 
-	guicomponents "github.com/ISMashtakov/mygame/components/gui"
 	systemssorter "github.com/ISMashtakov/mygame/core/systems_sorter"
 	"github.com/ISMashtakov/mygame/entities"
 	"github.com/ISMashtakov/mygame/entities/background"
 	"github.com/ISMashtakov/mygame/game"
-	"github.com/ISMashtakov/mygame/utils/don"
 
 	"github.com/ISMashtakov/mygame/gui"
 	"github.com/ISMashtakov/mygame/items"
@@ -72,7 +70,7 @@ func (b *Builder) Entities() {
 	b.creators.props = entities.NewPropsCreator()
 	grassCreator := background.NewGrassCreator(b.resourses)
 	coalCreator := entities.NewCoalCreator(b.resourses, *b.itemsFactory)
-	interfaceCreator := entities.NewInterfaceCreator()
+	interfaceCreator := entities.NewInterfaceCreator(b.itemsFactory)
 	cameraCreator := entities.NewCameraCreator()
 
 	// ----------
@@ -91,16 +89,6 @@ func (b *Builder) Entities() {
 	if err != nil {
 		panic(fmt.Errorf("can't create interface: %w", err))
 	}
-
-	don.CreateRequest(b.world, guicomponents.SetItemToDownPanelRequest, &guicomponents.SetItemToDownPanelRequestData{
-		Index: 0,
-		Item:  b.itemsFactory.Hoe(),
-	})
-
-	don.CreateRequest(b.world, guicomponents.SetItemToDownPanelRequest, &guicomponents.SetItemToDownPanelRequestData{
-		Index: 1,
-		Item:  b.itemsFactory.Pickaxe(),
-	})
 }
 
 func (b *Builder) Systems() {
@@ -115,8 +103,8 @@ func (b *Builder) Systems() {
 		systems.NewGardenCreatingRequestHandler(*b.creators.garden),
 		systems.NewDownPanelHandler(b.gui.DownPanel()),
 		systems.NewCameraMoving(),
-		systems.NewPropsTaking(),
-		systems.NewInventory(*b.gui.Inventory()),
+		systems.NewPropsTaking(b.gui.Inventory(), b.gui.DownPanel()),
+		systems.NewInventory(b.gui.Inventory()),
 	}
 
 	var err error

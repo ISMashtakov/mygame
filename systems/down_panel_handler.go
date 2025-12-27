@@ -5,7 +5,7 @@ import (
 
 	"github.com/ISMashtakov/mygame/components/gui"
 	"github.com/ISMashtakov/mygame/core"
-	"github.com/ISMashtakov/mygame/gui/components"
+	"github.com/ISMashtakov/mygame/gui/guicomponents"
 	"github.com/ISMashtakov/mygame/utils/don"
 	"github.com/yohamta/donburi"
 )
@@ -17,10 +17,10 @@ const (
 type DownPanelHandler struct {
 	core.BaseSystem
 
-	downPanel *components.DownPanel
+	downPanel *guicomponents.DownPanel
 }
 
-func NewDownPanelHandler(downPanel *components.DownPanel) *DownPanelHandler {
+func NewDownPanelHandler(downPanel *guicomponents.DownPanel) *DownPanelHandler {
 	return &DownPanelHandler{
 		BaseSystem: core.BaseSystem{
 			Codename:        DownPanelHandlerCodename,
@@ -36,14 +36,11 @@ func (c *DownPanelHandler) Update(world donburi.World) {
 }
 
 func (c *DownPanelHandler) updateItems(world donburi.World) {
-	panel := don.GetComponent(world, gui.DownPanel)
-
-	for request := range don.IterByRequests(world, gui.SetItemToDownPanelRequest) {
+	for request := range don.IterByRequests(world, gui.SetItemToGUIDownPanelRequest) {
 		if request.Index >= len(c.downPanel.Cells()) || request.Index < 0 {
 			panic(fmt.Errorf("invalid value of set item cell %d", request.Index))
 		}
 
-		panel.Items[request.Index] = request.Item
 		c.downPanel.Cells()[request.Index].SetImage(request.Item.GetImage())
 	}
 }

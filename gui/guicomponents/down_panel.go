@@ -1,4 +1,4 @@
-package components
+package guicomponents
 
 import (
 	"github.com/ISMashtakov/mygame/constants"
