@@ -3,6 +3,7 @@ package guicomponents
 import (
 	"github.com/ISMashtakov/mygame/constants"
 	"github.com/ISMashtakov/mygame/gui/colors"
+	"github.com/ISMashtakov/mygame/resources"
 	"github.com/ebitenui/ebitenui/image"
 	"github.com/ebitenui/ebitenui/widget"
 )
@@ -12,7 +13,7 @@ type DownPanel struct {
 	cells []*InventoryCell
 }
 
-func NewDownPanel() *DownPanel {
+func NewDownPanel(resourceLoaded resources.IResourceLoader) *DownPanel {
 	result := &DownPanel{}
 
 	result.root = widget.NewContainer(
@@ -33,7 +34,7 @@ func NewDownPanel() *DownPanel {
 	)
 
 	for range constants.DownPanelLength {
-		cell := NewInventoryCell()
+		cell := NewInventoryCell(resourceLoaded)
 
 		result.root.AddChild(cell.Root())
 

@@ -26,6 +26,20 @@ func (d *InventoryData) SetItem(world donburi.World, index int, item items.IItem
 	})
 }
 
+func (d *InventoryData) AddItem(world donburi.World, index int, count int) {
+	d.validateIndex(index)
+
+	d.items[index].AddCount(count)
+
+	don.Create(world, SetItemToGUIInventoryRequest, &SetItemToGUIInventoryRequestData{
+		Location: CellLocation{
+			CellNumber: index,
+			Location:   InventoryLocation,
+		},
+		Item: d.items[index],
+	})
+}
+
 func (d *InventoryData) GetItem(index int) items.IItem {
 	d.validateIndex(index)
 

@@ -2,6 +2,7 @@ package guicomponents
 
 import (
 	"github.com/ISMashtakov/mygame/gui/colors"
+	"github.com/ISMashtakov/mygame/resources"
 	"github.com/ebitenui/ebitenui/image"
 	"github.com/ebitenui/ebitenui/widget"
 	"github.com/samber/lo"
@@ -14,7 +15,7 @@ type Inventory struct {
 	disabled bool
 }
 
-func NewInventory() *Inventory {
+func NewInventory(resourceLoaded resources.IResourceLoader) *Inventory {
 	result := &Inventory{
 		size:     4,
 		root:     widget.NewContainer(),
@@ -40,7 +41,7 @@ func NewInventory() *Inventory {
 	)
 
 	for range result.size * result.size {
-		cell := NewInventoryCell()
+		cell := NewInventoryCell(resourceLoaded)
 
 		result.root.AddChild(cell.Root())
 

@@ -59,7 +59,7 @@ func (b *Builder) ItemsFactory() {
 }
 
 func (b *Builder) GUI() {
-	b.gui = gui.NewGUI()
+	b.gui = gui.NewGUI(b.resourses)
 }
 
 func (b *Builder) Entities() {

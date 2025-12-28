@@ -21,5 +21,5 @@ func (f Factory) Pickaxe() IItem {
 }
 
 func (f Factory) Coal() IItem {
-	return NewSimpleItem(Coal, f.loader.LoadImage(resources.ImageItemCoal))
+	return NewSimpleItem(Coal, f.loader.LoadImage(resources.ImageItemCoal), WithMaxStackSize(3))
 }

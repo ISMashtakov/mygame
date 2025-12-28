@@ -1,14 +1,11 @@
 package gui
 
 import (
-	"bytes"
-
 	"github.com/ISMashtakov/mygame/gui/guicomponents"
+	"github.com/ISMashtakov/mygame/resources"
 	"github.com/ebitenui/ebitenui"
 	"github.com/ebitenui/ebitenui/widget"
 	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/hajimehoshi/ebiten/v2/text/v2"
-	"golang.org/x/image/font/gofont/goregular"
 )
 
 type GUI struct {
@@ -17,26 +14,15 @@ type GUI struct {
 	inventory *guicomponents.Inventory
 }
 
-func DefaultFont() text.Face {
-	s, err := text.NewGoTextFaceSource(bytes.NewReader(goregular.TTF))
-	if err != nil {
-		panic(err)
-	}
-	return &text.GoTextFace{
-		Source: s,
-		Size:   20,
-	}
-}
-
-func NewGUI() *GUI {
+func NewGUI(resourceLoaded resources.IResourceLoader) *GUI {
 	g := &GUI{}
 
 	root := widget.NewContainer(
 		widget.ContainerOpts.Layout(widget.NewAnchorLayout()),
 	)
 
-	g.downPanel = guicomponents.NewDownPanel()
-	g.inventory = guicomponents.NewInventory()
+	g.downPanel = guicomponents.NewDownPanel(resourceLoaded)
+	g.inventory = guicomponents.NewInventory(resourceLoaded)
 
 	root.AddChild(g.downPanel.Root())
 	root.AddChild(g.inventory.Root())

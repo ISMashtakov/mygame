@@ -9,11 +9,13 @@ import (
 	"github.com/ISMashtakov/mygame/core/images"
 	"github.com/ISMashtakov/mygame/errs"
 	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/hajimehoshi/ebiten/v2/text/v2"
 )
 
 type ResourceLoader struct {
 	resources  map[ImageID]*ebiten.Image
 	animations map[AnimationID]*images.AnimationMap
+	fonts      map[FontID]*text.GoTextFaceSource
 }
 
 func NewResourceLoader() *ResourceLoader {
@@ -52,6 +54,22 @@ func (l *ResourceLoader) Preload() error {
 		)
 	}
 
+	l.fonts = make(map[FontID]*text.GoTextFaceSource, len(fontResources))
+
+	for fontID, path := range fontResources {
+		data, err := os.ReadFile(path)
+		if err != nil {
+			return fmt.Errorf("can't read font file %q: %w", path, err)
+		}
+
+		goFont, err := text.NewGoTextFaceSource(bytes.NewReader(data))
+		if err != nil {
+			return fmt.Errorf("can't decode font file %q: %w", path, err)
+		}
+
+		l.fonts[fontID] = goFont
+	}
+
 	return nil
 }
 
@@ -71,4 +89,13 @@ func (l *ResourceLoader) LoadAnimationMap(animationID AnimationID) *images.Anima
 	}
 
 	return animation
+}
+
+func (l *ResourceLoader) LoadFont(fontID FontID) *text.GoTextFaceSource {
+	font, ok := l.fonts[fontID]
+	if !ok {
+		panic(fmt.Errorf("%d: %w", fontID, errs.ErrUnknowsResourceID))
+	}
+
+	return font
 }

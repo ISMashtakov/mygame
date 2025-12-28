@@ -55,12 +55,17 @@ func (c *Inventory) handleSetItemToInventoryRequest(world donburi.World) {
 			panic(fmt.Errorf("invalid value of set item cell %d", request.Location.CellNumber))
 		}
 
+		cell := cells[request.Location.CellNumber]
 		if request.Item == nil {
-			cells[request.Location.CellNumber].SetImage(nil)
+			cell.SetImage(nil)
+			cell.SetCount(0)
 			continue
 		}
 
-		cells[request.Location.CellNumber].SetImage(request.Item.GetImage())
+		cell.SetImage(request.Item.GetImage())
+		if request.Item.GetMaxStackSize() > 1 {
+			cell.SetCount(request.Item.GetCount())
+		}
 	}
 }
 
@@ -120,8 +125,22 @@ func (c *Inventory) handleCellClickedRequests(world donburi.World) {
 		fromItem := c.getItemByLocation(world, dragAndDrop.From)
 		toItem := c.getItemByLocation(world, *location)
 
-		c.setItemByLocation(world, *location, fromItem)
-		c.setItemByLocation(world, dragAndDrop.From, toItem)
+		if fromItem != nil && toItem != nil && fromItem.GetType() == toItem.GetType() {
+			freeSlots := toItem.GetMaxStackSize() - toItem.GetCount()
+			if freeSlots >= fromItem.GetCount() {
+				c.setItemByLocation(world, dragAndDrop.From, nil)
+				toItem.AddCount(fromItem.GetCount())
+				c.setItemByLocation(world, *location, toItem)
+			} else {
+				fromItem.AddCount(-freeSlots)
+				c.setItemByLocation(world, dragAndDrop.From, fromItem)
+				toItem.AddCount(freeSlots)
+				c.setItemByLocation(world, *location, toItem)
+			}
+		} else {
+			c.setItemByLocation(world, *location, fromItem)
+			c.setItemByLocation(world, dragAndDrop.From, toItem)
+		}
 	}
 }
 

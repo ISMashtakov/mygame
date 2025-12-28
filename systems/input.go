@@ -64,7 +64,7 @@ func (m *Input) Update(world donburi.World) {
 	}
 
 	m.processNumbers(characterEntity, justPressedKeys)
-	if m.processAction(characterEntity, anim, keys) {
+	if m.processAction(characterEntity, anim, justPressedKeys) {
 		return
 	}
 
