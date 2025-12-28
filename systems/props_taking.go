@@ -53,14 +53,14 @@ func (s PropsTaking) addItemToInventory(world donburi.World, item items.IItem) b
 	inventory := don.GetComponent(world, gui.Inventory)
 
 	for index, cell := range panel.GetItems() {
-		if cell != nil && cell.GetCount() < cell.GetMaxStackSize() {
+		if cell != nil && cell.GetType() == item.GetType() && cell.GetCount() < cell.GetMaxStackSize() {
 			panel.AddItem(world, index, 1)
 			return true
 		}
 	}
 
 	for index, cell := range inventory.GetItems() {
-		if cell != nil && cell.GetCount() < cell.GetMaxStackSize() {
+		if cell != nil && cell.GetType() == item.GetType() && cell.GetCount() < cell.GetMaxStackSize() {
 			inventory.AddItem(world, index, 1)
 			return true
 		}

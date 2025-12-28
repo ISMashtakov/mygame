@@ -8,6 +8,10 @@ const (
 	Hoe Type = iota + 1
 	Pickaxe
 	Coal
+
+	// Seeds
+
+	CarrotSeed
 )
 
 type IItem interface {

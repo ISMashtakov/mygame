@@ -13,6 +13,8 @@ var (
 		ImageItemHoe:     "resources/images/items/hoe.png",
 		ImageItemPickaxe: "resources/images/items/pickaxe.png",
 		ImageItemCoal:    "resources/images/items/coal.png",
+		// Seeds
+		ImageItemSeedCarrot: "resources/images/items/seeds/carrot.png",
 	}
 )
 
@@ -31,4 +33,7 @@ const (
 	ImageItemHoe
 	ImageItemPickaxe
 	ImageItemCoal
+
+	// SEEDS
+	ImageItemSeedCarrot
 )

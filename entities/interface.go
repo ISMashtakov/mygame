@@ -44,6 +44,10 @@ func (c InterfaceCreator) Create(world donburi.World) *donburi.Entry {
 	panel.SetItem(world, 0, c.itemsFactory.Hoe())
 	panel.SetItem(world, 1, c.itemsFactory.Pickaxe())
 
+	carrotSeeds := c.itemsFactory.CarrotSeed()
+	carrotSeeds.AddCount(10)
+	panel.SetItem(world, 2, carrotSeeds)
+
 	c.setOnClickToItemCells(world)
 
 	return entry
