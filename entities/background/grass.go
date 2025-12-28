@@ -23,7 +23,7 @@ func NewGrassCreator(loader resources.IResourceLoader) *GrassCreator {
 	}
 }
 
-func (c GrassCreator) Create(world donburi.World, position components.PositionData) donburi.Entity {
+func (c GrassCreator) Create(world donburi.World, position components.PositionData) *donburi.Entry {
 	entity := world.Create(
 		components.Position,
 		components.Sprite,
@@ -42,5 +42,5 @@ func (c GrassCreator) Create(world donburi.World, position components.PositionDa
 
 	components.Position.SetValue(en, position)
 
-	return entity
+	return en
 }

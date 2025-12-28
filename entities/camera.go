@@ -11,11 +11,11 @@ func NewCameraCreator() *CameraCreator {
 	return &CameraCreator{}
 }
 
-func (c CameraCreator) Create(world donburi.World) donburi.Entity {
+func (c CameraCreator) Create(world donburi.World) *donburi.Entry {
 	entity := world.Create(
 		components.Position,
 		components.Camera,
 	)
 
-	return entity
+	return world.Entry(entity)
 }

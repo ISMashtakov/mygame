@@ -15,6 +15,9 @@ type InventoryCell struct {
 	cell     *widget.Container
 	image    *ebiten.Image
 	selected bool
+
+	onDrag func()
+	onDrop func()
 }
 
 func NewInventoryCell() *InventoryCell {
@@ -23,6 +26,15 @@ func NewInventoryCell() *InventoryCell {
 		widget.ContainerOpts.Layout(widget.NewRowLayout()))
 	res.cell = widget.NewContainer(widget.ContainerOpts.WidgetOpts(
 		widget.WidgetOpts.MinSize(20, 20),
+		widget.WidgetOpts.EnableDragAndDrop(NewDragAndDropItem(dragData{cell: res})),
+		widget.WidgetOpts.CanDrop(func(_ *widget.DragAndDropDroppedEventArgs) bool {
+			return true
+		}),
+		widget.WidgetOpts.Dropped(func(_ *widget.DragAndDropDroppedEventArgs) {
+			if res.onDrop != nil {
+				res.onDrop()
+			}
+		}),
 	))
 	res.root.AddChild(res.cell)
 
@@ -69,4 +81,12 @@ func (c *InventoryCell) Disable() {
 func (c *InventoryCell) SetImage(image *ebiten.Image) {
 	c.image = image
 	c.updateImage()
+}
+
+func (c *InventoryCell) SetOnDrag(fun func()) {
+	c.onDrag = fun
+}
+
+func (c *InventoryCell) SetOnDrop(fun func()) {
+	c.onDrop = fun
 }

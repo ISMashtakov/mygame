@@ -17,9 +17,12 @@ func (d *DownPanelData) SetItem(world donburi.World, index int, item items.IItem
 
 	d.items[index] = item
 
-	don.CreateRequest(world, SetItemToGUIDownPanelRequest, &SetItemToGUIDownPanelRequestData{
-		Index: index,
-		Item:  item,
+	don.Create(world, SetItemToGUIInventoryRequest, &SetItemToGUIInventoryRequestData{
+		Location: CellLocation{
+			CellNumber: index,
+			Location:   DownPanelLocation,
+		},
+		Item: item,
 	})
 }
 
@@ -40,10 +43,3 @@ func (d *DownPanelData) validateIndex(index int) {
 }
 
 var DownPanel = donburi.NewComponentType[DownPanelData]()
-
-type SetItemToGUIDownPanelRequestData struct {
-	Index int
-	Item  items.IItem
-}
-
-var SetItemToGUIDownPanelRequest = donburi.NewComponentType[SetItemToGUIDownPanelRequestData]()

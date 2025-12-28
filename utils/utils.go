@@ -5,7 +5,7 @@ import (
 	"github.com/samber/lo"
 )
 
-func SlicsByFunc[T any](count int, fun func() T) []T {
+func SliceByFunc[T any](count int, fun func() T) []T {
 	var res []T
 	for range count {
 		res = append(res, fun())

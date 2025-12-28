@@ -60,7 +60,7 @@ func (m *Input) Update(world donburi.World) {
 	keys := inpututil.AppendPressedKeys(nil)
 
 	if lo.Contains(justPressedKeys, ebiten.KeyTab) {
-		don.CreateRequest[any](world, gui.SwitchInventaryStatusRequest, nil)
+		don.Create[any](world, gui.SwitchInventaryStatusRequest, nil)
 	}
 
 	m.processNumbers(characterEntity, justPressedKeys)
@@ -130,13 +130,13 @@ func (m *Input) processItemAction(
 	switch item.GetType() { //nolint:exhaustive // Перечисляю не все Items так как не у всех есть действие
 	case items.Hoe:
 		startAnimation(func(point gmath.Vec) {
-			don.CreateRequest(char.World, actions.GardenCreatingRequest, &actions.GardenCreatingRequestData{
+			don.Create(char.World, actions.GardenCreatingRequest, &actions.GardenCreatingRequestData{
 				Point: point,
 			})
 		})
 	case items.Pickaxe:
 		startAnimation(func(point gmath.Vec) {
-			don.CreateRequest(char.World, actions.PickaxeHitRequest, &actions.PickaxeHitRequestData{
+			don.Create(char.World, actions.PickaxeHitRequest, &actions.PickaxeHitRequestData{
 				Point: point,
 			})
 		})
@@ -203,7 +203,7 @@ func (m *Input) processMoving(char *donburi.Entry, anim *components.CurrentAnima
 func (m *Input) processNumbers(char *donburi.Entry, keys []ebiten.Key) {
 	for i := range constants.DownPanelLength {
 		if lo.Contains(keys, ebiten.Key(int(ebiten.Key1)+i)) {
-			don.CreateRequest(char.World, gui.SelectCellRequest, &gui.SelectCellRequestData{CellNumber: i})
+			don.Create(char.World, gui.SelectCellRequest, &gui.SelectCellRequestData{CellNumber: i})
 			return
 		}
 	}

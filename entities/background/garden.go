@@ -22,7 +22,7 @@ func NewGardenCreator(loader resources.IResourceLoader) *GardenCreator {
 	}
 }
 
-func (c GardenCreator) Create(world donburi.World, position components.PositionData) donburi.Entity {
+func (c GardenCreator) Create(world donburi.World, position components.PositionData) *donburi.Entry {
 	entity := world.Create(
 		components.Position,
 		components.Sprite,
@@ -48,5 +48,5 @@ func (c GardenCreator) Create(world donburi.World, position components.PositionD
 	components.RectCollider.SetValue(en, components.RectColliderData{Rect: rect})
 	components.Position.SetValue(en, position)
 
-	return entity
+	return en
 }

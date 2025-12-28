@@ -26,7 +26,7 @@ func NewCoalCreator(loader resources.IResourceLoader, itemsFactory items.Factory
 	}
 }
 
-func (c CoalCreator) Create(world donburi.World, position components.PositionData) donburi.Entity {
+func (c CoalCreator) Create(world donburi.World, position components.PositionData) *donburi.Entry {
 	entity := world.Create(
 		components.Position,
 		components.Sprite,
@@ -57,8 +57,8 @@ func (c CoalCreator) Create(world donburi.World, position components.PositionDat
 	})
 
 	components.Destroyable.SetValue(en, components.DestroyableData{
-		Resources: utils.SlicsByFunc(utils.RandomInt(1, 4), c.itemsFactory.Coal),
+		Resources: utils.SliceByFunc(utils.RandomInt(1, 4), c.itemsFactory.Coal),
 	})
 
-	return entity
+	return en
 }

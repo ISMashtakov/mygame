@@ -70,7 +70,7 @@ func (b *Builder) Entities() {
 	b.creators.props = entities.NewPropsCreator()
 	grassCreator := background.NewGrassCreator(b.resourses)
 	coalCreator := entities.NewCoalCreator(b.resourses, *b.itemsFactory)
-	interfaceCreator := entities.NewInterfaceCreator(b.itemsFactory)
+	interfaceCreator := entities.NewInterfaceCreator(b.itemsFactory, b.gui.Inventory(), b.gui.DownPanel())
 	cameraCreator := entities.NewCameraCreator()
 
 	// ----------
@@ -85,10 +85,7 @@ func (b *Builder) Entities() {
 
 	_ = cameraCreator.Create(b.world)
 
-	_, err = interfaceCreator.Create(b.world)
-	if err != nil {
-		panic(fmt.Errorf("can't create interface: %w", err))
-	}
+	_ = interfaceCreator.Create(b.world)
 }
 
 func (b *Builder) Systems() {
@@ -101,10 +98,9 @@ func (b *Builder) Systems() {
 		systems.NewMovement(),
 		systems.NewPickaxeHitRequestHandler(*b.creators.simpleSprite, *b.creators.props),
 		systems.NewGardenCreatingRequestHandler(*b.creators.garden),
-		systems.NewDownPanelHandler(b.gui.DownPanel()),
 		systems.NewCameraMoving(),
 		systems.NewPropsTaking(b.gui.Inventory(), b.gui.DownPanel()),
-		systems.NewInventory(b.gui.Inventory()),
+		systems.NewInventory(b.gui.Inventory(), b.gui.DownPanel()),
 	}
 
 	var err error

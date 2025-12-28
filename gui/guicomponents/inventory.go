@@ -9,7 +9,7 @@ import (
 
 type Inventory struct {
 	root     *widget.Container
-	cells    [][]*InventoryCell
+	cells    []*InventoryCell
 	size     int
 	disabled bool
 }
@@ -39,21 +39,13 @@ func NewInventory() *Inventory {
 		),
 	)
 
-	var grid [][]*InventoryCell
-	for range result.size {
-		var row []*InventoryCell
-		for range result.size {
-			cell := NewInventoryCell()
+	for range result.size * result.size {
+		cell := NewInventoryCell()
 
-			result.root.AddChild(cell.Root())
+		result.root.AddChild(cell.Root())
 
-			row = append(row, cell)
-		}
-
-		grid = append(grid, row)
+		result.cells = append(result.cells, cell)
 	}
-
-	result.cells = grid
 
 	result.update()
 
@@ -68,7 +60,7 @@ func (c *Inventory) Root() *widget.Container {
 	return c.root
 }
 
-func (c *Inventory) Cells() [][]*InventoryCell {
+func (c *Inventory) Cells() []*InventoryCell {
 	return c.cells
 }
 

@@ -17,9 +17,12 @@ func (d *InventoryData) SetItem(world donburi.World, index int, item items.IItem
 
 	d.items[index] = item
 
-	don.CreateRequest(world, SetItemToGUIInventoryRequest, &SetItemToGUIInventoryRequestData{
-		Index: index,
-		Item:  item,
+	don.Create(world, SetItemToGUIInventoryRequest, &SetItemToGUIInventoryRequestData{
+		Location: CellLocation{
+			CellNumber: index,
+			Location:   InventoryLocation,
+		},
+		Item: item,
 	})
 }
 
@@ -42,8 +45,8 @@ func (d *InventoryData) validateIndex(index int) {
 var Inventory = donburi.NewComponentType[InventoryData]()
 
 type SetItemToGUIInventoryRequestData struct {
-	Index int
-	Item  items.IItem
+	Location CellLocation
+	Item     items.IItem
 }
 
 var SetItemToGUIInventoryRequest = donburi.NewComponentType[SetItemToGUIInventoryRequestData]()

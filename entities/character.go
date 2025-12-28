@@ -19,7 +19,7 @@ func NewCharacterCreator() *CharacterCreator {
 	}
 }
 
-func (c CharacterCreator) Create(world donburi.World) donburi.Entity {
+func (c CharacterCreator) Create(world donburi.World) *donburi.Entry {
 	entity := world.Create(
 		components.Position,
 		components.Sprite,
@@ -40,5 +40,5 @@ func (c CharacterCreator) Create(world donburi.World) donburi.Entity {
 	direction.Direction.SetValue(en, direction.Down)
 	components.Sprite.Get(en).Z = z.OBJ
 
-	return entity
+	return en
 }

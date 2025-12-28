@@ -20,7 +20,7 @@ func (c SimpeSpriteCreator) Create(
 	world donburi.World,
 	sprite components.SpriteData,
 	pos components.PositionData,
-) donburi.Entity {
+) *donburi.Entry {
 	entity := world.Create(
 		components.Position,
 		components.Sprite,
@@ -31,7 +31,7 @@ func (c SimpeSpriteCreator) Create(
 	components.Sprite.Set(entry, &sprite)
 	components.Position.Set(entry, &pos)
 
-	return entity
+	return entry
 }
 
 // DivideSprite Разделяет справйт на 4 и возвращает в порядке по часовой стрелке начиная с верхнего левого.
@@ -54,7 +54,7 @@ func (c SimpeSpriteCreator) DivideSprite(
 			),
 		})
 
-		return world.Entry(ent)
+		return ent
 	}
 
 	if sprite.Image.Flip {

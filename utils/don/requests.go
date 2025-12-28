@@ -14,7 +14,7 @@ type iComponent[T any] interface {
 	Get(entry *donburi.Entry) *T
 }
 
-func CreateRequest[T any](world donburi.World, component component.IComponentType, requestData *T) {
+func Create[T any](world donburi.World, component component.IComponentType, requestData *T) {
 	entity := world.Create(component)
 	entry := world.Entry(entity)
 
@@ -39,5 +39,11 @@ func IterByRequests[T any](world donburi.World, comp iComponent[T]) iter.Seq[*T]
 				return
 			}
 		}
+	}
+}
+
+func DeleteAllEntitiesWithComponent[T any](world donburi.World, comp iComponent[T]) {
+	for reqEn := range donburi.NewQuery(filter.Contains(comp)).Iter(world) {
+		reqEn.Remove()
 	}
 }
