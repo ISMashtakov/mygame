@@ -1,4 +1,4 @@
-package systems
+package actions
 
 import (
 	"time"
@@ -9,6 +9,7 @@ import (
 	"github.com/ISMashtakov/mygame/core"
 	"github.com/ISMashtakov/mygame/entities"
 	"github.com/ISMashtakov/mygame/subsystems"
+	"github.com/ISMashtakov/mygame/systems"
 	"github.com/ISMashtakov/mygame/utils/don"
 	"github.com/ISMashtakov/mygame/utils/funcs"
 	"github.com/hajimehoshi/ebiten/v2"
@@ -36,7 +37,7 @@ func NewPickaxeHitRequestHandler(
 	return &PickaxeHitRequestHandler{
 		BaseSystem: core.BaseSystem{
 			Codename:        PickaxeHitRequestHandlerCodename,
-			PreviousSystems: []string{AnimationCodename},
+			PreviousSystems: []string{systems.AnimationCodename},
 		},
 		spriteCreator:          spriteCreator,
 		dropGeneratorSubsystem: *subsystems.NewDropGeneratorSubSystem(propsCreator),

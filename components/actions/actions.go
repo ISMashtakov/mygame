@@ -1,6 +1,7 @@
 package actions
 
 import (
+	"github.com/ISMashtakov/mygame/items"
 	"github.com/quasilyte/gmath"
 	"github.com/yohamta/donburi"
 )
@@ -16,3 +17,10 @@ type PickaxeHitRequestData struct {
 }
 
 var PickaxeHitRequest = donburi.NewComponentType[PickaxeHitRequestData]()
+
+type SeedRequestData struct {
+	Point gmath.Vec
+	Item  items.IItem
+}
+
+var SeedRequest = donburi.NewComponentType[SeedRequestData]()

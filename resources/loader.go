@@ -13,9 +13,10 @@ import (
 )
 
 type ResourceLoader struct {
-	resources  map[ImageID]*ebiten.Image
-	animations map[AnimationID]*images.AnimationMap
-	fonts      map[FontID]*text.GoTextFaceSource
+	resources    map[ImageID]*ebiten.Image
+	animations   map[AnimationID]*images.AnimationMap
+	fonts        map[FontID]*text.GoTextFaceSource
+	spriteSheets map[SpriteSheetID]*images.SpritesSheet
 }
 
 func NewResourceLoader() *ResourceLoader {
@@ -70,6 +71,24 @@ func (l *ResourceLoader) Preload() error {
 		l.fonts[fontID] = goFont
 	}
 
+	l.spriteSheets = make(map[SpriteSheetID]*images.SpritesSheet, len(spriteSheetResources))
+
+	for spriteID, info := range spriteSheetResources {
+		data, err := os.ReadFile(info.path)
+		if err != nil {
+			return fmt.Errorf("can't read image file %q: %w", info.path, err)
+		}
+
+		img, _, err := image.Decode(bytes.NewReader(data))
+		if err != nil {
+			return fmt.Errorf("can't decode image file %q: %w", info.path, err)
+		}
+
+		spriteSheet := images.NewSpritesSheet(ebiten.NewImageFromImage(img), info.cellSize)
+
+		l.spriteSheets[spriteID] = spriteSheet
+	}
+
 	return nil
 }
 
@@ -98,4 +117,13 @@ func (l *ResourceLoader) LoadFont(fontID FontID) *text.GoTextFaceSource {
 	}
 
 	return font
+}
+
+func (l *ResourceLoader) LoadSpriteSheet(spriteSheetID SpriteSheetID) *images.SpritesSheet {
+	sheet, ok := l.spriteSheets[spriteSheetID]
+	if !ok {
+		panic(fmt.Errorf("%d: %w", spriteSheetID, errs.ErrUnknowsResourceID))
+	}
+
+	return sheet
 }

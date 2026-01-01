@@ -12,7 +12,7 @@ import (
 )
 
 const (
-	InventoryCodename = "InventoryCodename"
+	InterfaceCodename = "InterfaceCodename"
 )
 
 type Inventory struct {
@@ -28,7 +28,7 @@ func NewInventory(
 ) *Inventory {
 	return &Inventory{
 		BaseSystem: core.BaseSystem{
-			Codename:        InventoryCodename,
+			Codename:        InterfaceCodename,
 			PreviousSystems: []string{InputCodename},
 		},
 		inventory: inventory,

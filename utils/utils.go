@@ -37,3 +37,17 @@ func GetRectOfBottomOfParent(vec gmath.Vec, percent float64) gmath.Rect {
 		Max: vec.Sub(gmath.Vec{Y: vec.Y * 0.5}).Add(offset),
 	}
 }
+
+func GetStep(value, maxValue float64, steps int) int {
+	return int(value / maxValue * float64(steps))
+}
+
+// type Comparer[E any] interface { comparable Compare(E) int }
+
+func GetOrNil[K comparable, V any](m map[K]V, key K) V {
+	if val, ok := m[key]; ok {
+		return val
+	}
+	var res V
+	return res
+}

@@ -1,4 +1,4 @@
-package systems
+package actions
 
 import (
 	"github.com/ISMashtakov/mygame/components"
@@ -7,6 +7,7 @@ import (
 	"github.com/ISMashtakov/mygame/core"
 	"github.com/ISMashtakov/mygame/entities/background"
 	"github.com/ISMashtakov/mygame/subsystems"
+	"github.com/ISMashtakov/mygame/systems"
 	"github.com/ISMashtakov/mygame/utils"
 	"github.com/ISMashtakov/mygame/utils/don"
 	"github.com/ISMashtakov/mygame/utils/filter2"
@@ -29,7 +30,7 @@ func NewGardenCreatingRequestHandler(garderCreator background.GardenCreator) *Ga
 	return &GardenCreatingRequestHandler{
 		BaseSystem: core.BaseSystem{
 			Codename:        GardenCreatingRequestHandlerCodename,
-			PreviousSystems: []string{AnimationCodename},
+			PreviousSystems: []string{systems.AnimationCodename},
 		},
 		gardenCreator: garderCreator,
 	}

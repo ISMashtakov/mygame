@@ -13,6 +13,7 @@ import (
 	"github.com/ISMashtakov/mygame/items"
 	"github.com/ISMashtakov/mygame/resources"
 	"github.com/ISMashtakov/mygame/systems"
+	"github.com/ISMashtakov/mygame/systems/actions"
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/samber/lo"
 	"github.com/yohamta/donburi"
@@ -33,6 +34,7 @@ type Builder struct {
 		garden       *background.GardenCreator
 		simpleSprite *entities.SimpeSpriteCreator
 		props        *entities.PropsCreator
+		plants       *entities.PlantCreator
 	}
 	gui *gui.GUI
 
@@ -68,6 +70,7 @@ func (b *Builder) Entities() {
 	b.creators.garden = background.NewGardenCreator(b.resourses)
 	b.creators.simpleSprite = entities.NewSimpeSpriteCreator()
 	b.creators.props = entities.NewPropsCreator()
+	b.creators.plants = entities.NewPlantCreator(b.resourses)
 	grassCreator := background.NewGrassCreator(b.resourses)
 	coalCreator := entities.NewCoalCreator(b.resourses, *b.itemsFactory)
 	interfaceCreator := entities.NewInterfaceCreator(b.itemsFactory, b.gui.Inventory(), b.gui.DownPanel())
@@ -96,8 +99,10 @@ func (b *Builder) Systems() {
 		walkingAnimationSystem,
 		systems.NewCollisionDetector(),
 		systems.NewMovement(),
-		systems.NewPickaxeHitRequestHandler(*b.creators.simpleSprite, *b.creators.props),
-		systems.NewGardenCreatingRequestHandler(*b.creators.garden),
+		actions.NewPickaxeHitRequestHandler(*b.creators.simpleSprite, *b.creators.props),
+		actions.NewGardenCreatingRequestHandler(*b.creators.garden),
+		actions.NewSeedHandler(b.creators.plants),
+		systems.NewPlants(b.creators.garden),
 		systems.NewCameraMoving(),
 		systems.NewPropsTaking(b.gui.Inventory(), b.gui.DownPanel()),
 		systems.NewInventory(b.gui.Inventory(), b.gui.DownPanel()),

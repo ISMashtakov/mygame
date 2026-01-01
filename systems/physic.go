@@ -25,7 +25,7 @@ func NewMovement() *Movement {
 }
 
 func (m *Movement) Update(world donburi.World) {
-	for en := range donburi.NewQuery(filter.Contains(components.Position, components.Movement)).Iter(world) { //TODO: тут тоже
+	for en := range donburi.NewQuery(filter.Contains(components.Position, components.Movement)).Iter(world) {
 		pos, moveRequest := components.Position.Get(en), components.Movement.Get(en)
 
 		pos.Vec = pos.Vec.Add(moveRequest.Vec)

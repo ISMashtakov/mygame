@@ -6,6 +6,7 @@ import (
 	"github.com/ISMashtakov/mygame/components"
 	"github.com/ISMashtakov/mygame/components/direction"
 	"github.com/ISMashtakov/mygame/core/images"
+	"github.com/ISMashtakov/mygame/utils"
 	"github.com/hajimehoshi/ebiten/v2"
 )
 
@@ -31,7 +32,7 @@ func NewSpritesheetAnimation(
 }
 
 func (a *SpritesheetAnimation) Next(frame int) {
-	imageNumber := int(float64(frame) / float64(a.countFrames) * float64(a.animationMap.GetCountFrames()))
+	imageNumber := utils.GetStep(float64(frame), float64(a.countFrames), a.animationMap.GetCountFrames())
 
 	image := a.animationMap.GetByDirection(a.direction, imageNumber)
 

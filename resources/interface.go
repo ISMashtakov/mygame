@@ -10,4 +10,5 @@ type IResourceLoader interface {
 	LoadImage(imageID ImageID) *ebiten.Image
 	LoadAnimationMap(animationID AnimationID) *images.AnimationMap
 	LoadFont(fontID FontID) *text.GoTextFaceSource
+	LoadSpriteSheet(spriteSheetID SpriteSheetID) *images.SpritesSheet
 }
