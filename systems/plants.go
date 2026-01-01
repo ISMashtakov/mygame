@@ -1,8 +1,6 @@
 package systems
 
 import (
-	"fmt"
-
 	"github.com/ISMashtakov/mygame/components"
 	"github.com/ISMashtakov/mygame/core"
 	"github.com/ISMashtakov/mygame/entities/background"
@@ -43,7 +41,6 @@ func (p *Plants) Update(world donburi.World) {
 		gropDuration := funcs.X(plant.GrowDuration)
 
 		if plant.CurrentFrame >= int(gropDuration-1) {
-			fmt.Println("QWE")
 			entity.AddComponent(components.ReadyForHarvest)
 			sprite.Image = plant.SpriteSheet.Get(plant.Stages-1, 0)
 			sprite.Image.Scale = render.GetImageScale(sprite.Image.Bounds(), p.gardenCreator.TargetImageSize)

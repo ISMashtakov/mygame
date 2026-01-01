@@ -9,12 +9,11 @@ import (
 )
 
 type PlantData struct {
-	SpriteSheet       *images.SpritesSheet
-	Stages            int
-	GrowDuration      time.Duration
-	CurrentFrame      int
-	Offset            gmath.Vec
-	IsReadyForHarvest bool
+	SpriteSheet  *images.SpritesSheet
+	Stages       int
+	GrowDuration time.Duration
+	CurrentFrame int
+	Offset       gmath.Vec
 }
 
 var Plant = donburi.NewComponentType[PlantData]()

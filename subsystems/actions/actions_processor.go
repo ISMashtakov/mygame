@@ -26,6 +26,10 @@ func NewActionProcessor(resourcesLoader resources.IResourceLoader) *ActionsProce
 
 func (p *ActionsProcessor) Process(characterEntity *donburi.Entry) bool {
 	item := getSelectedItem(characterEntity.World)
+	if item == nil {
+		return false
+	}
+
 	processor, ok := p.processors[item.GetType()]
 	if !ok {
 		return false

@@ -127,16 +127,9 @@ func (c *Inventory) handleCellClickedRequests(world donburi.World) {
 
 		if fromItem != nil && toItem != nil && fromItem.GetType() == toItem.GetType() {
 			freeSlots := toItem.GetMaxStackSize() - toItem.GetCount()
-			if freeSlots >= fromItem.GetCount() {
-				c.setItemByLocation(world, dragAndDrop.From, nil)
-				toItem.AddCount(fromItem.GetCount())
-				c.setItemByLocation(world, *location, toItem)
-			} else {
-				fromItem.AddCount(-freeSlots)
-				c.setItemByLocation(world, dragAndDrop.From, fromItem)
-				toItem.AddCount(freeSlots)
-				c.setItemByLocation(world, *location, toItem)
-			}
+			forDrag := min(freeSlots, fromItem.GetCount())
+			c.addItemByLocation(world, dragAndDrop.From, -forDrag)
+			c.addItemByLocation(world, *location, forDrag)
 		} else {
 			c.setItemByLocation(world, *location, fromItem)
 			c.setItemByLocation(world, dragAndDrop.From, toItem)
@@ -165,5 +158,16 @@ func (c *Inventory) setItemByLocation(world donburi.World, location gui.CellLoca
 	case gui.InventoryLocation:
 		inventory := don.GetComponent(world, gui.Inventory)
 		inventory.SetItem(world, location.CellNumber, item)
+	}
+}
+
+func (c *Inventory) addItemByLocation(world donburi.World, location gui.CellLocation, count int) {
+	switch location.Location {
+	case gui.DownPanelLocation:
+		downPanel := don.GetComponent(world, gui.DownPanel)
+		downPanel.AddItem(world, location.CellNumber, count)
+	case gui.InventoryLocation:
+		inventory := don.GetComponent(world, gui.Inventory)
+		inventory.AddItem(world, location.CellNumber, count)
 	}
 }

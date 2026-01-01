@@ -40,12 +40,16 @@ func (c InterfaceCreator) Create(world donburi.World) *donburi.Entry {
 
 	// TODO: Начальные предметы надо вынести в другое место
 
-	panel := gui.DownPanel.Get(entry)
+	gui.Inventory.Set(entry, gui.NewInventoryData())
+
+	panel := gui.NewDownPanelData()
+	gui.DownPanel.Set(entry, panel)
+
 	panel.SetItem(world, 0, c.itemsFactory.Hoe())
 	panel.SetItem(world, 1, c.itemsFactory.Pickaxe())
 
 	carrotSeeds := c.itemsFactory.CarrotSeed()
-	carrotSeeds.AddCount(10)
+	carrotSeeds.AddCount(3)
 	panel.SetItem(world, 2, carrotSeeds)
 
 	c.setOnClickToItemCells(world)
